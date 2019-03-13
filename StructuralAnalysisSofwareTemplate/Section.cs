@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    class Section
+    public class Section
     {
         static int numOfSections = 0;
-        private string section_Name;
+        public string section_Name;
         private double height;
         private double width;
         private double area;
         private double inertia;
 
-        Section()
+        public Section()
         {
             this.height = 0;
             this.width = 0;
@@ -33,6 +33,19 @@ namespace StructuralAnalysisSofwareTemplate
             this.area = this.height*this.width;
             this.inertia = this.height*Math.Pow(this.width,3)/12;
 
+        }
+
+        public List<string> GetAll()
+        {
+            List<string> fieldData = new List<string>();
+
+            fieldData.Add(this.section_Name.ToString());
+            fieldData.Add(this.height.ToString());
+            fieldData.Add(this.width.ToString());
+            fieldData.Add(this.area.ToString());
+            fieldData.Add(this.inertia.ToString());
+
+            return fieldData;
         }
 
     }

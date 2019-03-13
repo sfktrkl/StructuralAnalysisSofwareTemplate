@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    class Node
+    public class Node
     {
 
         static int numOfNodes = 0;

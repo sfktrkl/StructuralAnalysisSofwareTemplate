@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    class Material
+    public class Material
     {
         static int numOfMaterial = 0;
-        private string material_Name;
+        public string material_Name;
         private double unitWeight;
         private double elasticModulus;
 
-        Material()
+        public Material()
         {
             this.elasticModulus = 0;
             this.unitWeight = 0;
@@ -25,6 +25,17 @@ namespace StructuralAnalysisSofwareTemplate
         {
             this.elasticModulus = elasticModulus;
             this.unitWeight = unitWeight;
+        }
+
+        public List<string> GetAll()
+        {
+            List<string> fieldData = new List<string>();
+
+            fieldData.Add(this.material_Name.ToString());
+            fieldData.Add(this.unitWeight.ToString());
+            fieldData.Add(this.elasticModulus.ToString());
+
+            return fieldData;
         }
     }
 }

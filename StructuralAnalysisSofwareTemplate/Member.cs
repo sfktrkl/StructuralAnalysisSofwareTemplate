@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    class Member
+    public class Member
     {
 
         static int numOfMembers;
-        private string member_Name;
+        public string member_Name;
         private Material memberMaterial;
         private Section memberSection;
         private Node node1;
         private Node node2;
 
 
-        Member()
+        public Member()
         {
             this.node1 = null;
             this.node2 = null;
@@ -35,6 +35,19 @@ namespace StructuralAnalysisSofwareTemplate
             this.memberMaterial = memberMaterial;
             this.memberSection = memberSection;
 
+        }
+
+        public List<string> GetAll()
+        {
+            List<string> fieldData = new List<string>();
+
+            fieldData.Add(this.member_Name == null ? "NULL" : this.member_Name.ToString());
+            fieldData.Add(this.memberMaterial == null ? "NULL" : this.memberMaterial.ToString());
+            fieldData.Add(this.memberSection == null ? "NULL" : this.memberSection.ToString());
+            fieldData.Add(this.node1 == null ? "NULL" : this.node1.ToString());
+            fieldData.Add(this.node2 == null ? "NULL" : this.node2.ToString());
+
+            return fieldData;
         }
 
 

@@ -14,112 +14,58 @@ namespace StructuralAnalysisSofwareTemplate
 {
     public partial class Form1 : Form
     {
-
-        static List<Node> nodeList = new List<Node>();
+        // public lists to store objects
+        public static List<Node> nodeList = new List<Node>();
+        public static List<Member> memberList = new List<Member>();
+        public static List<Material> materialList = new List<Material>();
+        public static List<Section> sectionList = new List<Section>();
 
         public Form1()
         {
             InitializeComponent();
             toolStripStatusLabel1.Text = "Ready";
-            tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            
 
-            treeView1.Nodes.Add("Nodes");
-            treeView1.Nodes.Add("Members");
-            treeView1.Nodes.Add("Materials");
-            treeView1.Nodes.Add("Sections");
+            // Panel is created temporarily
 
-            foreach (Node obj in nodeList)
-            {
-                treeView1.Nodes[0].Nodes.Add(obj.Node_Name.ToString());
-            }
+            // temporary objects
+            Node node1 = new Node();
+            Node node2 = new Node();
+            nodeList.Add(node1);
+            nodeList.Add(node2);
+
+            Member member1 = new Member();
+            memberList.Add(member1);
+
+            Material material1 = new Material();
+            materialList.Add(material1);
+
+            Section section1 = new Section();
+            sectionList.Add(section1);
+
+            // creates navigator form
+            createNavigator();
 
         }
 
 
-        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void createNavigator()
         {
-            
-            string clickedItem = e.Node.Text;
-            addTabs(clickedItem);
-
+            // creates new treeview form
+            TreeView navigator = new TreeView();
+            navigator.MdiParent = this;
+            panel1.Controls.Add(navigator);
+            navigator.Show();
+            navigator.Dock = System.Windows.Forms.DockStyle.Left; // docks the form in to panel (temporary)
+            navigator.refresh();
+        }
+        private void toolStripButton10_Click(object sender, EventArgs e)
+        {
+            createNavigator();
         }
 
-        private void addTabs(string tabName)
+        private void navigatorToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string newName;
-            if (tabName.Contains("Node"))
-            {
-                newName = "Nodes";
-            }
-            else if (tabName.Contains("Member"))
-            {
-                newName = "Members";
-            }
-            else
-            {
-                newName = "Empty";
-            }
-
-            TabPage tabPage = new TabPage(newName);
-            tabControl1.TabPages.Add(tabPage);
-            tabControl1.SelectedTab = tabPage;
-
-            DataGridView spreadSheet = new DataGridView();
-            tabPage.Controls.Add(spreadSheet);
-            spreadSheet.Dock = System.Windows.Forms.DockStyle.Fill;
-
-            BindingFlags bindingFlags = BindingFlags.Public |
-                            BindingFlags.NonPublic |
-                            BindingFlags.Instance;
-
-
-
-
-            if (newName == "Nodes")
-            {
-
-                foreach (FieldInfo field in typeof(Node).GetFields(bindingFlags))
-                {
-                    spreadSheet.Columns.Add(field.Name, field.Name);
-                }
-
-                if (nodeList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in nodeList)
-                    {
-                        spreadSheet.Rows.Add();
-
-                        foreach (var item2 in item.GetAll())
-                        {
-                            spreadSheet.CurrentCell = spreadSheet[col, row];
-                            spreadSheet.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
-                }
-                
-
-            }
-            else if (newName == "Member")
-            {
-
-            }
-        }
-
-        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                treeView1.SelectedNode = e.Node;
-                contextMenuStrip1.Show(Cursor.Position);
-            }
+            createNavigator();
         }
     }
 
