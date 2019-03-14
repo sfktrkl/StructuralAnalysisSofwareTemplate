@@ -14,6 +14,8 @@ namespace StructuralAnalysisSofwareTemplate
         private double width;
         private double area;
         private double inertia;
+        private Dictionary<string, Member> isUsed = new Dictionary<string, Member>();
+        public bool used = false;
 
         public Section()
         {
@@ -46,6 +48,24 @@ namespace StructuralAnalysisSofwareTemplate
             fieldData.Add(this.inertia.ToString());
 
             return fieldData;
+        }
+        
+        public void usedBy(string memberName,Member member, bool condition)
+        {
+            if (condition == true)
+            {
+                isUsed.Add(memberName, member);
+                used = true;
+            }
+            else
+            {
+                isUsed.Remove(memberName);
+                if (isUsed.Count == 0)
+                {
+                    used = false;
+                }
+            }
+
         }
 
     }

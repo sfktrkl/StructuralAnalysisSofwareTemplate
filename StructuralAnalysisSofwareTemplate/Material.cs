@@ -12,6 +12,8 @@ namespace StructuralAnalysisSofwareTemplate
         public string material_Name;
         private double unitWeight;
         private double elasticModulus;
+        private Dictionary<string, Member> isUsed = new Dictionary<string, Member>();
+        public bool used = false;
 
         public Material()
         {
@@ -36,6 +38,24 @@ namespace StructuralAnalysisSofwareTemplate
             fieldData.Add(this.elasticModulus.ToString());
 
             return fieldData;
+        }
+
+        public void usedBy(string memberName, Member member, bool condition)
+        {
+            if (condition == true)
+            {
+                isUsed.Add(memberName, member);
+                used = true;
+            }
+            else
+            {
+                isUsed.Remove(memberName);
+                if (isUsed.Count == 0)
+                {
+                    used = false;
+                }
+            }
+
         }
     }
 }

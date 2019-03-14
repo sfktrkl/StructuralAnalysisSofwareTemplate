@@ -20,6 +20,8 @@ namespace StructuralAnalysisSofwareTemplate
         private double X_Stiffness;
         private double Y_Stiffness;
         private double Z_Stiffness;
+        private Dictionary<string, Member> isUsed = new Dictionary<string, Member>();
+        public bool used = false;
 
         public Node()
         {
@@ -53,19 +55,36 @@ namespace StructuralAnalysisSofwareTemplate
             List<string> fieldData = new List<string>();
 
             fieldData.Add(this.Node_Name.ToString());
+            fieldData.Add(this.X_Coordinate.ToString());
+            fieldData.Add(this.Y_Coordinate.ToString());
             fieldData.Add(this.X_Fixity.ToString());
             fieldData.Add(this.Y_Fixity.ToString());
             fieldData.Add(this.Z_Fixity.ToString());
             fieldData.Add(this.X_Stiffness.ToString());
             fieldData.Add(this.Y_Stiffness.ToString());
             fieldData.Add(this.Z_Stiffness.ToString());
-            fieldData.Add(this.X_Coordinate.ToString());
-            fieldData.Add(this.Y_Coordinate.ToString());
+
 
             return fieldData;
         }
 
+        public void usedBy(string memberName, Member member, bool condition)
+        {
+            if (condition == true)
+            {
+                isUsed.Add(memberName, member);
+                used = true;
+            }
+            else
+            {
+                isUsed.Remove(memberName);
+                if (isUsed.Count == 0)
+                {
+                    used = false;
+                }
+            }
 
+        }
 
 
     }

@@ -38,21 +38,21 @@ namespace StructuralAnalysisSofwareTemplate
             treeView1.Nodes.Add("Sections");
 
             // loops each object to add treeview
-            foreach (Node obj in Form1.nodeList)
+            foreach (var obj in Form1.nodeList)
             {
-                treeView1.Nodes[0].Nodes.Add(obj.Node_Name.ToString());
+                treeView1.Nodes[0].Nodes.Add(obj.Value.Node_Name.ToString());
             }
-            foreach (Member obj in Form1.memberList)
+            foreach (var obj in Form1.memberList)
             {
-                treeView1.Nodes[1].Nodes.Add(obj.member_Name.ToString());
+                treeView1.Nodes[1].Nodes.Add(obj.Value.member_Name.ToString());
             }
-            foreach (Material obj in Form1.materialList)
+            foreach (var obj in Form1.materialList)
             {
-                treeView1.Nodes[2].Nodes.Add(obj.material_Name.ToString());
+                treeView1.Nodes[2].Nodes.Add(obj.Value.material_Name.ToString());
             }
-            foreach (Section obj in Form1.sectionList)
+            foreach (var obj in Form1.sectionList)
             {
-                treeView1.Nodes[3].Nodes.Add(obj.section_Name.ToString());
+                treeView1.Nodes[3].Nodes.Add(obj.Value.section_Name.ToString());
             }
             expand();
 
@@ -119,112 +119,7 @@ namespace StructuralAnalysisSofwareTemplate
             spreadSheet.Dock = DockStyle.Right;
             spreadSheet.Text = spreadSheetName;
 
-
-            // binding flags to take private and public field names
-            BindingFlags bindingFlags = BindingFlags.Public |
-                            BindingFlags.NonPublic |
-                            BindingFlags.Instance;
-
-
-            // adds each field name of a class as a column name
-            foreach (FieldInfo field in givenClass.GetFields(bindingFlags))
-            {
-                spreadSheet.dataGridView1.Columns.Add(field.Name, field.Name);
-            }
-
-            // checks whether objects exist or not and gets values to enter spreadsheet
-            if (spreadSheetName == "Nodes")
-            {
-                if (Form1.nodeList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.nodeList)
-                    {
-                        spreadSheet.dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.GetAll())
-                        {
-                            spreadSheet.dataGridView1.CurrentCell = spreadSheet.dataGridView1[col, row];
-                            spreadSheet.dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
-                }
-            }
-            else if (spreadSheetName == "Members")
-            {
-                if (Form1.memberList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.memberList)
-                    {
-                        spreadSheet.dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.GetAll())
-                        {
-                            spreadSheet.dataGridView1.CurrentCell = spreadSheet.dataGridView1[col, row];
-                            spreadSheet.dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
-                }
-            }
-            else if (spreadSheetName == "Materials")
-            {
-                if (Form1.materialList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.materialList)
-                    {
-                        spreadSheet.dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.GetAll())
-                        {
-                            spreadSheet.dataGridView1.CurrentCell = spreadSheet.dataGridView1[col, row];
-                            spreadSheet.dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
-                }
-            }
-            else
-            {
-                if (Form1.sectionList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.sectionList)
-                    {
-                        spreadSheet.dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.GetAll())
-                        {
-                            spreadSheet.dataGridView1.CurrentCell = spreadSheet.dataGridView1[col, row];
-                            spreadSheet.dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
-                }
-            }
+            spreadSheet.refresh(givenClass);
 
         }
 
@@ -290,6 +185,58 @@ namespace StructuralAnalysisSofwareTemplate
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string clickedItem = treeView1.SelectedNode.Text;
+            Clipboard.SetText(clickedItem);
+
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string clickedItem = treeView1.SelectedNode.Text;
+            if (clickedItem.Contains("Node"))
+            {
+                if (Form1.nodeList[clickedItem].used == true)
+                {
+                    MessageBox.Show("Node is Used");
+                }
+                else
+                {
+                    Form1.nodeList.Remove(clickedItem);
+                }
+            }
+            else if (clickedItem.Contains("Material"))
+            {
+                if (Form1.materialList[clickedItem].used == true)
+                {
+                    MessageBox.Show("Material is Used");
+                }
+                else
+                {
+                    Form1.materialList.Remove(clickedItem);
+                }
+
+            }
+            else if (clickedItem.Contains("Section"))
+            {
+                if(Form1.sectionList[clickedItem].used == true)
+                {
+                    MessageBox.Show("Section is Used");
+                }
+                else
+                {
+                    Form1.sectionList.Remove(clickedItem);
+                }
+                
+            }
+            else
+            {
+                Form1.memberList.Remove(clickedItem);
+            }
+            refresh();
         }
     }
 }

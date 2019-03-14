@@ -11,11 +11,10 @@ namespace StructuralAnalysisSofwareTemplate
 
         static int numOfMembers;
         public string member_Name;
-        private Material memberMaterial;
-        private Section memberSection;
         private Node node1;
         private Node node2;
-
+        private Material memberMaterial;
+        private Section memberSection;
 
         public Member()
         {
@@ -28,12 +27,60 @@ namespace StructuralAnalysisSofwareTemplate
 
         }
 
+        ~Member()
+        {
+            try
+            {
+                try
+                {
+                    try
+                    {
+                        try
+                        {
+                            this.memberSection.usedBy(this.member_Name, this, false);
+                        }
+                        catch { }
+                        this.memberMaterial.usedBy(this.member_Name, this, false);
+                    }
+                    catch { }
+                    this.node2.usedBy(this.member_Name, this, false);
+                }
+                catch { }
+                this.node1.usedBy(this.member_Name, this, false);
+            }
+            catch { }
+        }
+
         public void SetAll(Node node1, Node node2, Material memberMaterial, Section memberSection)
         {
             this.node1 = node1;
             this.node2 = node2;
             this.memberMaterial = memberMaterial;
             this.memberSection = memberSection;
+
+            try
+            {
+                try
+                {
+                    try
+                    {
+                        try
+                        {
+                            this.memberSection.usedBy(this.member_Name, this, true);
+                        }
+                        catch { }
+                        this.memberMaterial.usedBy(this.member_Name, this, true);
+                    }
+                    catch { }
+                    this.node2.usedBy(this.member_Name, this, true);
+                }
+                catch { }
+                this.node1.usedBy(this.member_Name, this, true);
+            }
+            catch { }
+            
+            
+            
 
         }
 
@@ -42,11 +89,10 @@ namespace StructuralAnalysisSofwareTemplate
             List<string> fieldData = new List<string>();
 
             fieldData.Add(this.member_Name == null ? "NULL" : this.member_Name.ToString());
-            fieldData.Add(this.memberMaterial == null ? "NULL" : this.memberMaterial.ToString());
-            fieldData.Add(this.memberSection == null ? "NULL" : this.memberSection.ToString());
-            fieldData.Add(this.node1 == null ? "NULL" : this.node1.ToString());
-            fieldData.Add(this.node2 == null ? "NULL" : this.node2.ToString());
-
+            fieldData.Add(this.node1 == null ? "NULL" : this.node1.Node_Name.ToString());
+            fieldData.Add(this.node2 == null ? "NULL" : this.node2.Node_Name.ToString());
+            fieldData.Add(this.memberMaterial == null ? "NULL" : this.memberMaterial.material_Name.ToString());
+            fieldData.Add(this.memberSection == null ? "NULL" : this.memberSection.section_Name.ToString());
             return fieldData;
         }
 
