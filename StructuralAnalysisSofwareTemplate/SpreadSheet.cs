@@ -149,15 +149,39 @@ namespace StructuralAnalysisSofwareTemplate
         {
             if (loaded == true)
             {
-                // adds new node with default constructor
+                // adds new objects with default constructors
                 loaded = false;
-                Node node = new Node();
-                Form1.nodeList.Add(node.Node_Name,node);
+                if (this.Text == "Nodes")
+                {
+                    Node node = new Node();
+                    Form1.nodeList.Add(node.Node_Name, node);
+                    // refresh the spreadsheet
+                    refresh(typeof(Node));
+                }
+                else if (this.Text == "Materials")
+                {
+                    Material material = new Material();
+                    Form1.materialList.Add(material.material_Name, material);
+                    refresh(typeof(Material));
+                }
+                else if (this.Text == "Sections")
+                {
+                    Section section = new Section();
+                    Form1.sectionList.Add(section.section_Name, section);
+                    refresh(typeof(Section));
+                }
+                else
+                {
+                    Member member = new Member();
+                    Form1.memberList.Add(member.member_Name, member);
+                    refresh(typeof(Member));
+                }
+
+                dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count-2].Cells[1];
                 // refresh the treeview
                 TreeView navigator = (TreeView)Application.OpenForms[0];
                 navigator.refresh();
-                // refresh the spreadsheet
-                refresh(typeof(Node));
+
             }
         }
 
@@ -232,7 +256,18 @@ namespace StructuralAnalysisSofwareTemplate
                     // tries whether object is exist or not
                     try
                     {
-                        node1 = Form1.nodeList[dataGridView1.Rows[index].Cells[1].Value.ToString()];
+                        // auto complete for nodenames
+                        if (dataGridView1.Rows[index].Cells[1].Value.ToString().All(char.IsDigit))
+                        {
+                            string temp = "Node: " + dataGridView1.Rows[index].Cells[1].Value.ToString();
+                            dataGridView1.Rows[index].Cells[1].Value = temp;
+                            node1 = Form1.nodeList[temp];
+                        }
+                        else
+                        {
+                            node1 = Form1.nodeList[dataGridView1.Rows[index].Cells[1].Value.ToString()];
+                        }
+                        
                     }
                     catch
                     {
@@ -242,7 +277,18 @@ namespace StructuralAnalysisSofwareTemplate
 
                     try
                     {
-                        node2 = Form1.nodeList[dataGridView1.Rows[index].Cells[2].Value.ToString()];
+                        // auto complete for nodenames
+                        if (dataGridView1.Rows[index].Cells[2].Value.ToString().All(char.IsDigit))
+                        {
+                            string temp = "Node: " + dataGridView1.Rows[index].Cells[2].Value.ToString();
+                            dataGridView1.Rows[index].Cells[2].Value = temp;
+                            node2 = Form1.nodeList[temp];
+                        }
+                        else
+                        {
+                            node2 = Form1.nodeList[dataGridView1.Rows[index].Cells[2].Value.ToString()];
+                        }
+                        
                     }
                     catch
                     {
@@ -252,16 +298,39 @@ namespace StructuralAnalysisSofwareTemplate
 
                     try
                     {
-                        material = Form1.materialList[dataGridView1.Rows[index].Cells[3].Value.ToString()];
+                        // auto complete for material names
+                        if (dataGridView1.Rows[index].Cells[3].Value.ToString().All(char.IsDigit))
+                        {
+                            string temp = "Material: " + dataGridView1.Rows[index].Cells[3].Value.ToString();
+                            dataGridView1.Rows[index].Cells[3].Value = temp;
+                            material = Form1.materialList[temp];
+                        }
+                        else
+                        {
+                            material = Form1.materialList[dataGridView1.Rows[index].Cells[3].Value.ToString()];
+                        }
+                        
                     }
                     catch
                     {
                         material = null;
                         dataGridView1.Rows[index].Cells[3].Value = "NULL";
                     }
+
                     try
                     {
-                        section = Form1.sectionList[dataGridView1.Rows[index].Cells[4].Value.ToString()];
+                        // auto complete for section names
+                        if (dataGridView1.Rows[index].Cells[4].Value.ToString().All(char.IsDigit))
+                        {
+                            string temp = "Section: " + dataGridView1.Rows[index].Cells[4].Value.ToString();
+                            dataGridView1.Rows[index].Cells[4].Value = temp;
+                            section = Form1.sectionList[temp];
+                        }
+                        else
+                        {
+                            section = Form1.sectionList[dataGridView1.Rows[index].Cells[4].Value.ToString()];
+                        }
+
                     }
                     catch
                     {

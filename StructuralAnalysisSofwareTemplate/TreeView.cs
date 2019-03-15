@@ -136,6 +136,7 @@ namespace StructuralAnalysisSofwareTemplate
             if (e.Button == MouseButtons.Left)
             {
                 MouseDownLocation = e.Location;
+                this.MdiParent = null;
                 this.Dock = DockStyle.None;
             }
             // enables docking with right click to panel1
@@ -154,6 +155,12 @@ namespace StructuralAnalysisSofwareTemplate
             // docks the form according to movement of cursor
             if (rightClickActive == true)
             {
+                // relocating navigator in form1 panel
+                this.TopLevel = false;
+                Form1 form1 = (Form1)Application.OpenForms["Form1"];
+                Panel panel1 = (Panel)form1.Controls["panel1"];
+                panel1.Controls.Add(this);
+
                 if (previousLocation.X > Cursor.Position.X && Math.Abs(previousLocation.Y - Cursor.Position.Y) < 300)
                 {
                     this.Dock = DockStyle.Left;
@@ -166,10 +173,12 @@ namespace StructuralAnalysisSofwareTemplate
                 {
                     this.Dock = DockStyle.Fill;
                 }
+
+                Cursor = Cursors.Arrow;
+                rightClickActive = false;
             }
             
-            Cursor = Cursors.Arrow;
-            rightClickActive = false;
+
         }
 
         private void splitContainer1_Panel1_MouseMove(object sender, MouseEventArgs e)

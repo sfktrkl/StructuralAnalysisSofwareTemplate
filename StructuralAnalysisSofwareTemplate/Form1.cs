@@ -35,7 +35,6 @@ namespace StructuralAnalysisSofwareTemplate
 
             Member member1 = new Member();
             memberList.Add(member1.member_Name,member1);
-            
 
             Material material1 = new Material();
             materialList.Add(material1.material_Name,material1);
@@ -54,7 +53,7 @@ namespace StructuralAnalysisSofwareTemplate
         {
             // creates new treeview form
             TreeView navigator = new TreeView();
-            navigator.MdiParent = this;
+            navigator.TopLevel = false;
             panel1.Controls.Add(navigator);
             navigator.Show();
             navigator.Dock = System.Windows.Forms.DockStyle.Left; // docks the form in to panel (temporary)

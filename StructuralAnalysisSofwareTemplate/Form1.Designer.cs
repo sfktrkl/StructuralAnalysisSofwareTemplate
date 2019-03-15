@@ -35,6 +35,7 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.navigatorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.navigatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.membersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,7 +67,6 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.navigatorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -82,7 +82,7 @@
             this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1199, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1354, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -102,22 +102,30 @@
             // 
             this.newToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.empty;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.folder;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.save;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.saveToolStripMenuItem.Text = "Save";
+            // 
+            // navigatorToolStripMenuItem1
+            // 
+            this.navigatorToolStripMenuItem1.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.navigator;
+            this.navigatorToolStripMenuItem1.Name = "navigatorToolStripMenuItem1";
+            this.navigatorToolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
+            this.navigatorToolStripMenuItem1.Text = "Navigator";
+            this.navigatorToolStripMenuItem1.Click += new System.EventHandler(this.navigatorToolStripMenuItem1_Click);
             // 
             // navigatorToolStripMenuItem
             // 
@@ -135,28 +143,28 @@
             // 
             this.nodesToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.dot;
             this.nodesToolStripMenuItem.Name = "nodesToolStripMenuItem";
-            this.nodesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nodesToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.nodesToolStripMenuItem.Text = "Nodes";
             // 
             // membersToolStripMenuItem
             // 
             this.membersToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.members;
             this.membersToolStripMenuItem.Name = "membersToolStripMenuItem";
-            this.membersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.membersToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.membersToolStripMenuItem.Text = "Members";
             // 
             // materialsToolStripMenuItem
             // 
             this.materialsToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.concrete;
             this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.materialsToolStripMenuItem.Text = "Materials";
             // 
             // sectionsToolStripMenuItem
             // 
             this.sectionsToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.pencil;
             this.sectionsToolStripMenuItem.Name = "sectionsToolStripMenuItem";
-            this.sectionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sectionsToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.sectionsToolStripMenuItem.Text = "Sections";
             // 
             // viewToolStripMenuItem
@@ -173,14 +181,14 @@
             // 
             this.dViewToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.axis;
             this.dViewToolStripMenuItem.Name = "dViewToolStripMenuItem";
-            this.dViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dViewToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.dViewToolStripMenuItem.Text = "2D View";
             // 
             // dViewToolStripMenuItem1
             // 
             this.dViewToolStripMenuItem1.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources._3d;
             this.dViewToolStripMenuItem1.Name = "dViewToolStripMenuItem1";
-            this.dViewToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.dViewToolStripMenuItem1.Size = new System.Drawing.Size(116, 22);
             this.dViewToolStripMenuItem1.Text = "3D View";
             // 
             // statusStrip1
@@ -189,7 +197,7 @@
             this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 589);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1199, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1354, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -217,7 +225,7 @@
             this.toolStripButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1199, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1354, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -372,22 +380,14 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 49);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1199, 540);
+            this.panel1.Size = new System.Drawing.Size(1354, 540);
             this.panel1.TabIndex = 6;
-            // 
-            // navigatorToolStripMenuItem1
-            // 
-            this.navigatorToolStripMenuItem1.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.navigator;
-            this.navigatorToolStripMenuItem1.Name = "navigatorToolStripMenuItem1";
-            this.navigatorToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.navigatorToolStripMenuItem1.Text = "Navigator";
-            this.navigatorToolStripMenuItem1.Click += new System.EventHandler(this.navigatorToolStripMenuItem1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1199, 611);
+            this.ClientSize = new System.Drawing.Size(1354, 611);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
