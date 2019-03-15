@@ -48,19 +48,6 @@ namespace StructuralAnalysisSofwareTemplate
 
         }
 
-        private void createSpreadSheet(string spreadSheetName, Type givenClass)
-        {
-            // adds spread sheet in to form1.panel1
-            SpreadSheet spreadSheet = new SpreadSheet();
-            spreadSheet.TopLevel = false;
-            panel1.Controls.Add(spreadSheet);
-            spreadSheet.Show();
-            spreadSheet.Dock = DockStyle.Right;
-            spreadSheet.Text = spreadSheetName;
-
-            spreadSheet.refresh(givenClass);
-
-        }
 
         private void createNavigator()
         {
@@ -69,10 +56,9 @@ namespace StructuralAnalysisSofwareTemplate
             navigator.TopLevel = false;
             panel1.Controls.Add(navigator);
             navigator.Show();
-            navigator.Dock = DockStyle.Left; // docks the form in to panel (temporary)
+            navigator.Dock = System.Windows.Forms.DockStyle.Left; // docks the form in to panel (temporary)
             navigator.refresh();
         }
-
         private void toolStripButton10_Click(object sender, EventArgs e)
         {
             createNavigator();
@@ -81,46 +67,6 @@ namespace StructuralAnalysisSofwareTemplate
         private void navigatorToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             createNavigator();
-        }
-
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Nodes", typeof(Node));
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Members", typeof(Member));
-        }
-
-        private void toolStripButton3_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Materials", typeof(Material));
-        }
-
-        private void toolStripButton4_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Sections", typeof(Section));
-        }
-
-        private void nodesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Nodes", typeof(Node));
-        }
-
-        private void membersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Members", typeof(Member));
-        }
-
-        private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Materials", typeof(Material));
-        }
-
-        private void sectionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            createSpreadSheet("Sections", typeof(Section));
         }
     }
 
