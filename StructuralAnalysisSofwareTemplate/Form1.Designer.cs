@@ -143,29 +143,33 @@
             // 
             this.nodesToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.dot;
             this.nodesToolStripMenuItem.Name = "nodesToolStripMenuItem";
-            this.nodesToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.nodesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.nodesToolStripMenuItem.Text = "Nodes";
+            this.nodesToolStripMenuItem.Click += new System.EventHandler(this.nodesToolStripMenuItem_Click);
             // 
             // membersToolStripMenuItem
             // 
             this.membersToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.members;
             this.membersToolStripMenuItem.Name = "membersToolStripMenuItem";
-            this.membersToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.membersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.membersToolStripMenuItem.Text = "Members";
+            this.membersToolStripMenuItem.Click += new System.EventHandler(this.membersToolStripMenuItem_Click);
             // 
             // materialsToolStripMenuItem
             // 
             this.materialsToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.concrete;
             this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.materialsToolStripMenuItem.Text = "Materials";
+            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
             // 
             // sectionsToolStripMenuItem
             // 
             this.sectionsToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.pencil;
             this.sectionsToolStripMenuItem.Name = "sectionsToolStripMenuItem";
-            this.sectionsToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.sectionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sectionsToolStripMenuItem.Text = "Sections";
+            this.sectionsToolStripMenuItem.Click += new System.EventHandler(this.sectionsToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -181,14 +185,14 @@
             // 
             this.dViewToolStripMenuItem.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.axis;
             this.dViewToolStripMenuItem.Name = "dViewToolStripMenuItem";
-            this.dViewToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.dViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.dViewToolStripMenuItem.Text = "2D View";
             // 
             // dViewToolStripMenuItem1
             // 
             this.dViewToolStripMenuItem1.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources._3d;
             this.dViewToolStripMenuItem1.Name = "dViewToolStripMenuItem1";
-            this.dViewToolStripMenuItem1.Size = new System.Drawing.Size(116, 22);
+            this.dViewToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.dViewToolStripMenuItem1.Text = "3D View";
             // 
             // statusStrip1
@@ -284,6 +288,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton2.Text = "Nodes";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripButton1
             // 
@@ -293,6 +298,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "Members";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripButton3
             // 
@@ -302,6 +308,7 @@
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton3.Text = "Materials";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // toolStripButton4
             // 
@@ -311,6 +318,7 @@
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton4.Text = "Sections";
+            this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
             // toolStripSeparator1
             // 
@@ -393,7 +401,6 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Template UI";

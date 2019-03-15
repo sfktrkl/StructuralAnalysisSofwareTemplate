@@ -128,8 +128,6 @@ namespace StructuralAnalysisSofwareTemplate
             refresh();
         }
 
-
-
         private void splitContainer1_Panel1_MouseDown(object sender, MouseEventArgs e)
         {
             // enables dragging with left click to panel
