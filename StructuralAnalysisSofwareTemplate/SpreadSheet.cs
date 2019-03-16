@@ -11,19 +11,14 @@ using System.Reflection;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public partial class SpreadSheet : Form
+    public partial class SpreadSheet : StructuralAnalysisSofwareTemplate.DockableForm
     {
-        private Point previousLocation;
-        private Point MouseDownLocation;
-        private bool rightClickActive;
-
         // to not trigger the events it is set to false initially
         private bool loaded = false;
 
         public SpreadSheet()
         {
             InitializeComponent();
-
         }
 
         public void refresh(Type givenClass)
@@ -143,7 +138,7 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 var index = dataGridView1.Columns["isUsed"].Index;
                 dataGridView1.Columns[index].Visible = false;
-                dataGridView1.Columns[index+1].Visible = false;
+                dataGridView1.Columns[index + 1].Visible = false;
             }
             // makes loaded field true
             loaded = true;
@@ -181,7 +176,7 @@ namespace StructuralAnalysisSofwareTemplate
                     refresh(typeof(Member));
                 }
 
-                dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count-2].Cells[1];
+                dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1];
                 // refresh the treeview
                 TreeView navigator = (TreeView)Application.OpenForms[0];
                 navigator.refresh();
@@ -233,10 +228,10 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             try
                             {
-                                
+
                                 try
                                 {
-                                    
+
                                     try
                                     {
                                         Form1.sectionList[previousData[i]].usedBy(previousData[0], Form1.memberList[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
@@ -271,7 +266,7 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             node1 = Form1.nodeList[dataGridView1.Rows[index].Cells[1].Value.ToString()];
                         }
-                        
+
                     }
                     catch
                     {
@@ -292,7 +287,7 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             node2 = Form1.nodeList[dataGridView1.Rows[index].Cells[2].Value.ToString()];
                         }
-                        
+
                     }
                     catch
                     {
@@ -313,7 +308,7 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             material = Form1.materialList[dataGridView1.Rows[index].Cells[3].Value.ToString()];
                         }
-                        
+
                     }
                     catch
                     {
@@ -345,7 +340,7 @@ namespace StructuralAnalysisSofwareTemplate
                     // sets objects to Member
                     Form1.memberList[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(node1, node2, material, section);
 
-                    
+
                 }
 
             }
@@ -386,81 +381,15 @@ namespace StructuralAnalysisSofwareTemplate
                     }
                 }
                 // shows the contextmenustrip in cursor position
-                contextMenuStrip2.Show(Cursor.Position);
+                contextMenuStrip1.Show(Cursor.Position);
             }
-            
+
         }
 
-        private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string clickedItem = dataGridView1.CurrentCell.Value.ToString(); ;
             Clipboard.SetText(clickedItem);
-        }
-
-        private void splitContainer1_Panel1_MouseDown(object sender, MouseEventArgs e)
-        {
-            // enables dragging with left click to panel
-            if (e.Button == MouseButtons.Left)
-            {
-                MouseDownLocation = e.Location;
-                this.MdiParent = null;
-                this.Dock = DockStyle.None;
-            }
-            // enables docking with right click to panel1
-            if (e.Button == MouseButtons.Right)
-            {
-                // takes cursor location for docking
-                previousLocation = Cursor.Position;
-                Cursor = Cursors.Hand;
-                rightClickActive = true;
-            }
-
-        }
-
-        private void splitContainer1_Panel1_MouseUp(object sender, MouseEventArgs e)
-        {
-            // docks the form according to movement of cursor
-            if (rightClickActive == true)
-            {
-                // relocating navigator in form1 panel
-                this.TopLevel = false;
-                Form1 form1 = (Form1)Application.OpenForms["Form1"];
-                Panel panel1 = (Panel)form1.Controls["panel1"];
-                panel1.Controls.Add(this);
-
-                if (previousLocation.X > Cursor.Position.X && Math.Abs(previousLocation.Y - Cursor.Position.Y) < 300)
-                {
-                    this.Dock = DockStyle.Left;
-                }
-                else if (previousLocation.X < Cursor.Position.X && Math.Abs(previousLocation.Y - Cursor.Position.Y) < 300)
-                {
-                    this.Dock = DockStyle.Right;
-                }
-                else
-                {
-                    this.Dock = DockStyle.Fill;
-                }
-
-                Cursor = Cursors.Arrow;
-                rightClickActive = false;
-            }
-
-
-        }
-
-        private void splitContainer1_Panel1_MouseMove(object sender, MouseEventArgs e)
-        {
-
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                this.Left = e.X + this.Left - MouseDownLocation.X;
-                this.Top = e.Y + this.Top - MouseDownLocation.Y;
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
     }
 }

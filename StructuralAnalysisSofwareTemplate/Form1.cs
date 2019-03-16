@@ -30,17 +30,17 @@ namespace StructuralAnalysisSofwareTemplate
             // temporary objects
             Node node1 = new Node();
             Node node2 = new Node();
-            nodeList.Add(node1.Node_Name,node1);
-            nodeList.Add(node2.Node_Name,node2);
+            nodeList.Add(node1.Node_Name, node1);
+            nodeList.Add(node2.Node_Name, node2);
 
             Member member1 = new Member();
-            memberList.Add(member1.member_Name,member1);
+            memberList.Add(member1.member_Name, member1);
 
             Material material1 = new Material();
-            materialList.Add(material1.material_Name,material1);
+            materialList.Add(material1.material_Name, material1);
 
             Section section1 = new Section();
-            sectionList.Add(section1.section_Name,section1);
+            sectionList.Add(section1.section_Name, section1);
 
             member1.SetAll(node1, node2, material1, section1);
             // creates navigator form
