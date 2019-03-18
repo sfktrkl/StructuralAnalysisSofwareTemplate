@@ -63,6 +63,13 @@ namespace StructuralAnalysisSofwareTemplate
 
             // makes Name columns readonly
             dataGridView1.Columns[0].ReadOnly = true;
+            // makes area and inertia columns in the datagridview (for sections) readonly 
+            // since they are related to other inputs
+            if (givenClass == typeof(Section))
+            {
+                dataGridView1.Columns[3].ReadOnly = true;
+                dataGridView1.Columns[4].ReadOnly = true;
+            }
             // hides unnecessary columns (fields)
             if (this.Text.Contains("Node") || this.Text.Contains("Material") || this.Text.Contains("Section") || this.Text.Contains("Member"))
             {
@@ -136,6 +143,12 @@ namespace StructuralAnalysisSofwareTemplate
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString())
                     );
+                    // refreshes the area and inertia column in the datagridview 
+                    if (dataGridView1.Rows[index].Cells[1].Value.ToString() != "0" && dataGridView1.Rows[index].Cells[2].Value.ToString() != "0")
+                    {
+                        dataGridView1.Rows[index].Cells[3].Value = Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll()[3].ToString();
+                        dataGridView1.Rows[index].Cells[4].Value = Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll()[4].ToString();
+                    }
                 }
                 else
                 {
@@ -145,9 +158,9 @@ namespace StructuralAnalysisSofwareTemplate
                     {
                         if (previousData[i] != "NULL")
                         {
-                            // deletes this member from all previous objects used dictionaries
-                            // used property will be added again in the Member.setall function
-                            // if new objects are same with previous ones
+                            // deletes this member from all previous related objects' used dictionaries
+                            // used property will be added again in the Member.setall function,
+                            // if new objects are same with previous ones.
                             try
                             {
 
@@ -175,7 +188,7 @@ namespace StructuralAnalysisSofwareTemplate
                     for (int i = 1; i < 5; i++)
                     {
                         // assigns k to a value for first two loop 
-                        // since for two loop it should return Node object
+                        // since for two loop should return Node object
                         int k = 0;
                         if (i == 1 || i == 2)
                         {
@@ -185,7 +198,7 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             k = i-1;
                         }
-                        // detemines return type according to k value (Node,Material or Section)
+                        // detemines return type according to k value (Node, Material or Section)
                         Type itemType = Form1.tempDatabase.returnType(k);
 
                         string itemName;
