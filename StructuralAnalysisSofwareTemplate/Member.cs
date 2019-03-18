@@ -27,6 +27,8 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void delete()
         {
+            // when this member is deleted
+            // deletes this member from all objects used dictionaries
             try
             {
                 try
@@ -56,7 +58,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.Node2 = Node2;
             this.Material = Material;
             this.Section = Section;
-
+            // adds objects used dictionaries to this member
             try
             {
                 try

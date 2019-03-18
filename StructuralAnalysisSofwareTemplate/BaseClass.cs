@@ -8,9 +8,12 @@ namespace StructuralAnalysisSofwareTemplate
 {
     public class BaseClass
     {
+        // contains which objects are using this object
         private Dictionary<string, Member> isUsed = new Dictionary<string, Member>();
+        // returns whether object is used by another object or objects
         public bool used = false;
 
+        // virtual method for deleting objects
         public virtual void delete()
         {
 
@@ -20,7 +23,9 @@ namespace StructuralAnalysisSofwareTemplate
         {
             if (condition == true)
             {
+                // adds member to used dictionary
                 isUsed.Add(memberName, member);
+                // when used dictionary has object, used returns true
                 used = true;
             }
             else
@@ -28,6 +33,8 @@ namespace StructuralAnalysisSofwareTemplate
                 isUsed.Remove(memberName);
                 if (isUsed.Count == 0)
                 {
+                    // if used dictionary is empty 
+                    // returns used as false
                     used = false;
                 }
             }

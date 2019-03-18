@@ -84,7 +84,7 @@ namespace StructuralAnalysisSofwareTemplate
             spreadSheet.Text = spreadSheetName;
 
             spreadSheet.refresh(givenClass);
-            Form1.spreadList.Add(spreadSheet);
+            Form1.tempDatabase.spreadList.Add(spreadSheet);
 
         }
 
@@ -118,11 +118,8 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 Form1.tempDatabase.get(itemType)[clickedItem].delete();
                 Form1.tempDatabase.get(itemType).Remove(clickedItem);
-                
-                foreach (var form in Form1.spreadList)
-                {
-                        form.refresh(form.loadType);
-                }
+
+                Form1.tempDatabase.refreshSpreadList();
             }
 
             refresh();

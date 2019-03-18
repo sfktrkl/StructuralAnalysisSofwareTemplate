@@ -15,7 +15,6 @@ namespace StructuralAnalysisSofwareTemplate
     public partial class Form1 : Form
     {
         public static TemporaryDatabase tempDatabase = new TemporaryDatabase();
-        public static List<SpreadSheet> spreadList = new List<SpreadSheet>();
 
         public Form1()
         {
@@ -58,7 +57,7 @@ namespace StructuralAnalysisSofwareTemplate
             spreadSheet.Text = spreadSheetName;
 
             spreadSheet.refresh(givenClass);
-            spreadList.Add(spreadSheet);
+            Form1.tempDatabase.spreadList.Add(spreadSheet);
         }
 
         private void createNavigator()
@@ -71,6 +70,8 @@ namespace StructuralAnalysisSofwareTemplate
             navigator.Dock = DockStyle.Left; // docks the form in to panel (temporary)
             navigator.refresh();
         }
+
+
 
         private void toolStripButton10_Click(object sender, EventArgs e)
         {

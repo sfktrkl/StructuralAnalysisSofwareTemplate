@@ -84,7 +84,8 @@ namespace StructuralAnalysisSofwareTemplate
                 var item = Activator.CreateInstance(itemType);
                 var itemName = item.GetType().GetField("Name").GetValue(item).ToString();
                 Form1.tempDatabase.get(itemType).Add(itemName, item);
-                refresh(itemType);
+                Form1.tempDatabase.refreshSpreadList();
+                
 
                 dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1];
                 // refresh the treeview
@@ -101,17 +102,26 @@ namespace StructuralAnalysisSofwareTemplate
                 var index = e.RowIndex;
                 if (this.Text.Contains("Node"))
                 {
+                    bool xFixity = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[3].Value.ToString());
+                    bool yFixity = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[4].Value.ToString());
+                    bool zFixity = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[5].Value.ToString());
+
                     // setting node properties
                     Form1.tempDatabase.get(typeof(Node))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString()),
-                        Convert.ToBoolean(dataGridView1.Rows[index].Cells[3].Value.ToString()),
-                        Convert.ToBoolean(dataGridView1.Rows[index].Cells[4].Value.ToString()),
-                        Convert.ToBoolean(dataGridView1.Rows[index].Cells[5].Value.ToString()),
+                        Convert.ToBoolean(xFixity),
+                        Convert.ToBoolean(yFixity),
+                        Convert.ToBoolean(zFixity),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[6].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[7].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[8].Value.ToString())
                     );
+
+                    dataGridView1.Rows[index].Cells[3].Value = xFixity.ToString();
+                    dataGridView1.Rows[index].Cells[4].Value = yFixity.ToString();
+                    dataGridView1.Rows[index].Cells[5].Value = zFixity.ToString();
+
                 }
                 else if (this.Text.Contains("Material"))
                 {
@@ -135,6 +145,9 @@ namespace StructuralAnalysisSofwareTemplate
                     {
                         if (previousData[i] != "NULL")
                         {
+                            // deletes this member from all previous objects used dictionaries
+                            // used property will be added again in the Member.setall function
+                            // if new objects are same with previous ones
                             try
                             {
 
@@ -155,102 +168,47 @@ namespace StructuralAnalysisSofwareTemplate
                         }
                     }
 
-                    // creates temporary objects
-                    Node node1;
-                    Node node2;
-                    Material material;
-                    Section section;
-
-                    // tries whether object is exist or not
-                    try
+                    // creates temporary object list
+                    List<dynamic> itemList = new List<dynamic>();
+                    
+                    // loop for every object type
+                    for (int i = 1; i < 5; i++)
                     {
-
-
-                        // auto complete for nodenames
-                        if (dataGridView1.Rows[index].Cells[1].Value.ToString().All(char.IsDigit))
+                        // assigns k to a value for first two loop 
+                        // since for two loop it should return Node object
+                        int k = 0;
+                        if (i == 1 || i == 2)
                         {
-                            string temp = "Node: " + dataGridView1.Rows[index].Cells[1].Value.ToString();
-                            dataGridView1.Rows[index].Cells[1].Value = temp;
-                            node1 = Form1.tempDatabase.get(typeof(Node))[temp];
+                            k = 0;
                         }
                         else
                         {
-                            node1 = Form1.tempDatabase.get(typeof(Node))[dataGridView1.Rows[index].Cells[1].Value.ToString()];
+                            k = i-1;
                         }
+                        // detemines return type according to k value (Node,Material or Section)
+                        Type itemType = Form1.tempDatabase.returnType(k);
 
-                    }
-                    catch
-                    {
-                        node1 = null;
-                        dataGridView1.Rows[index].Cells[1].Value = "NULL";
-                    }
-
-                    try
-                    {
-                        // auto complete for nodenames
-                        if (dataGridView1.Rows[index].Cells[2].Value.ToString().All(char.IsDigit))
+                        string itemName;
+                        try
                         {
-                            string temp = "Node: " + dataGridView1.Rows[index].Cells[2].Value.ToString();
-                            dataGridView1.Rows[index].Cells[2].Value = temp;
-                            node2 = Form1.tempDatabase.get(typeof(Node))[temp];
+                            // auto complete for object names
+                            itemName = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[i].Value.ToString(), itemType);
+                            // changes cell value 
+                            dataGridView1.Rows[index].Cells[i].Value = itemName;
+                            // adds object to object list
+                            itemList.Add(Form1.tempDatabase.get(itemType)[itemName]);
                         }
-                        else
+                        catch
                         {
-                            node2 = Form1.tempDatabase.get(typeof(Node))[dataGridView1.Rows[index].Cells[2].Value.ToString()];
+                            // if trial to add object from database fails (object name is wrong or object does not exist)
+                            // adds nullptr to itemlist as input for member.setall function
+                            itemList.Add(null);
+                            dataGridView1.Rows[index].Cells[i].Value = "NULL";
                         }
-
-                    }
-                    catch
-                    {
-                        node2 = null;
-                        dataGridView1.Rows[index].Cells[2].Value = "NULL";
-                    }
-
-                    try
-                    {
-                        // auto complete for material names
-                        if (dataGridView1.Rows[index].Cells[3].Value.ToString().All(char.IsDigit))
-                        {
-                            string temp = "Material: " + dataGridView1.Rows[index].Cells[3].Value.ToString();
-                            dataGridView1.Rows[index].Cells[3].Value = temp;
-                            material = Form1.tempDatabase.get(typeof(Material))[temp];
-                        }
-                        else
-                        {
-                            material = Form1.tempDatabase.get(typeof(Material))[dataGridView1.Rows[index].Cells[3].Value.ToString()];
-                        }
-
-                    }
-                    catch
-                    {
-                        material = null;
-                        dataGridView1.Rows[index].Cells[3].Value = "NULL";
-                    }
-
-                    try
-                    {
-                        // auto complete for section names
-                        if (dataGridView1.Rows[index].Cells[4].Value.ToString().All(char.IsDigit))
-                        {
-                            string temp = "Section: " + dataGridView1.Rows[index].Cells[4].Value.ToString();
-                            dataGridView1.Rows[index].Cells[4].Value = temp;
-                            section = Form1.tempDatabase.get(typeof(Section))[temp];
-                        }
-                        else
-                        {
-                            section = Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[4].Value.ToString()];
-                        }
-
-                    }
-                    catch
-                    {
-                        section = null;
-                        dataGridView1.Rows[index].Cells[4].Value = "NULL";
                     }
 
                     // sets objects to Member
-                    Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(node1, node2, material, section);
-
+                    Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(itemList[0], itemList[1], itemList[2], itemList[3]);
 
                 }
 
@@ -305,7 +263,8 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-                refresh(this.loadType);
+            Form1.tempDatabase.refreshSpreadList();
+                
         }
     }
 }
