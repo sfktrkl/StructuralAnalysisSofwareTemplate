@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseClass.cs" />
     <Compile Include="DockableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +75,7 @@
     <Compile Include="SpreadSheet.Designer.cs">
       <DependentUpon>SpreadSheet.cs</DependentUpon>
     </Compile>
+    <Compile Include="TemporaryDatabase.cs" />
     <Compile Include="TreeView.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class Node
+    public class Node : BaseClass
     {
-
-        static int numOfNodes = 0;
-        public string Node_Name;
+        public string Name;
         private double X_Coordinate;
         private double Y_Coordinate;
         private bool X_Fixity;
@@ -20,8 +19,6 @@ namespace StructuralAnalysisSofwareTemplate
         private double X_Stiffness;
         private double Y_Stiffness;
         private double Z_Stiffness;
-        private Dictionary<string, Member> isUsed = new Dictionary<string, Member>();
-        public bool used = false;
 
         public Node()
         {
@@ -33,8 +30,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.X_Stiffness = 0;
             this.Y_Stiffness = 0;
             this.Z_Stiffness = 0;
-            this.Node_Name= "Node: " + numOfNodes.ToString();
-            numOfNodes++;
+            this.Name= "Node: " + Form1.tempDatabase.get(0).Count.ToString();
         }
 
         public void SetAll(double X_Coordinate, double Y_Coordinate, bool X_Fixity, bool Y_Fixity, bool Z_Fixity, double X_Stiffness, double Y_Stiffness, double Z_Stiffness)
@@ -54,7 +50,7 @@ namespace StructuralAnalysisSofwareTemplate
         {
             List<string> fieldData = new List<string>();
 
-            fieldData.Add(this.Node_Name.ToString());
+            fieldData.Add(this.Name.ToString());
             fieldData.Add(this.X_Coordinate.ToString());
             fieldData.Add(this.Y_Coordinate.ToString());
             fieldData.Add(this.X_Fixity.ToString());
@@ -66,24 +62,6 @@ namespace StructuralAnalysisSofwareTemplate
 
 
             return fieldData;
-        }
-
-        public void usedBy(string memberName, Member member, bool condition)
-        {
-            if (condition == true)
-            {
-                isUsed.Add(memberName, member);
-                used = true;
-            }
-            else
-            {
-                isUsed.Remove(memberName);
-                if (isUsed.Count == 0)
-                {
-                    used = false;
-                }
-            }
-
         }
 
 

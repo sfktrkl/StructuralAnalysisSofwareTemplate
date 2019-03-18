@@ -14,11 +14,8 @@ namespace StructuralAnalysisSofwareTemplate
 {
     public partial class Form1 : Form
     {
-        // public lists to store objects
-        public static Dictionary<string,Node> nodeList = new Dictionary<string,Node>();
-        public static Dictionary<string,Member> memberList = new Dictionary<string,Member>();
-        public static Dictionary<string,Material> materialList = new Dictionary<string,Material>();
-        public static Dictionary<string,Section> sectionList = new Dictionary<string,Section>();
+        public static TemporaryDatabase tempDatabase = new TemporaryDatabase();
+        public static List<SpreadSheet> spreadList = new List<SpreadSheet>();
 
         public Form1()
         {
@@ -28,21 +25,22 @@ namespace StructuralAnalysisSofwareTemplate
             // Panel is created temporarily
 
             // temporary objects
-            Node node1 = new Node();
-            Node node2 = new Node();
-            nodeList.Add(node1.Node_Name, node1);
-            nodeList.Add(node2.Node_Name, node2);
+            Node Node1 = new Node();
+            tempDatabase.get(typeof(Node)).Add(Node1.Name, Node1);
+
+            Node Node2 = new Node();
+            tempDatabase.get(typeof(Node)).Add(Node2.Name, Node2);
 
             Member member1 = new Member();
-            memberList.Add(member1.member_Name, member1);
+            tempDatabase.get(typeof(Member)).Add(member1.Name, member1);
 
             Material material1 = new Material();
-            materialList.Add(material1.material_Name, material1);
+            tempDatabase.get(typeof(Material)).Add(material1.Name, material1);
 
             Section section1 = new Section();
-            sectionList.Add(section1.section_Name, section1);
+            tempDatabase.get(typeof(Section)).Add(section1.Name, section1);
 
-            member1.SetAll(node1, node2, material1, section1);
+            member1.SetAll(Node1, Node2, material1, section1);
             // creates navigator form
             createNavigator();
 
@@ -52,6 +50,7 @@ namespace StructuralAnalysisSofwareTemplate
         {
             // adds spread sheet in to form1.panel1
             SpreadSheet spreadSheet = new SpreadSheet();
+            
             spreadSheet.TopLevel = false;
             panel1.Controls.Add(spreadSheet);
             spreadSheet.Show();
@@ -59,7 +58,7 @@ namespace StructuralAnalysisSofwareTemplate
             spreadSheet.Text = spreadSheetName;
 
             spreadSheet.refresh(givenClass);
-
+            spreadList.Add(spreadSheet);
         }
 
         private void createNavigator()
@@ -122,6 +121,7 @@ namespace StructuralAnalysisSofwareTemplate
         {
             createSpreadSheet("Sections", typeof(Section));
         }
+
     }
 
 }

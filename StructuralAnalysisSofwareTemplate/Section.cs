@@ -6,16 +6,13 @@ using System.Threading.Tasks;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class Section
+    public class Section : BaseClass
     {
-        static int numOfSections = 0;
-        public string section_Name;
+        public string Name;
         private double height;
         private double width;
         private double area;
         private double inertia;
-        private Dictionary<string, Member> isUsed = new Dictionary<string, Member>();
-        public bool used = false;
 
         public Section()
         {
@@ -23,9 +20,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.width = 0;
             this.area = 0;
             this.inertia = 0;
-            this.section_Name = "Section: " + numOfSections.ToString();
-            numOfSections++;
-
+            this.Name = "Section: " + Form1.tempDatabase.get(3).Count.ToString();
         }
 
         public void SetAll(double height, double width)
@@ -41,7 +36,7 @@ namespace StructuralAnalysisSofwareTemplate
         {
             List<string> fieldData = new List<string>();
 
-            fieldData.Add(this.section_Name.ToString());
+            fieldData.Add(this.Name.ToString());
             fieldData.Add(this.height.ToString());
             fieldData.Add(this.width.ToString());
             fieldData.Add(this.area.ToString());
@@ -50,23 +45,6 @@ namespace StructuralAnalysisSofwareTemplate
             return fieldData;
         }
         
-        public void usedBy(string memberName,Member member, bool condition)
-        {
-            if (condition == true)
-            {
-                isUsed.Add(memberName, member);
-                used = true;
-            }
-            else
-            {
-                isUsed.Remove(memberName);
-                if (isUsed.Count == 0)
-                {
-                    used = false;
-                }
-            }
-
-        }
 
     }
 }

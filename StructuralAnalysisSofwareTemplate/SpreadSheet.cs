@@ -15,6 +15,7 @@ namespace StructuralAnalysisSofwareTemplate
     {
         // to not trigger the events it is set to false initially
         private bool loaded = false;
+        public Type loadType;
 
         public SpreadSheet()
         {
@@ -23,12 +24,15 @@ namespace StructuralAnalysisSofwareTemplate
 
         public void refresh(Type givenClass)
         {
+            loaded = false;
+
+            loadType = givenClass;
             // clears the spreadsheet
             dataGridView1.Rows.Clear();
             dataGridView1.Columns.Clear();
 
             // binding flags to take private and public field names
-            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic ;
 
 
             // adds each field name of a class as a column name
@@ -38,107 +42,32 @@ namespace StructuralAnalysisSofwareTemplate
             }
 
             // checks whether objects exist or not and gets values to enter spreadsheet
-            if (this.Text == "Nodes")
+            if (Form1.tempDatabase.get(givenClass).Count != 0)
             {
-                if (Form1.nodeList.Count != 0)
+                int col = 0, row = 0;
+
+                foreach (var item in Form1.tempDatabase.get(givenClass))
                 {
+                    dataGridView1.Rows.Add();
 
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.nodeList)
+                    foreach (var item2 in item.Value.GetAll())
                     {
-                        dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.Value.GetAll())
-                        {
-                            dataGridView1.CurrentCell = dataGridView1[col, row];
-                            dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
+                        dataGridView1.CurrentCell = dataGridView1[col, row];
+                        dataGridView1.CurrentCell.Value = item2;
+                        col++;
                     }
-                }
-            }
-            else if (this.Text == "Members")
-            {
-                if (Form1.memberList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.memberList)
-                    {
-                        dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.Value.GetAll())
-                        {
-                            dataGridView1.CurrentCell = dataGridView1[col, row];
-                            dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
-                }
-            }
-            else if (this.Text == "Materials")
-            {
-                if (Form1.materialList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.materialList)
-                    {
-                        dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.Value.GetAll())
-                        {
-                            dataGridView1.CurrentCell = dataGridView1[col, row];
-                            dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
-                }
-            }
-            else
-            {
-                if (Form1.sectionList.Count != 0)
-                {
-
-                    int col = 0, row = 0;
-
-                    foreach (var item in Form1.sectionList)
-                    {
-                        dataGridView1.Rows.Add();
-
-                        foreach (var item2 in item.Value.GetAll())
-                        {
-                            dataGridView1.CurrentCell = dataGridView1[col, row];
-                            dataGridView1.CurrentCell.Value = item2;
-                            col++;
-                        }
-                        col = 0;
-                        row++;
-
-                    }
+                    col = 0;
+                    row++;
                 }
             }
 
             // makes Name columns readonly
             dataGridView1.Columns[0].ReadOnly = true;
             // hides unnecessary columns (fields)
-            if (this.Text == "Nodes" || this.Text == "Materials" || this.Text == "Sections")
+            if (this.Text.Contains("Node") || this.Text.Contains("Material") || this.Text.Contains("Section") || this.Text.Contains("Member"))
             {
-                var index = dataGridView1.Columns["isUsed"].Index;
+                var index = dataGridView1.Columns["used"].Index;
                 dataGridView1.Columns[index].Visible = false;
-                dataGridView1.Columns[index + 1].Visible = false;
             }
             // makes loaded field true
             loaded = true;
@@ -148,33 +77,14 @@ namespace StructuralAnalysisSofwareTemplate
         {
             if (loaded == true)
             {
-                // adds new objects with default constructors
                 loaded = false;
-                if (this.Text == "Nodes")
-                {
-                    Node node = new Node();
-                    Form1.nodeList.Add(node.Node_Name, node);
-                    // refresh the spreadsheet
-                    refresh(typeof(Node));
-                }
-                else if (this.Text == "Materials")
-                {
-                    Material material = new Material();
-                    Form1.materialList.Add(material.material_Name, material);
-                    refresh(typeof(Material));
-                }
-                else if (this.Text == "Sections")
-                {
-                    Section section = new Section();
-                    Form1.sectionList.Add(section.section_Name, section);
-                    refresh(typeof(Section));
-                }
-                else
-                {
-                    Member member = new Member();
-                    Form1.memberList.Add(member.member_Name, member);
-                    refresh(typeof(Member));
-                }
+
+                // adds new objects with default constructors
+                Type itemType = Form1.tempDatabase.returnType(this.Text);
+                var item = Activator.CreateInstance(itemType);
+                var itemName = item.GetType().GetField("Name").GetValue(item).ToString();
+                Form1.tempDatabase.get(itemType).Add(itemName, item);
+                refresh(itemType);
 
                 dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1];
                 // refresh the treeview
@@ -189,11 +99,10 @@ namespace StructuralAnalysisSofwareTemplate
             if (loaded == true)
             {
                 var index = e.RowIndex;
-
-                if (this.Text == "Nodes")
+                if (this.Text.Contains("Node"))
                 {
                     // setting node properties
-                    Form1.nodeList[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
+                    Form1.tempDatabase.get(typeof(Node))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString()),
                         Convert.ToBoolean(dataGridView1.Rows[index].Cells[3].Value.ToString()),
@@ -204,16 +113,16 @@ namespace StructuralAnalysisSofwareTemplate
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[8].Value.ToString())
                     );
                 }
-                else if (this.Text == "Materials")
+                else if (this.Text.Contains("Material"))
                 {
-                    Form1.materialList[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
+                    Form1.tempDatabase.get(typeof(Material))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString())
                     );
                 }
-                else if (this.Text == "Sections")
+                else if (this.Text.Contains("Section"))
                 {
-                    Form1.sectionList[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
+                    Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString())
                     );
@@ -221,7 +130,7 @@ namespace StructuralAnalysisSofwareTemplate
                 else
                 {
                     // checks previous data if objects are used by member
-                    List<string> previousData = Form1.memberList[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll();
+                    List<string> previousData = Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll();
                     for (int i = 1; i < 5; i++)
                     {
                         if (previousData[i] != "NULL")
@@ -234,13 +143,13 @@ namespace StructuralAnalysisSofwareTemplate
 
                                     try
                                     {
-                                        Form1.sectionList[previousData[i]].usedBy(previousData[0], Form1.memberList[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                                        Form1.tempDatabase.get(typeof(Section))[previousData[i]].usedBy(previousData[0], Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
                                     }
                                     catch { }
-                                    Form1.materialList[previousData[i]].usedBy(previousData[0], Form1.memberList[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                                    Form1.tempDatabase.get(typeof(Material))[previousData[i]].usedBy(previousData[0], Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
                                 }
                                 catch { }
-                                Form1.nodeList[previousData[i]].usedBy(previousData[0], Form1.memberList[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                                Form1.tempDatabase.get(typeof(Node))[previousData[i]].usedBy(previousData[0], Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
                             }
                             catch { }
                         }
@@ -255,16 +164,18 @@ namespace StructuralAnalysisSofwareTemplate
                     // tries whether object is exist or not
                     try
                     {
+
+
                         // auto complete for nodenames
                         if (dataGridView1.Rows[index].Cells[1].Value.ToString().All(char.IsDigit))
                         {
                             string temp = "Node: " + dataGridView1.Rows[index].Cells[1].Value.ToString();
                             dataGridView1.Rows[index].Cells[1].Value = temp;
-                            node1 = Form1.nodeList[temp];
+                            node1 = Form1.tempDatabase.get(typeof(Node))[temp];
                         }
                         else
                         {
-                            node1 = Form1.nodeList[dataGridView1.Rows[index].Cells[1].Value.ToString()];
+                            node1 = Form1.tempDatabase.get(typeof(Node))[dataGridView1.Rows[index].Cells[1].Value.ToString()];
                         }
 
                     }
@@ -281,11 +192,11 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             string temp = "Node: " + dataGridView1.Rows[index].Cells[2].Value.ToString();
                             dataGridView1.Rows[index].Cells[2].Value = temp;
-                            node2 = Form1.nodeList[temp];
+                            node2 = Form1.tempDatabase.get(typeof(Node))[temp];
                         }
                         else
                         {
-                            node2 = Form1.nodeList[dataGridView1.Rows[index].Cells[2].Value.ToString()];
+                            node2 = Form1.tempDatabase.get(typeof(Node))[dataGridView1.Rows[index].Cells[2].Value.ToString()];
                         }
 
                     }
@@ -302,11 +213,11 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             string temp = "Material: " + dataGridView1.Rows[index].Cells[3].Value.ToString();
                             dataGridView1.Rows[index].Cells[3].Value = temp;
-                            material = Form1.materialList[temp];
+                            material = Form1.tempDatabase.get(typeof(Material))[temp];
                         }
                         else
                         {
-                            material = Form1.materialList[dataGridView1.Rows[index].Cells[3].Value.ToString()];
+                            material = Form1.tempDatabase.get(typeof(Material))[dataGridView1.Rows[index].Cells[3].Value.ToString()];
                         }
 
                     }
@@ -323,11 +234,11 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             string temp = "Section: " + dataGridView1.Rows[index].Cells[4].Value.ToString();
                             dataGridView1.Rows[index].Cells[4].Value = temp;
-                            section = Form1.sectionList[temp];
+                            section = Form1.tempDatabase.get(typeof(Section))[temp];
                         }
                         else
                         {
-                            section = Form1.sectionList[dataGridView1.Rows[index].Cells[4].Value.ToString()];
+                            section = Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[4].Value.ToString()];
                         }
 
                     }
@@ -338,7 +249,7 @@ namespace StructuralAnalysisSofwareTemplate
                     }
 
                     // sets objects to Member
-                    Form1.memberList[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(node1, node2, material, section);
+                    Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(node1, node2, material, section);
 
 
                 }
@@ -390,6 +301,11 @@ namespace StructuralAnalysisSofwareTemplate
         {
             string clickedItem = dataGridView1.CurrentCell.Value.ToString(); ;
             Clipboard.SetText(clickedItem);
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+                refresh(this.loadType);
         }
     }
 }

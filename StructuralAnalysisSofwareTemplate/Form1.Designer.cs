@@ -213,6 +213,7 @@
             // 
             // toolStrip1
             // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton7,
             this.toolStripButton8,
@@ -229,7 +230,7 @@
             this.toolStripButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1541, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1541, 32);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -239,7 +240,7 @@
             this.toolStripButton7.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.empty;
             this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton7.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton7.Text = "New";
             // 
             // toolStripButton8
@@ -248,7 +249,7 @@
             this.toolStripButton8.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.folder;
             this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton8.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton8.Text = "Open";
             // 
             // toolStripButton9
@@ -257,13 +258,13 @@
             this.toolStripButton9.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.save;
             this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton9.Name = "toolStripButton9";
-            this.toolStripButton9.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton9.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton9.Text = "Save";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButton10
             // 
@@ -271,14 +272,14 @@
             this.toolStripButton10.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.navigator;
             this.toolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton10.Name = "toolStripButton10";
-            this.toolStripButton10.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton10.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton10.Text = "Navigator";
             this.toolStripButton10.Click += new System.EventHandler(this.toolStripButton10_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButton2
             // 
@@ -286,7 +287,7 @@
             this.toolStripButton2.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.dot;
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton2.Text = "Nodes";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
@@ -296,7 +297,7 @@
             this.toolStripButton1.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.members;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton1.Text = "Members";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
@@ -306,7 +307,7 @@
             this.toolStripButton3.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.concrete;
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton3.Text = "Materials";
             this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
@@ -316,14 +317,14 @@
             this.toolStripButton4.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.pencil;
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton4.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton4.Text = "Sections";
             this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButton6
             // 
@@ -331,7 +332,7 @@
             this.toolStripButton6.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources.axis;
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton6.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton6.Text = "2D View";
             // 
             // toolStripButton5
@@ -340,7 +341,7 @@
             this.toolStripButton5.Image = global::StructuralAnalysisSofwareTemplate.Properties.Resources._3d;
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton5.Text = "3D View";
             // 
             // contextMenuStrip2
@@ -386,9 +387,9 @@
             // panel1
             // 
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 49);
+            this.panel1.Location = new System.Drawing.Point(0, 56);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1541, 579);
+            this.panel1.Size = new System.Drawing.Size(1541, 572);
             this.panel1.TabIndex = 6;
             // 
             // Form1

@@ -3,31 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class Member
+    public class Member : BaseClass
     {
-
-        static int numOfMembers;
-        public string member_Name;
-        private Node node1;
-        private Node node2;
-        private Material memberMaterial;
-        private Section memberSection;
+        public string Name;
+        private Node Node1;
+        private Node Node2;
+        private Material Material;
+        private Section Section;
 
         public Member()
         {
-            this.node1 = null;
-            this.node2 = null;
-            this.memberMaterial = null;
-            this.memberSection = null;
-            this.member_Name = "Member: " + numOfMembers.ToString();
-            numOfMembers++;
+            this.Node1 = null;
+            this.Node2 = null;
+            this.Material = null;
+            this.Section = null;
+            this.Name = "Member: " + Form1.tempDatabase.get(1).Count.ToString();
 
         }
 
-        ~Member()
+        public override void delete()
         {
             try
             {
@@ -37,26 +35,27 @@ namespace StructuralAnalysisSofwareTemplate
                     {
                         try
                         {
-                            this.memberSection.usedBy(this.member_Name, this, false);
+                            this.Section.usedBy(this.Name, this, false);
                         }
                         catch { }
-                        this.memberMaterial.usedBy(this.member_Name, this, false);
+                        this.Material.usedBy(this.Name, this, false);
                     }
                     catch { }
-                    this.node2.usedBy(this.member_Name, this, false);
+                    this.Node2.usedBy(this.Name, this, false);
                 }
                 catch { }
-                this.node1.usedBy(this.member_Name, this, false);
+                this.Node1.usedBy(this.Name, this, false);
             }
             catch { }
         }
 
-        public void SetAll(Node node1, Node node2, Material memberMaterial, Section memberSection)
+
+        public void SetAll(Node Node1, Node Node2, Material Material, Section Section)
         {
-            this.node1 = node1;
-            this.node2 = node2;
-            this.memberMaterial = memberMaterial;
-            this.memberSection = memberSection;
+            this.Node1 = Node1;
+            this.Node2 = Node2;
+            this.Material = Material;
+            this.Section = Section;
 
             try
             {
@@ -66,21 +65,18 @@ namespace StructuralAnalysisSofwareTemplate
                     {
                         try
                         {
-                            this.memberSection.usedBy(this.member_Name, this, true);
+                            this.Section.usedBy(this.Name, this, true);
                         }
                         catch { }
-                        this.memberMaterial.usedBy(this.member_Name, this, true);
+                        this.Material.usedBy(this.Name, this, true);
                     }
                     catch { }
-                    this.node2.usedBy(this.member_Name, this, true);
+                    this.Node2.usedBy(this.Name, this, true);
                 }
                 catch { }
-                this.node1.usedBy(this.member_Name, this, true);
+                this.Node1.usedBy(this.Name, this, true);
             }
             catch { }
-            
-            
-            
 
         }
 
@@ -88,14 +84,13 @@ namespace StructuralAnalysisSofwareTemplate
         {
             List<string> fieldData = new List<string>();
 
-            fieldData.Add(this.member_Name == null ? "NULL" : this.member_Name.ToString());
-            fieldData.Add(this.node1 == null ? "NULL" : this.node1.Node_Name.ToString());
-            fieldData.Add(this.node2 == null ? "NULL" : this.node2.Node_Name.ToString());
-            fieldData.Add(this.memberMaterial == null ? "NULL" : this.memberMaterial.material_Name.ToString());
-            fieldData.Add(this.memberSection == null ? "NULL" : this.memberSection.section_Name.ToString());
+            fieldData.Add(this.Name == null ? "NULL" : this.Name.ToString());
+            fieldData.Add(this.Node1 == null ? "NULL" : this.Node1.Name.ToString());
+            fieldData.Add(this.Node2 == null ? "NULL" : this.Node2.Name.ToString());
+            fieldData.Add(this.Material == null ? "NULL" : this.Material.Name.ToString());
+            fieldData.Add(this.Section == null ? "NULL" : this.Section.Name.ToString());
             return fieldData;
         }
-
 
     }
 }

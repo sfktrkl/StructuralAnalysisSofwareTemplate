@@ -5,19 +5,17 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace StructuralAnalysisSofwareTemplate
 {
     public partial class TreeView : StructuralAnalysisSofwareTemplate.DockableForm
     {
+
         public TreeView()
         {
             InitializeComponent();
-            // adds base nodes to treeview
-            treeView1.Nodes.Add("Nodes");
-            treeView1.Nodes.Add("Members");
-            treeView1.Nodes.Add("Materials");
-            treeView1.Nodes.Add("Sections");
+            refresh();
 
         }
 
@@ -31,21 +29,12 @@ namespace StructuralAnalysisSofwareTemplate
             treeView1.Nodes.Add("Sections");
 
             // loops each object to add treeview
-            foreach (var obj in Form1.nodeList)
+            for (int i = 0; i < 4; i++)
             {
-                treeView1.Nodes[0].Nodes.Add(obj.Value.Node_Name.ToString());
-            }
-            foreach (var obj in Form1.memberList)
-            {
-                treeView1.Nodes[1].Nodes.Add(obj.Value.member_Name.ToString());
-            }
-            foreach (var obj in Form1.materialList)
-            {
-                treeView1.Nodes[2].Nodes.Add(obj.Value.material_Name.ToString());
-            }
-            foreach (var obj in Form1.sectionList)
-            {
-                treeView1.Nodes[3].Nodes.Add(obj.Value.section_Name.ToString());
+                foreach (var obj in Form1.tempDatabase.get(i))
+                {
+                    treeView1.Nodes[i].Nodes.Add(obj.Value.Name.ToString());
+                }
             }
             expand();
 
@@ -54,27 +43,8 @@ namespace StructuralAnalysisSofwareTemplate
         private void addTabs(string tabName)
         {
             // sets the spread sheet name and calls the function
-            string newName;
-            if (tabName.Contains("Node"))
-            {
-                newName = "Nodes";
-                createSpreadSheet(newName, typeof(Node));
-            }
-            else if (tabName.Contains("Member"))
-            {
-                newName = "Members";
-                createSpreadSheet(newName, typeof(Member));
-            }
-            else if (tabName.Contains("Material"))
-            {
-                newName = "Materials";
-                createSpreadSheet(newName, typeof(Material));
-            }
-            else
-            {
-                newName = "Sections";
-                createSpreadSheet(newName, typeof(Section));
-            }
+            Type item = Form1.tempDatabase.returnType(tabName);
+            createSpreadSheet(tabName, item);
 
         }
 
@@ -104,6 +74,7 @@ namespace StructuralAnalysisSofwareTemplate
         {
             // adds spread sheet in to form1.panel1
             SpreadSheet spreadSheet = new SpreadSheet();
+            
             spreadSheet.TopLevel = false;
             Form1 form1 = (Form1)Application.OpenForms["Form1"];
             Panel panel1 = (Panel)form1.Controls["panel1"];
@@ -113,6 +84,7 @@ namespace StructuralAnalysisSofwareTemplate
             spreadSheet.Text = spreadSheetName;
 
             spreadSheet.refresh(givenClass);
+            Form1.spreadList.Add(spreadSheet);
 
         }
 
@@ -136,45 +108,23 @@ namespace StructuralAnalysisSofwareTemplate
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string clickedItem = treeView1.SelectedNode.Text;
-            if (clickedItem.Contains("Node"))
-            {
-                if (Form1.nodeList[clickedItem].used == true)
-                {
-                    MessageBox.Show("Node is Used");
-                }
-                else
-                {
-                    Form1.nodeList.Remove(clickedItem);
-                }
-            }
-            else if (clickedItem.Contains("Material"))
-            {
-                if (Form1.materialList[clickedItem].used == true)
-                {
-                    MessageBox.Show("Material is Used");
-                }
-                else
-                {
-                    Form1.materialList.Remove(clickedItem);
-                }
+            Type itemType = Form1.tempDatabase.returnType(clickedItem);
 
-            }
-            else if (clickedItem.Contains("Section"))
+            if (Form1.tempDatabase.get(itemType)[clickedItem].used == true)
             {
-                if (Form1.sectionList[clickedItem].used == true)
-                {
-                    MessageBox.Show("Section is Used");
-                }
-                else
-                {
-                    Form1.sectionList.Remove(clickedItem);
-                }
-
+                MessageBox.Show("Object is Used");
             }
             else
             {
-                Form1.memberList.Remove(clickedItem);
+                Form1.tempDatabase.get(itemType)[clickedItem].delete();
+                Form1.tempDatabase.get(itemType).Remove(clickedItem);
+                
+                foreach (var form in Form1.spreadList)
+                {
+                        form.refresh(form.loadType);
+                }
             }
+
             refresh();
         }
     }
