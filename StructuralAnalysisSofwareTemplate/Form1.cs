@@ -14,8 +14,6 @@ namespace StructuralAnalysisSofwareTemplate
 {
     public partial class Form1 : Form
     {
-        public static TemporaryDatabase tempDatabase = new TemporaryDatabase();
-
         public Form1()
         {
             InitializeComponent();
@@ -25,19 +23,19 @@ namespace StructuralAnalysisSofwareTemplate
 
             // temporary objects
             Node Node1 = new Node();
-            tempDatabase.get(typeof(Node)).Add(Node1.Name, Node1);
+            Database.get(typeof(Node)).Add(Node1.Name, Node1);
 
             Node Node2 = new Node();
-            tempDatabase.get(typeof(Node)).Add(Node2.Name, Node2);
+            Database.get(typeof(Node)).Add(Node2.Name, Node2);
 
             Member member1 = new Member();
-            tempDatabase.get(typeof(Member)).Add(member1.Name, member1);
+            Database.get(typeof(Member)).Add(member1.Name, member1);
 
             Material material1 = new Material();
-            tempDatabase.get(typeof(Material)).Add(material1.Name, material1);
+            Database.get(typeof(Material)).Add(material1.Name, material1);
 
             Section section1 = new Section();
-            tempDatabase.get(typeof(Section)).Add(section1.Name, section1);
+            Database.get(typeof(Section)).Add(section1.Name, section1);
 
             member1.SetAll(Node1, Node2, material1, section1);
             // creates navigator form
@@ -57,7 +55,7 @@ namespace StructuralAnalysisSofwareTemplate
             spreadSheet.Text = spreadSheetName;
 
             spreadSheet.refresh(givenClass);
-            Form1.tempDatabase.spreadList.Add(spreadSheet);
+            Database.spreadList.Add(spreadSheet);
         }
 
         private void createNavigator()

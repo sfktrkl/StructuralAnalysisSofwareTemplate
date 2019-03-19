@@ -32,7 +32,7 @@ namespace StructuralAnalysisSofwareTemplate
             dataGridView1.Columns.Clear();
 
             // binding flags to take private and public field names
-            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic ;
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic ;
 
 
             // adds each field name of a class as a column name
@@ -42,11 +42,11 @@ namespace StructuralAnalysisSofwareTemplate
             }
 
             // checks whether objects exist or not and gets values to enter spreadsheet
-            if (Form1.tempDatabase.get(givenClass).Count != 0)
+            if (Database.get(givenClass).Count != 0)
             {
                 int col = 0, row = 0;
 
-                foreach (var item in Form1.tempDatabase.get(givenClass))
+                foreach (var item in Database.get(givenClass))
                 {
                     dataGridView1.Rows.Add();
 
@@ -70,12 +70,11 @@ namespace StructuralAnalysisSofwareTemplate
                 dataGridView1.Columns[3].ReadOnly = true;
                 dataGridView1.Columns[4].ReadOnly = true;
             }
+
             // hides unnecessary columns (fields)
-            if (this.Text.Contains("Node") || this.Text.Contains("Material") || this.Text.Contains("Section") || this.Text.Contains("Member"))
-            {
-                var index = dataGridView1.Columns["used"].Index;
-                dataGridView1.Columns[index].Visible = false;
-            }
+            var index = dataGridView1.Columns["UsedBy"].Index;
+            dataGridView1.Columns[index].Visible = false;
+
             // makes loaded field true
             loaded = true;
         }
@@ -87,11 +86,11 @@ namespace StructuralAnalysisSofwareTemplate
                 loaded = false;
 
                 // adds new objects with default constructors
-                Type itemType = Form1.tempDatabase.returnType(this.Text);
+                Type itemType = Database.returnType(this.Text);
                 var item = Activator.CreateInstance(itemType);
                 var itemName = item.GetType().GetField("Name").GetValue(item).ToString();
-                Form1.tempDatabase.get(itemType).Add(itemName, item);
-                Form1.tempDatabase.refreshSpreadList();
+                Database.get(itemType).Add(itemName, item);
+                Database.refreshSpreadList();
                 
 
                 dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1];
@@ -109,12 +108,12 @@ namespace StructuralAnalysisSofwareTemplate
                 var index = e.RowIndex;
                 if (this.Text.Contains("Node"))
                 {
-                    bool xFixity = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[3].Value.ToString());
-                    bool yFixity = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[4].Value.ToString());
-                    bool zFixity = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[5].Value.ToString());
+                    bool xFixity = Database.autoComplete(dataGridView1.Rows[index].Cells[3].Value.ToString());
+                    bool yFixity = Database.autoComplete(dataGridView1.Rows[index].Cells[4].Value.ToString());
+                    bool zFixity = Database.autoComplete(dataGridView1.Rows[index].Cells[5].Value.ToString());
 
                     // setting node properties
-                    Form1.tempDatabase.get(typeof(Node))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
+                    Database.get(typeof(Node))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString()),
                         Convert.ToBoolean(xFixity),
@@ -132,28 +131,28 @@ namespace StructuralAnalysisSofwareTemplate
                 }
                 else if (this.Text.Contains("Material"))
                 {
-                    Form1.tempDatabase.get(typeof(Material))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
+                    Database.get(typeof(Material))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString())
                     );
                 }
                 else if (this.Text.Contains("Section"))
                 {
-                    Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
+                    Database.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString())
                     );
                     // refreshes the area and inertia column in the datagridview 
                     if (dataGridView1.Rows[index].Cells[1].Value.ToString() != "0" && dataGridView1.Rows[index].Cells[2].Value.ToString() != "0")
                     {
-                        dataGridView1.Rows[index].Cells[3].Value = Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll()[3].ToString();
-                        dataGridView1.Rows[index].Cells[4].Value = Form1.tempDatabase.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll()[4].ToString();
+                        dataGridView1.Rows[index].Cells[3].Value = Database.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll()[3].ToString();
+                        dataGridView1.Rows[index].Cells[4].Value = Database.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll()[4].ToString();
                     }
                 }
                 else
                 {
                     // checks previous data if objects are used by member
-                    List<string> previousData = Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll();
+                    List<string> previousData = Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll();
                     for (int i = 1; i < 5; i++)
                     {
                         if (previousData[i] != "NULL")
@@ -169,13 +168,13 @@ namespace StructuralAnalysisSofwareTemplate
 
                                     try
                                     {
-                                        Form1.tempDatabase.get(typeof(Section))[previousData[i]].usedBy(previousData[0], Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                                        Database.get(typeof(Section))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
                                     }
                                     catch { }
-                                    Form1.tempDatabase.get(typeof(Material))[previousData[i]].usedBy(previousData[0], Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                                    Database.get(typeof(Material))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
                                 }
                                 catch { }
-                                Form1.tempDatabase.get(typeof(Node))[previousData[i]].usedBy(previousData[0], Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                                Database.get(typeof(Node))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
                             }
                             catch { }
                         }
@@ -199,17 +198,17 @@ namespace StructuralAnalysisSofwareTemplate
                             k = i-1;
                         }
                         // detemines return type according to k value (Node, Material or Section)
-                        Type itemType = Form1.tempDatabase.returnType(k);
+                        Type itemType = Database.returnType(k);
 
                         string itemName;
                         try
                         {
                             // auto complete for object names
-                            itemName = Form1.tempDatabase.autoComplete(dataGridView1.Rows[index].Cells[i].Value.ToString(), itemType);
+                            itemName = Database.autoComplete(dataGridView1.Rows[index].Cells[i].Value.ToString(), itemType);
                             // changes cell value 
                             dataGridView1.Rows[index].Cells[i].Value = itemName;
                             // adds object to object list
-                            itemList.Add(Form1.tempDatabase.get(itemType)[itemName]);
+                            itemList.Add(Database.get(itemType)[itemName]);
                         }
                         catch
                         {
@@ -221,7 +220,7 @@ namespace StructuralAnalysisSofwareTemplate
                     }
 
                     // sets objects to Member
-                    Form1.tempDatabase.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(itemList[0], itemList[1], itemList[2], itemList[3]);
+                    Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(itemList[0], itemList[1], itemList[2], itemList[3]);
 
                 }
 
@@ -276,7 +275,7 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form1.tempDatabase.refreshSpreadList();
+            Database.refreshSpreadList();
                 
         }
     }

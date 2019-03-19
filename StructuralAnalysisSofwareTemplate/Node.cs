@@ -1,25 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class Node : BaseClass
+    public class Node : Component
     {
-        public string Name;
-        private double X_Coordinate;
-        private double Y_Coordinate;
-        private bool X_Fixity;
-        private bool Y_Fixity;
-        private bool Z_Fixity;
-        private double X_Stiffness;
-        private double Y_Stiffness;
-        private double Z_Stiffness;
-
         public Node()
         {
             this.X_Coordinate = 0;
@@ -30,8 +14,17 @@ namespace StructuralAnalysisSofwareTemplate
             this.X_Stiffness = 0;
             this.Y_Stiffness = 0;
             this.Z_Stiffness = 0;
-            this.Name= "Node: " + Form1.tempDatabase.get(0).Count.ToString();
+            this.Name = "Node: " + Database.get(0).Count.ToString();
         }
+
+        private double X_Coordinate;
+        private double Y_Coordinate;
+        private bool X_Fixity;
+        private bool Y_Fixity;
+        private bool Z_Fixity;
+        private double X_Stiffness;
+        private double Y_Stiffness;
+        private double Z_Stiffness;
 
         public void SetAll(double X_Coordinate, double Y_Coordinate, bool X_Fixity, bool Y_Fixity, bool Z_Fixity, double X_Stiffness, double Y_Stiffness, double Z_Stiffness)
         {
@@ -43,27 +36,22 @@ namespace StructuralAnalysisSofwareTemplate
             this.X_Stiffness = X_Stiffness;
             this.Y_Stiffness = Y_Stiffness;
             this.Z_Stiffness = Z_Stiffness;
-
         }
 
         public List<string> GetAll()
         {
-            List<string> fieldData = new List<string>();
-
-            fieldData.Add(this.Name.ToString());
-            fieldData.Add(this.X_Coordinate.ToString());
-            fieldData.Add(this.Y_Coordinate.ToString());
-            fieldData.Add(this.X_Fixity.ToString());
-            fieldData.Add(this.Y_Fixity.ToString());
-            fieldData.Add(this.Z_Fixity.ToString());
-            fieldData.Add(this.X_Stiffness.ToString());
-            fieldData.Add(this.Y_Stiffness.ToString());
-            fieldData.Add(this.Z_Stiffness.ToString());
-
-
-            return fieldData;
+            return new List<string>
+            {
+                this.Name.ToString(),
+                this.X_Coordinate.ToString(),
+                this.Y_Coordinate.ToString(),
+                this.X_Fixity.ToString(),
+                this.Y_Fixity.ToString(),
+                this.Z_Fixity.ToString(),
+                this.X_Stiffness.ToString(),
+                this.Y_Stiffness.ToString(),
+                this.Z_Stiffness.ToString()
+            };
         }
-
-
     }
 }

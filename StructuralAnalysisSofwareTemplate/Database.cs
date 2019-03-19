@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class TemporaryDatabase
+    public static class Database
     {
-        // public lists to store objects
-        private static Dictionary<string, object> nodeList = new Dictionary<string, object>();
-        private static Dictionary<string, object> memberList = new Dictionary<string, object>();
-        private static Dictionary<string, object> materialList = new Dictionary<string, object>();
-        private static Dictionary<string, object> sectionList = new Dictionary<string, object>();
-        public List<SpreadSheet> spreadList = new List<SpreadSheet>();
+        private static readonly Dictionary<string, Node> nodeList = new Dictionary<string, Node>();
+        private static readonly Dictionary<string, Member> memberList = new Dictionary<string, Member>();
+        private static readonly Dictionary<string, Material> materialList = new Dictionary<string, Material>();
+        private static readonly Dictionary<string, Section> sectionList = new Dictionary<string, Section>();
+
+        public static List<SpreadSheet> spreadList = new List<SpreadSheet>();
 
         // get method is used for returning the dictionaries according to object type or by integer
-        public dynamic get(Type givenClass)
+        public static dynamic get(Type givenClass)
         {
-
             if (givenClass == typeof(Node))
             {
                 return nodeList;
@@ -34,13 +31,11 @@ namespace StructuralAnalysisSofwareTemplate
             else
             {
                 return sectionList;
-            } 
-
+            }
         }
 
-        public dynamic get(int givenClass)
+        public static dynamic get(int givenClass)
         {
-
             if (givenClass == 0)
             {
                 return nodeList;
@@ -57,11 +52,10 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 return sectionList;
             }
-
         }
 
         // returnType method is used for returning the object type according to given string(object.Name property) or by integer
-        public dynamic returnType(string given)
+        public static dynamic returnType(string given)
         {
             if (given.Contains("Node"))
             {
@@ -85,7 +79,7 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public dynamic returnType(int given)
+        public static dynamic returnType(int given)
         {
             if (given == 0)
             {
@@ -105,7 +99,7 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public void refreshSpreadList()
+        public static void refreshSpreadList()
         {
             // refreshes all spreadsheets
             foreach (var form in spreadList)
@@ -114,7 +108,7 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public string autoComplete(string cellValue, Type cellType)
+        public static string autoComplete(string cellValue, Type cellType)
         {
             string objectName;
             // determines prefix according to object type
@@ -152,9 +146,9 @@ namespace StructuralAnalysisSofwareTemplate
                 // if given input is full name return as same
                 return cellValue;
             }
-
         }
-        public bool autoComplete(string cellValue)
+
+        public static bool autoComplete(string cellValue)
         {
             // overload for autocomplete method which return (boolean)true for strings which means true
             if (cellValue == "1" || cellValue == "true" || cellValue == "True" || cellValue == "TRUE")
@@ -166,6 +160,5 @@ namespace StructuralAnalysisSofwareTemplate
                 return false;
             }
         }
-
     }
 }

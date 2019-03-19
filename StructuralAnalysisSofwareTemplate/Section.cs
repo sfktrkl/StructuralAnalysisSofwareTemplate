@@ -1,50 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class Section : BaseClass
+    public class Section : Component
     {
-        public string Name;
-        private double height;
-        private double width;
-        private double area;
-        private double inertia;
-
         public Section()
         {
             this.height = 0;
             this.width = 0;
-            this.area = 0;
-            this.inertia = 0;
-            this.Name = "Section: " + Form1.tempDatabase.get(3).Count.ToString();
+            this.Area = 0;
+            this.Inertia = 0;
+            this.Name = "Section: " + Database.get(3).Count.ToString();
         }
 
-        public void SetAll(double height, double width)
+        public double Height
         {
-            this.height = height;
-            this.width = width;
-            this.area = this.height*this.width;
-            this.inertia = this.height*Math.Pow(this.width,3)/12;
-
+            get { return this.height; }
+            set
+            {
+                this.height = value;
+                this.Area = this.height * this.Width;
+                this.Inertia = this.height * Math.Pow(this.width, 3) / 12;
+            }
         }
+
+        public double Width
+        {
+            get { return this.width; }
+            set
+            {
+                this.width = value;
+                this.Area = this.height * this.Width;
+                this.Inertia = this.height * Math.Pow(this.width, 3) / 12;
+            }
+        }
+
+        public double Area { get; private set; }
+        public double Inertia { get; private set; }
+
+        private double height;
+        private double width;
 
         public List<string> GetAll()
         {
-            List<string> fieldData = new List<string>();
-
-            fieldData.Add(this.Name.ToString());
-            fieldData.Add(this.height.ToString());
-            fieldData.Add(this.width.ToString());
-            fieldData.Add(this.area.ToString());
-            fieldData.Add(this.inertia.ToString());
-
-            return fieldData;
+            return new List<string>
+            {
+                this.Name.ToString(),
+                this.Height.ToString(),
+                this.Width.ToString(),
+                this.Area.ToString(),
+                this.Inertia.ToString()
+            };
         }
-        
-
     }
 }

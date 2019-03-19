@@ -75,7 +75,7 @@
     <Compile Include="SpreadSheet.Designer.cs">
       <DependentUpon>SpreadSheet.cs</DependentUpon>
     </Compile>
-    <Compile Include="TemporaryDatabase.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="TreeView.cs">
       <SubType>Form</SubType>
     </Compile>

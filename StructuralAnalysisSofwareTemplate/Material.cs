@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class Material : BaseClass
+    public class Material : Component
     {
-        public string Name;
-        private double unitWeight;
-        private double elasticModulus;
-
         public Material()
         {
             this.elasticModulus = 0;
             this.unitWeight = 0;
-            this.Name = "Material: " + Form1.tempDatabase.get(2).Count.ToString();
+            this.Name = "Material: " + Database.get(2).Count.ToString();
         }
+
+        private double unitWeight;
+        private double elasticModulus;
 
         public void SetAll(double elasticModulus, double unitWeight)
         {
@@ -27,14 +22,12 @@ namespace StructuralAnalysisSofwareTemplate
 
         public List<string> GetAll()
         {
-            List<string> fieldData = new List<string>();
-
-            fieldData.Add(this.Name.ToString());
-            fieldData.Add(this.unitWeight.ToString());
-            fieldData.Add(this.elasticModulus.ToString());
-
-            return fieldData;
+            return new List<string>
+            {
+                this.Name.ToString(),
+                this.unitWeight.ToString(),
+                this.elasticModulus.ToString()
+            };
         }
-
     }
 }

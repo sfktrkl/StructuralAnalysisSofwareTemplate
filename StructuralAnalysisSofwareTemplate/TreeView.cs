@@ -31,7 +31,7 @@ namespace StructuralAnalysisSofwareTemplate
             // loops each object to add treeview
             for (int i = 0; i < 4; i++)
             {
-                foreach (var obj in Form1.tempDatabase.get(i))
+                foreach (var obj in Database.get(i))
                 {
                     treeView1.Nodes[i].Nodes.Add(obj.Value.Name.ToString());
                 }
@@ -43,7 +43,7 @@ namespace StructuralAnalysisSofwareTemplate
         private void addTabs(string tabName)
         {
             // sets the spread sheet name and calls the function
-            Type item = Form1.tempDatabase.returnType(tabName);
+            Type item = Database.returnType(tabName);
             createSpreadSheet(tabName, item);
 
         }
@@ -84,7 +84,7 @@ namespace StructuralAnalysisSofwareTemplate
             spreadSheet.Text = spreadSheetName;
 
             spreadSheet.refresh(givenClass);
-            Form1.tempDatabase.spreadList.Add(spreadSheet);
+            Database.spreadList.Add(spreadSheet);
 
         }
 
@@ -108,18 +108,18 @@ namespace StructuralAnalysisSofwareTemplate
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string clickedItem = treeView1.SelectedNode.Text;
-            Type itemType = Form1.tempDatabase.returnType(clickedItem);
+            Type itemType = Database.returnType(clickedItem);
 
-            if (Form1.tempDatabase.get(itemType)[clickedItem].used == true)
+            if (Database.get(itemType)[clickedItem].used == true)
             {
                 MessageBox.Show("Object is Used");
             }
             else
             {
-                Form1.tempDatabase.get(itemType)[clickedItem].delete();
-                Form1.tempDatabase.get(itemType).Remove(clickedItem);
+                Database.get(itemType)[clickedItem].delete();
+                Database.get(itemType).Remove(clickedItem);
 
-                Form1.tempDatabase.refreshSpreadList();
+                Database.refreshSpreadList();
             }
 
             refresh();

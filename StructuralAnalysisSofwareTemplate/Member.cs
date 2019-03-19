@@ -1,56 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public class Member : BaseClass
+    public class Member : Component
     {
-        public string Name;
+        public Member()
+        {
+            this.Name = "Member: " + Database.get(1).Count.ToString();
+        }
+
         private Node Node1;
         private Node Node2;
         private Material Material;
         private Section Section;
 
-        public Member()
-        {
-            this.Node1 = null;
-            this.Node2 = null;
-            this.Material = null;
-            this.Section = null;
-            this.Name = "Member: " + Form1.tempDatabase.get(1).Count.ToString();
-
-        }
-
-        public override void delete()
+        public override void Delete()
         {
             // when this member is deleted
             // deletes this member from all objects used dictionaries
-            try
-            {
-                try
-                {
-                    try
-                    {
-                        try
-                        {
-                            this.Section.usedBy(this.Name, this, false);
-                        }
-                        catch { }
-                        this.Material.usedBy(this.Name, this, false);
-                    }
-                    catch { }
-                    this.Node2.usedBy(this.Name, this, false);
-                }
-                catch { }
-                this.Node1.usedBy(this.Name, this, false);
-            }
-            catch { }
+            this.Section.UsedBy.Remove(this);
+            this.Material.UsedBy.Remove(this);
+            this.Node1.UsedBy.Remove(this);
+            this.Node2.UsedBy.Remove(this);
         }
-
 
         public void SetAll(Node Node1, Node Node2, Material Material, Section Section)
         {
@@ -59,40 +31,23 @@ namespace StructuralAnalysisSofwareTemplate
             this.Material = Material;
             this.Section = Section;
             // adds objects used dictionaries to this member
-            try
-            {
-                try
-                {
-                    try
-                    {
-                        try
-                        {
-                            this.Section.usedBy(this.Name, this, true);
-                        }
-                        catch { }
-                        this.Material.usedBy(this.Name, this, true);
-                    }
-                    catch { }
-                    this.Node2.usedBy(this.Name, this, true);
-                }
-                catch { }
-                this.Node1.usedBy(this.Name, this, true);
-            }
-            catch { }
 
+            this.Section.UsedBy.Add(this);
+            this.Material.UsedBy.Add(this);
+            this.Node1.UsedBy.Add(this);
+            this.Node2.UsedBy.Add(this);
         }
 
         public List<string> GetAll()
         {
-            List<string> fieldData = new List<string>();
-
-            fieldData.Add(this.Name == null ? "NULL" : this.Name.ToString());
-            fieldData.Add(this.Node1 == null ? "NULL" : this.Node1.Name.ToString());
-            fieldData.Add(this.Node2 == null ? "NULL" : this.Node2.Name.ToString());
-            fieldData.Add(this.Material == null ? "NULL" : this.Material.Name.ToString());
-            fieldData.Add(this.Section == null ? "NULL" : this.Section.Name.ToString());
-            return fieldData;
+            return new List<string>
+            {
+                this.Name == null ? "NULL" : this.Name.ToString(),
+                this.Node1 == null ? "NULL" : this.Node1.Name.ToString(),
+                this.Node2 == null ? "NULL" : this.Node2.Name.ToString(),
+                this.Material == null ? "NULL" : this.Material.Name.ToString(),
+                this.Section == null ? "NULL" : this.Section.Name.ToString()
+            };
         }
-
     }
 }
