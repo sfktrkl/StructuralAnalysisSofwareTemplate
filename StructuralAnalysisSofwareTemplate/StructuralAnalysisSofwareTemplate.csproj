@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseClass.cs" />
+    <Compile Include="Component.cs" />
     <Compile Include="DockableForm.cs">
       <SubType>Form</SubType>
     </Compile>

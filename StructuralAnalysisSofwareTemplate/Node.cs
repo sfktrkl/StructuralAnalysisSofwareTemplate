@@ -14,7 +14,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.X_Stiffness = 0;
             this.Y_Stiffness = 0;
             this.Z_Stiffness = 0;
-            this.Name = "Node: " + Database.get(0).Count.ToString();
+            this.Name = "Node: " + Database.NodeList.Count.ToString();
         }
 
         private double X_Coordinate;
@@ -25,6 +25,11 @@ namespace StructuralAnalysisSofwareTemplate
         private double X_Stiffness;
         private double Y_Stiffness;
         private double Z_Stiffness;
+
+        public override void Delete()
+        {
+            Database.NodeList.Remove(this.Name);
+        }
 
         public void SetAll(double X_Coordinate, double Y_Coordinate, bool X_Fixity, bool Y_Fixity, bool Z_Fixity, double X_Stiffness, double Y_Stiffness, double Z_Stiffness)
         {
@@ -38,7 +43,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.Z_Stiffness = Z_Stiffness;
         }
 
-        public List<string> GetAll()
+        public override List<string> GetAll()
         {
             return new List<string>
             {

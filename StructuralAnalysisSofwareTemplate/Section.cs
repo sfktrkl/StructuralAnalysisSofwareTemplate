@@ -11,7 +11,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.width = 0;
             this.Area = 0;
             this.Inertia = 0;
-            this.Name = "Section: " + Database.get(3).Count.ToString();
+            this.Name = "Section: " + Database.SectionList.Count.ToString();
         }
 
         public double Height
@@ -42,7 +42,12 @@ namespace StructuralAnalysisSofwareTemplate
         private double height;
         private double width;
 
-        public List<string> GetAll()
+        public override void Delete()
+        {
+            Database.SectionList.Remove(this.Name);
+        }
+
+        public override List<string> GetAll()
         {
             return new List<string>
             {

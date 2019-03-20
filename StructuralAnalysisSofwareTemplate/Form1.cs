@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Reflection;
-
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -23,31 +14,30 @@ namespace StructuralAnalysisSofwareTemplate
 
             // temporary objects
             Node Node1 = new Node();
-            Database.get(typeof(Node)).Add(Node1.Name, Node1);
+            Database.NodeList.Add(Node1.Name, Node1);
 
             Node Node2 = new Node();
-            Database.get(typeof(Node)).Add(Node2.Name, Node2);
+            Database.NodeList.Add(Node2.Name, Node2);
 
             Member member1 = new Member();
-            Database.get(typeof(Member)).Add(member1.Name, member1);
+            Database.MemberList.Add(member1.Name, member1);
 
             Material material1 = new Material();
-            Database.get(typeof(Material)).Add(material1.Name, material1);
+            Database.MaterialList.Add(material1.Name, material1);
 
             Section section1 = new Section();
-            Database.get(typeof(Section)).Add(section1.Name, section1);
+            Database.SectionList.Add(section1.Name, section1);
 
             member1.SetAll(Node1, Node2, material1, section1);
             // creates navigator form
             createNavigator();
-
         }
 
         private void createSpreadSheet(string spreadSheetName, Type givenClass)
         {
             // adds spread sheet in to form1.panel1
             SpreadSheet spreadSheet = new SpreadSheet();
-            
+
             spreadSheet.TopLevel = false;
             panel1.Controls.Add(spreadSheet);
             spreadSheet.Show();
@@ -61,15 +51,13 @@ namespace StructuralAnalysisSofwareTemplate
         private void createNavigator()
         {
             // creates new treeview form
-            TreeView navigator = new TreeView();
+            var navigator = new TreeView();
             navigator.TopLevel = false;
             panel1.Controls.Add(navigator);
             navigator.Show();
             navigator.Dock = DockStyle.Left; // docks the form in to panel (temporary)
             navigator.refresh();
         }
-
-
 
         private void toolStripButton10_Click(object sender, EventArgs e)
         {
@@ -120,7 +108,5 @@ namespace StructuralAnalysisSofwareTemplate
         {
             createSpreadSheet("Sections", typeof(Section));
         }
-
     }
-
 }

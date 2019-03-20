@@ -11,6 +11,8 @@ namespace StructuralAnalysisSofwareTemplate
         public List<Component> UsedBy = new List<Component>();
 
         // virtual method for deleting objects
-        public virtual void Delete() { }
+        public abstract void Delete();
+
+        public abstract List<string> GetAll();
     }
 }

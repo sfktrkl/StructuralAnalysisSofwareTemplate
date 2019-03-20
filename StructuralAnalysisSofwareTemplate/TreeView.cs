@@ -1,55 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Reflection;
 
 namespace StructuralAnalysisSofwareTemplate
 {
     public partial class TreeView : StructuralAnalysisSofwareTemplate.DockableForm
     {
-
         public TreeView()
         {
             InitializeComponent();
-            refresh();
-
         }
 
         public void refresh()
         {
             // clears the treeview and adds base nodes
             treeView1.Nodes.Clear();
-            treeView1.Nodes.Add("Nodes");
-            treeView1.Nodes.Add("Members");
-            treeView1.Nodes.Add("Materials");
-            treeView1.Nodes.Add("Sections");
 
-            // loops each object to add treeview
-            for (int i = 0; i < 4; i++)
+            var parentNode = treeView1.Nodes.Add("Nodes");
+            foreach (var obj in Database.NodeList)
             {
-                foreach (var obj in Database.get(i))
-                {
-                    treeView1.Nodes[i].Nodes.Add(obj.Value.Name.ToString());
-                }
+                var childNode = parentNode.Nodes.Add(obj.Value.Name);
+                childNode.Tag = obj.Value;
             }
-            expand();
 
-        }
+            parentNode = treeView1.Nodes.Add("Members");
+            foreach (var obj in Database.MemberList)
+            {
+                var childNode = parentNode.Nodes.Add(obj.Value.Name);
+                childNode.Tag = obj.Value;
+            }
 
-        private void addTabs(string tabName)
-        {
-            // sets the spread sheet name and calls the function
-            Type item = Database.returnType(tabName);
-            createSpreadSheet(tabName, item);
+            parentNode = treeView1.Nodes.Add("Materials");
+            foreach (var obj in Database.MaterialList)
+            {
+                var childNode = parentNode.Nodes.Add(obj.Value.Name);
+                childNode.Tag = obj.Value;
+            }
 
-        }
+            parentNode = treeView1.Nodes.Add("Sections");
+            foreach (var obj in Database.SectionList)
+            {
+                var childNode = parentNode.Nodes.Add(obj.Value.Name);
+                childNode.Tag = obj.Value;
+            }
 
-        public void expand()
-        {
             treeView1.ExpandAll();
         }
 
@@ -65,16 +58,15 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            // double click event which sends clicked node text
-            string clickedItem = e.Node.Text;
-            addTabs(clickedItem);
+            // sets the spread sheet name and calls the function
+            createSpreadSheet(e.Node.Text, e.Node.Tag.GetType());
         }
 
         private void createSpreadSheet(string spreadSheetName, Type givenClass)
         {
             // adds spread sheet in to form1.panel1
             SpreadSheet spreadSheet = new SpreadSheet();
-            
+
             spreadSheet.TopLevel = false;
             Form1 form1 = (Form1)Application.OpenForms["Form1"];
             Panel panel1 = (Panel)form1.Controls["panel1"];
@@ -85,7 +77,6 @@ namespace StructuralAnalysisSofwareTemplate
 
             spreadSheet.refresh(givenClass);
             Database.spreadList.Add(spreadSheet);
-
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -102,22 +93,20 @@ namespace StructuralAnalysisSofwareTemplate
         {
             string clickedItem = treeView1.SelectedNode.Text;
             Clipboard.SetText(clickedItem);
-
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string clickedItem = treeView1.SelectedNode.Text;
-            Type itemType = Database.returnType(clickedItem);
+            var clickedItem = treeView1.SelectedNode.Text;
+            var obj = (Component)treeView1.SelectedNode.Tag;
 
-            if (Database.get(itemType)[clickedItem].used == true)
+            if (obj.UsedBy.Count > 0)
             {
                 MessageBox.Show("Object is Used");
             }
             else
             {
-                Database.get(itemType)[clickedItem].delete();
-                Database.get(itemType).Remove(clickedItem);
+                obj.Delete();
 
                 Database.refreshSpreadList();
             }

@@ -8,11 +8,16 @@ namespace StructuralAnalysisSofwareTemplate
         {
             this.elasticModulus = 0;
             this.unitWeight = 0;
-            this.Name = "Material: " + Database.get(2).Count.ToString();
+            this.Name = "Material: " + Database.MaterialList.Count.ToString();
         }
 
         private double unitWeight;
         private double elasticModulus;
+
+        public override void Delete()
+        {
+            Database.MaterialList.Remove(this.Name);
+        }
 
         public void SetAll(double elasticModulus, double unitWeight)
         {
@@ -20,7 +25,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.unitWeight = unitWeight;
         }
 
-        public List<string> GetAll()
+        public override List<string> GetAll()
         {
             return new List<string>
             {

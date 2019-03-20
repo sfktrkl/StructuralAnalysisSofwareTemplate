@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Reflection;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -15,61 +8,49 @@ namespace StructuralAnalysisSofwareTemplate
     {
         // to not trigger the events it is set to false initially
         private bool loaded = false;
-        public Type loadType;
 
-        public SpreadSheet()
+        public DataModel dataModel;
+
+        public SpreadSheet(DataModel dataModel)
         {
             InitializeComponent();
+
+            this.dataModel = dataModel;
         }
 
-        public void refresh(Type givenClass)
+        public void refresh()
         {
             loaded = false;
 
-            loadType = givenClass;
             // clears the spreadsheet
             dataGridView1.Rows.Clear();
             dataGridView1.Columns.Clear();
 
-            // binding flags to take private and public field names
-            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic ;
-
-
             // adds each field name of a class as a column name
-            foreach (FieldInfo field in givenClass.GetFields(bindingFlags))
+            foreach (var name in dataModel.GetColumnNames())
             {
-                dataGridView1.Columns.Add(field.Name, field.Name);
+                dataGridView1.Columns.Add(name, name);
             }
 
             // checks whether objects exist or not and gets values to enter spreadsheet
-            if (Database.get(givenClass).Count != 0)
+            int col = 0, row = 0;
+
+            foreach (var component in dataModel.Components)
             {
-                int col = 0, row = 0;
+                dataGridView1.Rows.Add();
 
-                foreach (var item in Database.get(givenClass))
+                foreach (var item2 in component.Value.GetAll())
                 {
-                    dataGridView1.Rows.Add();
-
-                    foreach (var item2 in item.Value.GetAll())
-                    {
-                        dataGridView1.CurrentCell = dataGridView1[col, row];
-                        dataGridView1.CurrentCell.Value = item2;
-                        col++;
-                    }
-                    col = 0;
-                    row++;
+                    dataGridView1.CurrentCell = dataGridView1[col, row];
+                    dataGridView1.CurrentCell.Value = item2;
+                    col++;
                 }
+                col = 0;
+                row++;
             }
 
             // makes Name columns readonly
             dataGridView1.Columns[0].ReadOnly = true;
-            // makes area and inertia columns in the datagridview (for sections) readonly 
-            // since they are related to other inputs
-            if (givenClass == typeof(Section))
-            {
-                dataGridView1.Columns[3].ReadOnly = true;
-                dataGridView1.Columns[4].ReadOnly = true;
-            }
 
             // hides unnecessary columns (fields)
             var index = dataGridView1.Columns["UsedBy"].Index;
@@ -86,18 +67,12 @@ namespace StructuralAnalysisSofwareTemplate
                 loaded = false;
 
                 // adds new objects with default constructors
-                Type itemType = Database.returnType(this.Text);
-                var item = Activator.CreateInstance(itemType);
-                var itemName = item.GetType().GetField("Name").GetValue(item).ToString();
-                Database.get(itemType).Add(itemName, item);
-                Database.refreshSpreadList();
-                
+                this.dataModel.CreateComponent();
 
                 dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1];
                 // refresh the treeview
-                TreeView navigator = (TreeView)Application.OpenForms[0];
+                var navigator = (TreeView)Application.OpenForms[0];
                 navigator.refresh();
-
             }
         }
 
@@ -127,7 +102,6 @@ namespace StructuralAnalysisSofwareTemplate
                     dataGridView1.Rows[index].Cells[3].Value = xFixity.ToString();
                     dataGridView1.Rows[index].Cells[4].Value = yFixity.ToString();
                     dataGridView1.Rows[index].Cells[5].Value = zFixity.ToString();
-
                 }
                 else if (this.Text.Contains("Material"))
                 {
@@ -142,7 +116,7 @@ namespace StructuralAnalysisSofwareTemplate
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[1].Value.ToString()),
                         Convert.ToDouble(dataGridView1.Rows[index].Cells[2].Value.ToString())
                     );
-                    // refreshes the area and inertia column in the datagridview 
+                    // refreshes the area and inertia column in the datagridview
                     if (dataGridView1.Rows[index].Cells[1].Value.ToString() != "0" && dataGridView1.Rows[index].Cells[2].Value.ToString() != "0")
                     {
                         dataGridView1.Rows[index].Cells[3].Value = Database.get(typeof(Section))[dataGridView1.Rows[index].Cells[0].Value.ToString()].GetAll()[3].ToString();
@@ -160,33 +134,24 @@ namespace StructuralAnalysisSofwareTemplate
                             // deletes this member from all previous related objects' used dictionaries
                             // used property will be added again in the Member.setall function,
                             // if new objects are same with previous ones.
-                            try
-                            {
 
-                                try
-                                {
+                            // the following line will be a part of dataModel.ReleaseAllFor(index)
+                            //if (member.Section != null) member.Section.UsedBy.Remove(member);
+                            //if (member.Material != null) member.Material.UsedBy.Remove(member);
 
-                                    try
-                                    {
-                                        Database.get(typeof(Section))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
-                                    }
-                                    catch { }
-                                    Database.get(typeof(Material))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
-                                }
-                                catch { }
-                                Database.get(typeof(Node))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
-                            }
-                            catch { }
+                            Database.get(typeof(Section))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                            Database.get(typeof(Material))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
+                            Database.get(typeof(Node))[previousData[i]].usedBy(previousData[0], Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()], false);
                         }
                     }
 
                     // creates temporary object list
                     List<dynamic> itemList = new List<dynamic>();
-                    
+
                     // loop for every object type
                     for (int i = 1; i < 5; i++)
                     {
-                        // assigns k to a value for first two loop 
+                        // assigns k to a value for first two loop
                         // since for two loop should return Node object
                         int k = 0;
                         if (i == 1 || i == 2)
@@ -195,7 +160,7 @@ namespace StructuralAnalysisSofwareTemplate
                         }
                         else
                         {
-                            k = i-1;
+                            k = i - 1;
                         }
                         // detemines return type according to k value (Node, Material or Section)
                         Type itemType = Database.returnType(k);
@@ -205,7 +170,7 @@ namespace StructuralAnalysisSofwareTemplate
                         {
                             // auto complete for object names
                             itemName = Database.autoComplete(dataGridView1.Rows[index].Cells[i].Value.ToString(), itemType);
-                            // changes cell value 
+                            // changes cell value
                             dataGridView1.Rows[index].Cells[i].Value = itemName;
                             // adds object to object list
                             itemList.Add(Database.get(itemType)[itemName]);
@@ -221,9 +186,7 @@ namespace StructuralAnalysisSofwareTemplate
 
                     // sets objects to Member
                     Database.get(typeof(Member))[dataGridView1.Rows[index].Cells[0].Value.ToString()].SetAll(itemList[0], itemList[1], itemList[2], itemList[3]);
-
                 }
-
             }
         }
 
@@ -242,7 +205,6 @@ namespace StructuralAnalysisSofwareTemplate
                 dataGridView1.CurrentCell.Value = previousValue;
                 MessageBox.Show("Wrong input type!");
             }
-
         }
 
         private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -258,13 +220,11 @@ namespace StructuralAnalysisSofwareTemplate
                         c.DataGridView.ClearSelection();
                         c.DataGridView.CurrentCell = c;
                         c.Selected = true;
-
                     }
                 }
                 // shows the contextmenustrip in cursor position
                 contextMenuStrip1.Show(Cursor.Position);
             }
-
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -276,7 +236,6 @@ namespace StructuralAnalysisSofwareTemplate
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Database.refreshSpreadList();
-                
         }
     }
 }

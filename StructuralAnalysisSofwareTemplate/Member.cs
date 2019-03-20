@@ -6,7 +6,7 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public Member()
         {
-            this.Name = "Member: " + Database.get(1).Count.ToString();
+            this.Name = "Member: " + Database.MemberList.Count.ToString();
         }
 
         private Node Node1;
@@ -22,6 +22,8 @@ namespace StructuralAnalysisSofwareTemplate
             this.Material.UsedBy.Remove(this);
             this.Node1.UsedBy.Remove(this);
             this.Node2.UsedBy.Remove(this);
+
+            Database.MemberList.Remove(this.Name);
         }
 
         public void SetAll(Node Node1, Node Node2, Material Material, Section Section)
@@ -38,7 +40,7 @@ namespace StructuralAnalysisSofwareTemplate
             this.Node2.UsedBy.Add(this);
         }
 
-        public List<string> GetAll()
+        public override List<string> GetAll()
         {
             return new List<string>
             {
