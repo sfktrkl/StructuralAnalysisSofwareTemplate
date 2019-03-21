@@ -59,23 +59,40 @@ namespace StructuralAnalysisSofwareTemplate
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             // sets the spread sheet name and calls the function
-            createSpreadSheet(e.Node.Text, e.Node.Tag.GetType());
+            createSpreadSheet(e.Node.Tag.GetType());
         }
 
-        private void createSpreadSheet(string spreadSheetName, Type givenClass)
+        private void createSpreadSheet(Type givenClass)
         {
-            // adds spread sheet in to form1.panel1
-            SpreadSheet spreadSheet = new SpreadSheet();
+            DataModel dataModel;
 
+            // adds spread sheet in to form1.panel1
+            if (givenClass == typeof(Node))
+            {
+                dataModel = new NodeDataModel(Database.NodeList);
+            }
+            else if (givenClass == typeof(Member))
+            {
+                dataModel = new MemberDataModel(Database.MemberList);
+            }
+            else if (givenClass == typeof(Material))
+            {
+                dataModel = new MaterialDataModel(Database.MaterialList);
+            }
+            else
+            {
+                dataModel = new SectionDataModel(Database.SectionList);
+            }
+
+            SpreadSheet spreadSheet = new SpreadSheet(dataModel);
             spreadSheet.TopLevel = false;
-            Form1 form1 = (Form1)Application.OpenForms["Form1"];
+            MainForm form1 = (MainForm)Application.OpenForms["MainForm"];
             Panel panel1 = (Panel)form1.Controls["panel1"];
             panel1.Controls.Add(spreadSheet);
             spreadSheet.Show();
             spreadSheet.Dock = DockStyle.Right;
-            spreadSheet.Text = spreadSheetName;
 
-            spreadSheet.refresh(givenClass);
+            spreadSheet.refresh();
             Database.spreadList.Add(spreadSheet);
         }
 
@@ -97,7 +114,6 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var clickedItem = treeView1.SelectedNode.Text;
             var obj = (Component)treeView1.SelectedNode.Tag;
 
             if (obj.UsedBy.Count > 0)
@@ -107,7 +123,6 @@ namespace StructuralAnalysisSofwareTemplate
             else
             {
                 obj.Delete();
-
                 Database.refreshSpreadList();
             }
 

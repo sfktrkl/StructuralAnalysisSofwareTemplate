@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             toolStripStatusLabel1.Text = "Ready";
@@ -33,18 +33,35 @@ namespace StructuralAnalysisSofwareTemplate
             createNavigator();
         }
 
-        private void createSpreadSheet(string spreadSheetName, Type givenClass)
+        private void createSpreadSheet(Type givenClass)
         {
             // adds spread sheet in to form1.panel1
-            SpreadSheet spreadSheet = new SpreadSheet();
+            DataModel dataModel;
 
+            if (givenClass == typeof(Node))
+            {
+                dataModel = new NodeDataModel(Database.NodeList);
+            }
+            else if (givenClass == typeof(Member))
+            {
+                dataModel = new MemberDataModel(Database.MemberList);
+            }
+            else if (givenClass == typeof(Material))
+            {
+                dataModel = new MaterialDataModel(Database.MemberList);
+            }
+            else
+            {
+                dataModel = new SectionDataModel(Database.SectionList);
+            }
+
+            SpreadSheet spreadSheet = new SpreadSheet(dataModel);
             spreadSheet.TopLevel = false;
             panel1.Controls.Add(spreadSheet);
             spreadSheet.Show();
             spreadSheet.Dock = DockStyle.Right;
-            spreadSheet.Text = spreadSheetName;
 
-            spreadSheet.refresh(givenClass);
+            spreadSheet.refresh();
             Database.spreadList.Add(spreadSheet);
         }
 
@@ -71,42 +88,42 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Nodes", typeof(Node));
+            createSpreadSheet(typeof(Node));
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Members", typeof(Member));
+            createSpreadSheet(typeof(Member));
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Materials", typeof(Material));
+            createSpreadSheet(typeof(Material));
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Sections", typeof(Section));
+            createSpreadSheet(typeof(Section));
         }
 
         private void nodesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Nodes", typeof(Node));
+            createSpreadSheet(typeof(Node));
         }
 
         private void membersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Members", typeof(Member));
+            createSpreadSheet(typeof(Member));
         }
 
         private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Materials", typeof(Material));
+            createSpreadSheet(typeof(Material));
         }
 
         private void sectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet("Sections", typeof(Section));
+            createSpreadSheet(typeof(Section));
         }
     }
 }

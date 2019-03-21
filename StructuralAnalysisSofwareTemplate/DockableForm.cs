@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
@@ -28,7 +22,7 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 // relocating navigator in form1 panel
                 this.TopLevel = false;
-                Form1 form1 = (Form1)Application.OpenForms["Form1"];
+                MainForm form1 = (MainForm)Application.OpenForms["Form1"];
                 Panel panel1 = (Panel)form1.Controls["panel1"];
                 panel1.Controls.Add(this);
 
@@ -48,13 +42,10 @@ namespace StructuralAnalysisSofwareTemplate
                 Cursor = Cursors.Arrow;
                 rightClickActive = false;
             }
-
-
         }
 
         private void splitContainer1_Panel1_MouseMove(object sender, MouseEventArgs e)
         {
-
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 this.Left = e.X + this.Left - MouseDownLocation.X;
@@ -66,7 +57,6 @@ namespace StructuralAnalysisSofwareTemplate
         {
             this.Close();
         }
-
 
         private void splitContainer1_Panel1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -85,7 +75,6 @@ namespace StructuralAnalysisSofwareTemplate
                 Cursor = Cursors.Hand;
                 rightClickActive = true;
             }
-
         }
     }
 }

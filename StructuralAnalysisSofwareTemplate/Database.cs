@@ -6,10 +6,10 @@ namespace StructuralAnalysisSofwareTemplate
 {
     public static class Database
     {
-        public static readonly Dictionary<string, Node> NodeList = new Dictionary<string, Node>();
-        public static readonly Dictionary<string, Member> MemberList = new Dictionary<string, Member>();
-        public static readonly Dictionary<string, Material> MaterialList = new Dictionary<string, Material>();
-        public static readonly Dictionary<string, Section> SectionList = new Dictionary<string, Section>();
+        public static readonly Dictionary<string, Component> NodeList = new Dictionary<string, Component>();
+        public static readonly Dictionary<string, Component> MemberList = new Dictionary<string, Component>();
+        public static readonly Dictionary<string, Component> MaterialList = new Dictionary<string, Component>();
+        public static readonly Dictionary<string, Component> SectionList = new Dictionary<string, Component>();
 
         public static List<SpreadSheet> spreadList = new List<SpreadSheet>();
 
@@ -18,11 +18,11 @@ namespace StructuralAnalysisSofwareTemplate
             // refreshes all spreadsheets
             foreach (var form in spreadList)
             {
-                form.refresh(form.loadType);
+                form.refresh();
             }
         }
 
-        public static string autoComplete(string cellValue, Type cellType)
+        public static string AutoComplete(string cellValue, Type cellType)
         {
             string objectName;
             // determines prefix according to object type
@@ -62,9 +62,9 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public static bool autoComplete(string cellValue)
+        public static bool AutoComplete(string cellValue)
         {
-            // overload for autocomplete method which return (boolean)true for strings which means true
+            // overload for AutoComplete method which return (boolean)true for strings which means true
             if (cellValue == "1" || cellValue == "true" || cellValue == "True" || cellValue == "TRUE")
             {
                 return true;

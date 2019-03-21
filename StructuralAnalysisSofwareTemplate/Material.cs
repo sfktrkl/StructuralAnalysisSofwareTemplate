@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace StructuralAnalysisSofwareTemplate
+﻿namespace StructuralAnalysisSofwareTemplate
 {
     public class Material : Component
     {
@@ -11,8 +9,8 @@ namespace StructuralAnalysisSofwareTemplate
             this.Name = "Material: " + Database.MaterialList.Count.ToString();
         }
 
-        private double unitWeight;
-        private double elasticModulus;
+        public double unitWeight { get; private set; }
+        public double elasticModulus { get; private set; }
 
         public override void Delete()
         {
@@ -23,16 +21,6 @@ namespace StructuralAnalysisSofwareTemplate
         {
             this.elasticModulus = elasticModulus;
             this.unitWeight = unitWeight;
-        }
-
-        public override List<string> GetAll()
-        {
-            return new List<string>
-            {
-                this.Name.ToString(),
-                this.unitWeight.ToString(),
-                this.elasticModulus.ToString()
-            };
         }
     }
 }

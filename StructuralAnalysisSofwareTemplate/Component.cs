@@ -12,7 +12,5 @@ namespace StructuralAnalysisSofwareTemplate
 
         // virtual method for deleting objects
         public abstract void Delete();
-
-        public abstract List<string> GetAll();
     }
 }

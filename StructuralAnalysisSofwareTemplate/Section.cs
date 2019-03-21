@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -39,24 +38,12 @@ namespace StructuralAnalysisSofwareTemplate
         public double Area { get; private set; }
         public double Inertia { get; private set; }
 
-        private double height;
-        private double width;
+        public double height { get; private set; }
+        public double width { get; private set; }
 
         public override void Delete()
         {
             Database.SectionList.Remove(this.Name);
-        }
-
-        public override List<string> GetAll()
-        {
-            return new List<string>
-            {
-                this.Name.ToString(),
-                this.Height.ToString(),
-                this.Width.ToString(),
-                this.Area.ToString(),
-                this.Inertia.ToString()
-            };
         }
     }
 }

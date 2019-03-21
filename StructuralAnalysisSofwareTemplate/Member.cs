@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace StructuralAnalysisSofwareTemplate
+﻿namespace StructuralAnalysisSofwareTemplate
 {
     public class Member : Component
     {
@@ -9,10 +7,10 @@ namespace StructuralAnalysisSofwareTemplate
             this.Name = "Member: " + Database.MemberList.Count.ToString();
         }
 
-        private Node Node1;
-        private Node Node2;
-        private Material Material;
-        private Section Section;
+        public Node Node1 { get; private set; }
+        public Node Node2 { get; private set; }
+        public Material Material { get; private set; }
+        public Section Section { get; private set; }
 
         public override void Delete()
         {
@@ -34,22 +32,10 @@ namespace StructuralAnalysisSofwareTemplate
             this.Section = Section;
             // adds objects used dictionaries to this member
 
-            this.Section.UsedBy.Add(this);
-            this.Material.UsedBy.Add(this);
-            this.Node1.UsedBy.Add(this);
-            this.Node2.UsedBy.Add(this);
-        }
-
-        public override List<string> GetAll()
-        {
-            return new List<string>
-            {
-                this.Name == null ? "NULL" : this.Name.ToString(),
-                this.Node1 == null ? "NULL" : this.Node1.Name.ToString(),
-                this.Node2 == null ? "NULL" : this.Node2.Name.ToString(),
-                this.Material == null ? "NULL" : this.Material.Name.ToString(),
-                this.Section == null ? "NULL" : this.Section.Name.ToString()
-            };
+            if (this.Section != null) this.Section.UsedBy.Add(this);
+            if (this.Material != null) this.Material.UsedBy.Add(this);
+            if (this.Node1 != null) this.Node1.UsedBy.Add(this);
+            if (this.Node2 != null) this.Node2.UsedBy.Add(this);
         }
     }
 }
