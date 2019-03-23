@@ -17,7 +17,7 @@
             Database.MaterialList.Remove(this.Name);
         }
 
-        public void SetAll(double elasticModulus, double unitWeight)
+        public void SetAll(double unitWeight, double elasticModulus)
         {
             this.elasticModulus = elasticModulus;
             this.unitWeight = unitWeight;

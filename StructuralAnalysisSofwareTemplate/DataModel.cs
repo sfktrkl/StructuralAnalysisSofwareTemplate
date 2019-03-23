@@ -75,18 +75,24 @@ namespace StructuralAnalysisSofwareTemplate
             bool yFixity = Database.AutoComplete(componentData[4].ToString());
             bool zFixity = Database.AutoComplete(componentData[5].ToString());
 
-            // setting node properties
-            component.SetAll(
-                Convert.ToDouble(componentData[1]),
-                Convert.ToDouble(componentData[2]),
-                Convert.ToBoolean(xFixity),
-                Convert.ToBoolean(yFixity),
-                Convert.ToBoolean(zFixity),
-                Convert.ToDouble(componentData[6]),
-                Convert.ToDouble(componentData[7]),
-                Convert.ToDouble(componentData[8])
-            );
-
+            try
+            {
+                // setting node properties
+                component.SetAll(
+                    Convert.ToDouble(componentData[1]),
+                    Convert.ToDouble(componentData[2]),
+                    Convert.ToBoolean(xFixity),
+                    Convert.ToBoolean(yFixity),
+                    Convert.ToBoolean(zFixity),
+                    Convert.ToDouble(componentData[6]),
+                    Convert.ToDouble(componentData[7]),
+                    Convert.ToDouble(componentData[8])
+                );
+            }
+            catch
+            {
+                MessageBox.Show("Wrong Input!!");
+            }
         }
     }
 
@@ -145,9 +151,9 @@ namespace StructuralAnalysisSofwareTemplate
                 member.SetAll
                 (
                 Database.AutoComplete(componentData[1].ToString(), typeof(Node)) == "NULL" ? (Node)null : Database.NodeList[Database.AutoComplete(componentData[1].ToString(), typeof(Node))],
-                Database.AutoComplete(componentData[2].ToString(), typeof(Node)) == "NULL" ? (Node)null : Database.NodeList[Database.AutoComplete(componentData[1].ToString(), typeof(Node))],
-                Database.AutoComplete(componentData[3].ToString(), typeof(Material)) == "NULL" ? (Material)null : Database.NodeList[Database.AutoComplete(componentData[1].ToString(), typeof(Material))],
-                Database.AutoComplete(componentData[3].ToString(), typeof(Section)) == "NULL" ? (Section)null : Database.NodeList[Database.AutoComplete(componentData[1].ToString(), typeof(Section))]
+                Database.AutoComplete(componentData[2].ToString(), typeof(Node)) == "NULL" ? (Node)null : Database.NodeList[Database.AutoComplete(componentData[2].ToString(), typeof(Node))],
+                Database.AutoComplete(componentData[3].ToString(), typeof(Material)) == "NULL" ? (Material)null : Database.MaterialList[Database.AutoComplete(componentData[3].ToString(), typeof(Material))],
+                Database.AutoComplete(componentData[4].ToString(), typeof(Section)) == "NULL" ? (Section)null : Database.SectionList[Database.AutoComplete(componentData[4].ToString(), typeof(Section))]
                 );
             }
             catch
@@ -199,11 +205,18 @@ namespace StructuralAnalysisSofwareTemplate
         {
             var material = this.Components[componentData[0]];
 
-            // setting material properties
-            material.SetAll(
-                Convert.ToDouble(componentData[1]),
-                Convert.ToDouble(componentData[2])
-            );
+            try
+            {
+                // setting material properties
+                material.SetAll(
+                    Convert.ToDouble(componentData[1]),
+                    Convert.ToDouble(componentData[2])
+                );
+            }
+            catch
+            {
+                MessageBox.Show("Wrong Input!!");
+            }
         }
     }
 
@@ -249,9 +262,15 @@ namespace StructuralAnalysisSofwareTemplate
         {
             var section = this.Components[componentData[0]];
 
-            section.Height = Convert.ToDouble(componentData[1]);
-            section.Width = Convert.ToDouble(componentData[2]);
-
+            try
+            {
+                section.Height = Convert.ToDouble(componentData[1]);
+                section.Width = Convert.ToDouble(componentData[2]);
+            }
+            catch
+            {
+                MessageBox.Show("Wrong Input!!");
+            }
         }
     }
 }

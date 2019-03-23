@@ -22,7 +22,7 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 // relocating navigator in form1 panel
                 this.TopLevel = false;
-                MainForm form1 = (MainForm)Application.OpenForms["Form1"];
+                MainForm form1 = (MainForm)Application.OpenForms["MainForm"];
                 Panel panel1 = (Panel)form1.Controls["panel1"];
                 panel1.Controls.Add(this);
 

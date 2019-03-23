@@ -48,6 +48,8 @@ namespace StructuralAnalysisSofwareTemplate
                 row++;
             }
 
+            dataGridView1.CurrentCell = dataGridView1[1, row-1];
+            dataGridView1.Columns[0].ReadOnly = true;
             loaded = true;
         }
 
@@ -57,12 +59,12 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 loaded = false;
 
-                // adds new objects with default constructors
+                // adds new components with default constructors
                 this.dataModel.CreateComponent();
                 this.refresh();
 
                 // refresh the treeview
-                var navigator = (TreeView)Application.OpenForms[0];
+                TreeView navigator = (TreeView)Application.OpenForms["TreeView"];
                 navigator.refresh();
             }
         }
@@ -73,6 +75,7 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 var index = e.RowIndex;
 
+
                 var componentData = new List<dynamic>();
 
                 foreach (DataGridViewCell cell in dataGridView1.Rows[index].Cells)
@@ -81,8 +84,8 @@ namespace StructuralAnalysisSofwareTemplate
                 }
 
                 dataModel.SetComponentFromData(componentData);
-
-                this.refresh();
+                var newRowData = dataModel.GetRowData(dataGridView1.Rows[index].Cells[0].Value.ToString());
+                dataGridView1.Rows[index].Cells[e.ColumnIndex].Value = newRowData[e.ColumnIndex];
             }
         }
 

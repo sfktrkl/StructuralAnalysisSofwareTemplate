@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -22,10 +23,11 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
+        // auto complete for object names
         public static string AutoComplete(string cellValue, Type cellType)
         {
             string objectName;
-            // determines prefix according to object type
+            // determines prefix according to component type
             if (cellType == typeof(Node))
             {
                 objectName = "Node: ";
@@ -47,8 +49,6 @@ namespace StructuralAnalysisSofwareTemplate
                 objectName = "";
             }
 
-            // auto complete for object names
-
             // if given input is all digit adds objectName as prefix
             if (cellValue.All(char.IsDigit))
             {
@@ -57,15 +57,32 @@ namespace StructuralAnalysisSofwareTemplate
             }
             else
             {
-                // if given input is full name return as same
-                return cellValue;
+                // finds matches for "null" if indented string is null
+                Regex regex = new Regex("^([n][u]?[l]?[l]?)$", RegexOptions.IgnoreCase);
+                MatchCollection matches = regex.Matches(cellValue);
+
+                // returns null if matches found
+                if (matches.Count > 0)
+                {
+                    return "NULL";
+                }
+                // returns component's name
+                else
+                {
+                    // if given input is full name return as same
+                    return cellValue;
+                }
             }
         }
 
         public static bool AutoComplete(string cellValue)
         {
+            // regex for words meaning true (1 or "true")
+            Regex regex = new Regex("^([t][r]?[u]?[e]?|1)$", RegexOptions.IgnoreCase);
+            MatchCollection matches = regex.Matches(cellValue);
+
             // overload for AutoComplete method which return (boolean)true for strings which means true
-            if (cellValue == "1" || cellValue == "true" || cellValue == "True" || cellValue == "TRUE")
+            if (matches.Count > 0)
             {
                 return true;
             }

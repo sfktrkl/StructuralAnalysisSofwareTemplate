@@ -15,7 +15,7 @@
         public override void Delete()
         {
             // when this member is deleted
-            // deletes this member from all objects used dictionaries
+            // deletes this member from all components usedBy lists
             this.Section.UsedBy.Remove(this);
             this.Material.UsedBy.Remove(this);
             this.Node1.UsedBy.Remove(this);
@@ -30,8 +30,8 @@
             this.Node2 = Node2;
             this.Material = Material;
             this.Section = Section;
-            // adds objects used dictionaries to this member
 
+            // adds components used lists to this Member
             if (this.Section != null) this.Section.UsedBy.Add(this);
             if (this.Material != null) this.Material.UsedBy.Add(this);
             if (this.Node1 != null) this.Node1.UsedBy.Add(this);
