@@ -5,12 +5,16 @@ namespace StructuralAnalysisSofwareTemplate
 {
     public partial class TreeView : StructuralAnalysisSofwareTemplate.DockableForm
     {
-        public TreeView()
+        public TreeView(MainForm mainForm)
         {
             InitializeComponent();
+
+            this.mainForm = mainForm;
         }
 
-        public void refresh()
+        private MainForm mainForm;
+
+        public void RefreshData()
         {
             // clears the treeview and adds base nodes
             treeView1.Nodes.Clear();
@@ -59,46 +63,12 @@ namespace StructuralAnalysisSofwareTemplate
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             // sets the spread sheet name and calls the function
-            createSpreadSheet(e.Node.Tag.GetType());
-        }
-
-        private void createSpreadSheet(Type givenClass)
-        {
-            DataModel dataModel;
-
-            // adds spread sheet in to form1.panel1
-            if (givenClass == typeof(Node))
-            {
-                dataModel = new NodeDataModel(Database.NodeList);
-            }
-            else if (givenClass == typeof(Member))
-            {
-                dataModel = new MemberDataModel(Database.MemberList);
-            }
-            else if (givenClass == typeof(Material))
-            {
-                dataModel = new MaterialDataModel(Database.MaterialList);
-            }
-            else
-            {
-                dataModel = new SectionDataModel(Database.SectionList);
-            }
-
-            SpreadSheet spreadSheet = new SpreadSheet(dataModel);
-            spreadSheet.TopLevel = false;
-            MainForm form1 = (MainForm)Application.OpenForms["MainForm"];
-            Panel panel1 = (Panel)form1.Controls["panel1"];
-            panel1.Controls.Add(spreadSheet);
-            spreadSheet.Show();
-            spreadSheet.Dock = DockStyle.Right;
-
-            spreadSheet.refresh();
-            Database.spreadList.Add(spreadSheet);
+            this.mainForm.CreateSpreadSheet(e.Node.Tag.GetType());
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            refresh();
+            RefreshData();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -123,10 +93,10 @@ namespace StructuralAnalysisSofwareTemplate
             else
             {
                 obj.Delete();
-                Database.refreshSpreadList();
+                this.mainForm.RefreshSpreadsheets();
             }
 
-            refresh();
+            RefreshData();
         }
     }
 }

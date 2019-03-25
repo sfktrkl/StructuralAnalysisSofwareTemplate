@@ -20,7 +20,7 @@ namespace StructuralAnalysisSofwareTemplate
         //ReleaseAllFor(int index);
         public abstract List<string> GetRowData(string componentName);
 
-        public abstract void SetComponentFromData(List<dynamic> componentData);
+        public abstract void SetComponentFromData(List<object> componentData);
     }
 
     public class NodeDataModel : DataModel
@@ -68,12 +68,12 @@ namespace StructuralAnalysisSofwareTemplate
             };
         }
 
-        public override void SetComponentFromData(List<dynamic> componentData)
+        public override void SetComponentFromData(List<object> componentData)
         {
-            var component = (Node)this.Components[componentData[0]];
-            bool xFixity = Database.AutoComplete(componentData[3].ToString());
-            bool yFixity = Database.AutoComplete(componentData[4].ToString());
-            bool zFixity = Database.AutoComplete(componentData[5].ToString());
+            var component = (Node)this.Components[componentData[0].ToString()];
+            bool xFixity = AutoComplete.TrueFalse(componentData[3].ToString());
+            bool yFixity = AutoComplete.TrueFalse(componentData[4].ToString());
+            bool zFixity = AutoComplete.TrueFalse(componentData[5].ToString());
 
             try
             {
@@ -133,12 +133,12 @@ namespace StructuralAnalysisSofwareTemplate
             };
         }
 
-        public override void SetComponentFromData(List<dynamic> componentData)
+        public override void SetComponentFromData(List<object> componentData)
         {
             // deletes this member from all previous related objects' used dictionaries
             // used property will be added again in the Member.setall function,
             // if new objects are same with previous ones.
-            var member = this.Components[componentData[0]];
+            var member = (Member)this.Components[componentData[0].ToString()];
 
             // the following line will be a part of dataModel.ReleaseAllFor(index)
             if (member.Section != null) member.Section.UsedBy.Remove(member);
@@ -150,10 +150,10 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 member.SetAll
                 (
-                Database.AutoComplete(componentData[1].ToString(), typeof(Node)) == "NULL" ? (Node)null : Database.NodeList[Database.AutoComplete(componentData[1].ToString(), typeof(Node))],
-                Database.AutoComplete(componentData[2].ToString(), typeof(Node)) == "NULL" ? (Node)null : Database.NodeList[Database.AutoComplete(componentData[2].ToString(), typeof(Node))],
-                Database.AutoComplete(componentData[3].ToString(), typeof(Material)) == "NULL" ? (Material)null : Database.MaterialList[Database.AutoComplete(componentData[3].ToString(), typeof(Material))],
-                Database.AutoComplete(componentData[4].ToString(), typeof(Section)) == "NULL" ? (Section)null : Database.SectionList[Database.AutoComplete(componentData[4].ToString(), typeof(Section))]
+                AutoComplete.IsNull(componentData[1].ToString()) ? null : (Node)Database.NodeList[AutoComplete.ForObject(componentData[1].ToString(), typeof(Node))],
+                AutoComplete.IsNull(componentData[2].ToString()) ? null : (Node)Database.NodeList[AutoComplete.ForObject(componentData[2].ToString(), typeof(Node))],
+                AutoComplete.IsNull(componentData[3].ToString()) ? null : (Material)Database.MaterialList[AutoComplete.ForObject(componentData[3].ToString(), typeof(Material))],
+                AutoComplete.IsNull(componentData[4].ToString()) ? null : (Section)Database.SectionList[AutoComplete.ForObject(componentData[4].ToString(), typeof(Section))]
                 );
             }
             catch
@@ -201,9 +201,9 @@ namespace StructuralAnalysisSofwareTemplate
             };
         }
 
-        public override void SetComponentFromData(List<dynamic> componentData)
+        public override void SetComponentFromData(List<object> componentData)
         {
-            var material = this.Components[componentData[0]];
+            var material = (Material)this.Components[componentData[0].ToString()];
 
             try
             {
@@ -258,9 +258,9 @@ namespace StructuralAnalysisSofwareTemplate
             };
         }
 
-        public override void SetComponentFromData(List<dynamic> componentData)
+        public override void SetComponentFromData(List<object> componentData)
         {
-            var section = this.Components[componentData[0]];
+            var section = (Section)this.Components[componentData[0].ToString()];
 
             try
             {

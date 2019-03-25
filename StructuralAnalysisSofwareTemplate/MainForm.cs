@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
@@ -29,11 +30,25 @@ namespace StructuralAnalysisSofwareTemplate
             Database.SectionList.Add(section1.Name, section1);
 
             member1.SetAll(Node1, Node2, material1, section1);
-            // creates navigator form
-            createNavigator();
+
+            // creates the first navigator
+            
         }
 
-        private void createSpreadSheet(Type givenClass)
+        private List<SpreadSheet> spreadsheets = new List<SpreadSheet>();
+        private List<TreeView> navigators = new List<TreeView>();
+
+        public void RefreshSpreadsheets()
+        {
+            foreach (var spreadsheet in this.spreadsheets) spreadsheet.RefreshData();
+        }
+
+        public void RefreshNavigators()
+        {
+            foreach (var navigator in this.navigators) navigator.RefreshData();
+        }
+
+        public void CreateSpreadSheet(Type givenClass)
         {
             // adds spread sheet in to form1.panel1
             DataModel dataModel;
@@ -55,75 +70,76 @@ namespace StructuralAnalysisSofwareTemplate
                 dataModel = new SectionDataModel(Database.SectionList);
             }
 
-            SpreadSheet spreadSheet = new SpreadSheet(dataModel);
+            SpreadSheet spreadSheet = new SpreadSheet(this, dataModel);
             spreadSheet.TopLevel = false;
             panel1.Controls.Add(spreadSheet);
             spreadSheet.Show();
             spreadSheet.Dock = DockStyle.Right;
 
-            spreadSheet.refresh();
-            Database.spreadList.Add(spreadSheet);
+            spreadSheet.RefreshData();
+            this.spreadsheets.Add(spreadSheet);
         }
 
-        private void createNavigator()
+        private void CreateNavigator()
         {
-            // creates new treeview form
-            var navigator = new TreeView();
+            var navigator = new TreeView(this);
             navigator.TopLevel = false;
             panel1.Controls.Add(navigator);
             navigator.Show();
             navigator.Dock = DockStyle.Left; // docks the form in to panel (temporary)
-            navigator.refresh();
+            navigator.RefreshData();
+
+            this.navigators.Add(navigator);
         }
 
         private void toolStripButton10_Click(object sender, EventArgs e)
         {
-            createNavigator();
+            this.CreateNavigator();
         }
 
         private void navigatorToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            createNavigator();
+            this.CreateNavigator();
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Node));
+            this.CreateSpreadSheet(typeof(Node));
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Member));
+            this.CreateSpreadSheet(typeof(Member));
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Material));
+            this.CreateSpreadSheet(typeof(Material));
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Section));
+            this.CreateSpreadSheet(typeof(Section));
         }
 
         private void nodesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Node));
+            this.CreateSpreadSheet(typeof(Node));
         }
 
         private void membersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Member));
+            this.CreateSpreadSheet(typeof(Member));
         }
 
         private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Material));
+            this.CreateSpreadSheet(typeof(Material));
         }
 
         private void sectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSpreadSheet(typeof(Section));
+            this.CreateSpreadSheet(typeof(Section));
         }
     }
 }

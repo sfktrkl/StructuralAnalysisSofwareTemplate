@@ -4,6 +4,9 @@
     {
         public Node()
         {
+            this.parameters.Add("Node Name", new Name("Node: " + Database.NodeList.Count.ToString()));
+            this.parameters.Add("X Coordinate", new Number(0.0));
+
             this.xCoordinate = 0;
             this.yCoordinate = 0;
             this.xFixity = false;
@@ -12,7 +15,6 @@
             this.xStiffness = 0;
             this.yStiffness = 0;
             this.zStiffness = 0;
-            this.Name = "Node: " + Database.NodeList.Count.ToString();
         }
 
         public double xCoordinate { get; private set; }

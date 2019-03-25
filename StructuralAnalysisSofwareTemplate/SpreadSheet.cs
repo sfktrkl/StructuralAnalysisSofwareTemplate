@@ -11,13 +11,17 @@ namespace StructuralAnalysisSofwareTemplate
 
         public DataModel dataModel;
 
-        public SpreadSheet(DataModel dataModel)
+        public SpreadSheet(MainForm mainForm, DataModel dataModel)
         {
             InitializeComponent();
             this.dataModel = dataModel;
+
+            this.mainForm = mainForm;
         }
 
-        public void refresh()
+        private MainForm mainForm;
+
+        public void RefreshData()
         {
             loaded = false;
 
@@ -61,22 +65,23 @@ namespace StructuralAnalysisSofwareTemplate
 
                 // adds new components with default constructors
                 this.dataModel.CreateComponent();
-                this.refresh();
+                this.RefreshData();
 
                 // refresh the treeview
-                TreeView navigator = (TreeView)Application.OpenForms["TreeView"];
-                navigator.refresh();
+                this.mainForm.RefreshNavigators();
             }
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            dataModel.SetValueOf(e.RowIndex, e.ColumnIndex, newString);
+
             if (loaded == true)
             {
                 var index = e.RowIndex;
 
 
-                var componentData = new List<dynamic>();
+                var componentData = new List<object>();
 
                 foreach (DataGridViewCell cell in dataGridView1.Rows[index].Cells)
                 {
@@ -134,7 +139,7 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Database.refreshSpreadList();
+            this.mainForm.RefreshSpreadsheets();
         }
     }
 }
