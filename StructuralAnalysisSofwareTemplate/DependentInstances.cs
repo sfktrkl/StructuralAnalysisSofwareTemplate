@@ -4,6 +4,7 @@ namespace StructuralAnalysisSofwareTemplate
 {
     public abstract class DependentInstances : DependentParameter
     {
+        // sets readOnly field false since these instances can be changed by user input
         public DependentInstances()
         {
             this.readOnly = false;
@@ -17,135 +18,200 @@ namespace StructuralAnalysisSofwareTemplate
 
     public class NodeInstance : DependentInstances
     {
-        public NodeInstance(Node component)
+        public NodeInstance()
         {
-            this.Value = component;
-            this.Display = component != null ? component.parameters["Node Name"].Display : "NULL";
-            this.readOnly = false;
-            this.RefreshAffects();
+            this.Value = null;
+            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
         {
-            try
-            {
-                var newValue = AutoComplete.ForObject(value.ToString(), typeof(Node));
-                this.Value = newValue == "NULL" ? null : Database.NodeList[newValue.ToString()];
-                var node = newValue == "NULL" ? null : (Node)this.Value;
-                this.Display = newValue == "NULL" ? "NULL" : node.parameters["Node Name"].Display;
+            var newValue = AutoComplete.ForObject(value.ToString(), typeof(Node));
 
-                foreach (var parameters in node.parameters.Values)
-                {
-                    parameters.affects.Add(this);
-                }
-                this.RefreshAffects();
-            }
-            catch
+            // if result from autocomplete is not null
+            // tries changing the value and display of the parameter
+            if (newValue != "NULL")
             {
-                MessageBox.Show("Object does not exist!!!");
+                try
+                {
+                    //sets the value and the display of the parameter
+                    this.Value = Database.NodeList[newValue.ToString()];
+                    var component = (Node)this.Value;
+                    this.Display = component.parameters["Node Name"].Display;
+
+                    foreach (var parameters in component.parameters.Values)
+                    {
+                        // this parameter depends all of its parameters
+                        // hence all parameters of this parameter effects this parameter
+                        this.depends.Add(parameters);
+                        // for all parameters of this parameter add this parameter as affected parameter
+                        parameters.affects.Add(this);
+                    }
+                    this.RefreshAffects();
+                }
+                catch
+                {
+                    // if given input (component) does not exist
+                    MessageBox.Show("Object does not exist!!!");
+                }
+            }
+            else
+            {
+                this.Value = null;
+                this.Display = "NULL";
             }
         }
 
+        public override void RefreshDepends()
+        {
+            var component = (Node)this.Value;
+            this.Value = component;
+            this.Display = component.parameters["Node Name"].Display;
+            base.RefreshDepends();
+        }
     }
 
     public class MaterialInstance : DependentInstances
     {
-        public MaterialInstance(Material component)
+        public MaterialInstance()
         {
-            this.Value = component;
-            this.Display = component != null ? component.parameters["Material Name"].Display : "NULL";
-            this.readOnly = false;
-            this.RefreshAffects();
+            this.Value = null;
+            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
         {
-            try
-            {
-                var newValue = AutoComplete.ForObject(value.ToString(), typeof(Material));
-                this.Value = newValue == "NULL" ? null : Database.MaterialList[newValue.ToString()];
-                var material = newValue == "NULL" ? null : (Material)this.Value;
-                this.Display = newValue == "NULL" ? "NULL" : material.parameters["Material Name"].Display;
+            var newValue = AutoComplete.ForObject(value.ToString(), typeof(Material));
 
-                foreach (var parameters in material.parameters.Values)
+            if (newValue != "NULL")
+            {
+                try
                 {
-                    parameters.affects.Add(this);
-                }
-                this.RefreshAffects();
+                    this.Value = Database.MaterialList[newValue.ToString()];
+                    var component = (Material)this.Value;
+                    this.Display = component.parameters["Material Name"].Display;
 
+                    foreach (var parameters in component.parameters.Values)
+                    {
+                        this.depends.Add(parameters);
+                        parameters.affects.Add(this);
+                    }
+                    this.RefreshAffects();
+                }
+                catch
+                {
+                    MessageBox.Show("Object does not exist!!!");
+                }
             }
-            catch
+            else
             {
-                MessageBox.Show("Object does not exist!!!");
+                this.Value = null;
+                this.Display = "NULL";
             }
         }
 
+        public override void RefreshDepends()
+        {
+            var component = (Material)this.Value;
+            this.Value = component;
+            this.Display = component.parameters["Material Name"].Display;
+            base.RefreshDepends();
+        }
     }
 
     public class SectionInstance : DependentInstances
     {
-        public SectionInstance(Section component)
+        public SectionInstance()
         {
-            this.Value = component;
-            this.Display = component != null ? component.parameters["Section Name"].Display : "NULL";
-            this.readOnly = false;
-            this.RefreshAffects();
+            this.Value = null;
+            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
         {
-            try
-            {
-                var newValue = AutoComplete.ForObject(value.ToString(), typeof(Section));
-                this.Value = newValue == "NULL" ? null : Database.SectionList[newValue.ToString()];
-                var section = newValue == "NULL" ? null : (Section)this.Value;
-                this.Display = newValue == "NULL" ? "NULL" : section.parameters["Section Name"].Display;
+            var newValue = AutoComplete.ForObject(value.ToString(), typeof(Section));
 
-                foreach (var parameters in section.parameters.Values)
+            if (newValue != "NULL")
+            {
+                try
                 {
-                    parameters.affects.Add(this);
-                }
+                    this.Value = Database.SectionList[newValue.ToString()];
+                    var component = (Section)this.Value;
+                    this.Display = component.parameters["Section Name"].Display;
 
-                this.RefreshAffects();
+                    foreach (var parameters in component.parameters.Values)
+                    {
+                        this.depends.Add(parameters);
+                        parameters.affects.Add(this);
+                    }
+                    this.RefreshAffects();
+                }
+                catch
+                {
+                    MessageBox.Show("Object does not exist!!!");
+                }
             }
-            catch
+            else
             {
-                MessageBox.Show("Object does not exist!!!");
+                this.Value = null;
+                this.Display = "NULL";
             }
         }
 
+        public override void RefreshDepends()
+        {
+            var component = (Section)this.Value;
+            this.Value = component;
+            this.Display = component.parameters["Section Name"].Display;
+            base.RefreshDepends();
+        }
     }
 
     public class MemberInstance : DependentInstances
     {
-        public MemberInstance(Member component)
+        public MemberInstance()
         {
-            this.Value = component;
-            this.Display = component != null ? component.parameters["Member Name"].Display : "NULL";
-            this.readOnly = false;
-            this.RefreshAffects();
+            this.Value = null;
+            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
         {
-            try
-            {
-                var newValue = AutoComplete.ForObject(value.ToString(), typeof(Member));
-                this.Value = newValue == "NULL" ? null : Database.SectionList[newValue.ToString()];
-                var member = newValue == "NULL" ? null : (Member)this.Value;
-                this.Display = newValue == "NULL" ? "NULL" : member.parameters["Member Name"].Display;
+            var newValue = AutoComplete.ForObject(value.ToString(), typeof(Member));
 
-                foreach (var parameters in member.parameters.Values)
-                {
-                    parameters.affects.Add(this);
-                }
-                this.RefreshAffects();
-            }
-            catch
+            if (newValue != "NULL")
             {
-                MessageBox.Show("Object does not exist!!!");
+                try
+                {
+                    this.Value = Database.MemberList[newValue.ToString()];
+                    var component = (Member)this.Value;
+                    this.Display = component.parameters["Member Name"].Display;
+
+                    foreach (var parameters in component.parameters.Values)
+                    {
+                        this.depends.Add(parameters);
+                        parameters.affects.Add(this);
+                    }
+                    this.RefreshAffects();
+                }
+                catch
+                {
+                    MessageBox.Show("Object does not exist!!!");
+                }
+            }
+            else
+            {
+                this.Value = null;
+                this.Display = "NULL";
             }
         }
 
+        public override void RefreshDepends()
+        {
+            var component = (Member)this.Value;
+            this.Value = component;
+            this.Display = component.parameters["Member Name"].Display;
+            base.RefreshDepends();
+        }
     }
 }

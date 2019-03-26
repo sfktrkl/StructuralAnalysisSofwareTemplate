@@ -6,12 +6,12 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public Member()
         {
-            this.UniqueName = "Member: " + Database.MemberList.Count.ToString();
+            this.UniqueName = "Member: " + Database.MemberList.Count.ToString();            
             this.parameters.Add("Member Name", new Name("Member: " + Database.MemberList.Count.ToString()));
-            this.parameters.Add("First Node", new NodeInstance(null));
-            this.parameters.Add("Second Node", new NodeInstance(null));
-            this.parameters.Add("Material", new MaterialInstance(null));
-            this.parameters.Add("Section", new SectionInstance(null));
+            this.parameters.Add("First Node", new NodeInstance());
+            this.parameters.Add("Second Node", new NodeInstance());
+            this.parameters.Add("Material", new MaterialInstance());
+            this.parameters.Add("Section", new SectionInstance());
             this.parameters.Add("Length", new Length(new List<Parameter> { this.parameters["First Node"], this.parameters["Second Node"] }));
         }
 

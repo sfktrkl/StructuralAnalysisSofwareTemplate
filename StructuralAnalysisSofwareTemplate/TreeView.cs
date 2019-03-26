@@ -19,7 +19,7 @@ namespace StructuralAnalysisSofwareTemplate
             parentNode.Tag = new Node();
             foreach (var obj in Database.NodeList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Node Name"].Display);
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Node Name"].Display + " = " + obj.Value.UniqueName.ToString());
                 childNode.Tag = obj.Value;
             }
 
@@ -27,7 +27,7 @@ namespace StructuralAnalysisSofwareTemplate
             parentNode.Tag = new Member();
             foreach (var obj in Database.MemberList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Member Name"].Display);
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Member Name"].Display + " = " + obj.Value.UniqueName.ToString());
                 childNode.Tag = obj.Value;
             }
 
@@ -35,7 +35,7 @@ namespace StructuralAnalysisSofwareTemplate
             parentNode.Tag = new Material();
             foreach (var obj in Database.MaterialList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Material Name"].Display);
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Material Name"].Display + " = " + obj.Value.UniqueName.ToString());
                 childNode.Tag = obj.Value;
             }
 
@@ -43,7 +43,7 @@ namespace StructuralAnalysisSofwareTemplate
             parentNode.Tag = new Section();
             foreach (var obj in Database.SectionList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Section Name"].Display);
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Section Name"].Display + " = " + obj.Value.UniqueName.ToString());
                 childNode.Tag = obj.Value;
             }
 

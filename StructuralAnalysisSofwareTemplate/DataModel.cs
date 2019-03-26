@@ -112,20 +112,29 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void SetCellToComponent(string componentName, object data, string parameter)
         {
-            // finds the member and component which will be changed
-            var member = (Member)this.Components[componentName];
-            var component = (Component)member.parameters[parameter].Value;
+            try
+            {
+                // finds the member and component which will be changed
+                var member = (Member)this.Components[componentName];
+                var component = (Component)member.parameters[parameter].Value;
 
-            // if any component is exits before (component != null)
-            // remove the member from usedBy field of this component
-            if (component != null) component.UsedBy.Remove(member);
+                // if any component is exits before (component != null)
+                // remove the member from usedBy field of this component
+                if (component != null) component.UsedBy.Remove(member);
 
-            // sets the new component
-            member.parameters[parameter].SetValue(data);
+                // sets the new component
+                member.parameters[parameter].SetValue(data);
 
-            // takes the new component and adds this member to its usedBy field
-            component = (Component)member.parameters[parameter].Value;
-            if (component != null) component.UsedBy.Add(member);
+                // takes the new component and adds this member to its usedBy field
+                component = (Component)member.parameters[parameter].Value;
+                if (component != null) component.UsedBy.Add(member);
+            }
+            catch
+            {
+                var member = (Member)this.Components[componentName];
+                member.parameters[parameter].SetValue(data);
+            }
+
         }
     }
 

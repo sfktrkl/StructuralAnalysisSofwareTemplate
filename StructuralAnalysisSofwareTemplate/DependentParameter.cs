@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -8,8 +7,12 @@ namespace StructuralAnalysisSofwareTemplate
     {
         protected List<Parameter> depends = new List<Parameter>();
 
+        // refreshes value and display of this parameter
+        // method can be differentiate according to the parameter type
         public abstract void RefreshDepends();
 
+        // sets readonly as true since parameter is dependent to other parameters
+        // means that they are not(can not) directly taken by user input
         public DependentParameter()
         {
             this.readOnly = true;
