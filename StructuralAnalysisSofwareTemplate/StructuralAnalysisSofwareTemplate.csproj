@@ -53,6 +53,7 @@
     <Compile Include="AutoComplete.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="DataModel.cs" />
+    <Compile Include="DependentInstances.cs" />
     <Compile Include="DependentParameter.cs" />
     <Compile Include="DockableForm.cs">
       <SubType>Form</SubType>

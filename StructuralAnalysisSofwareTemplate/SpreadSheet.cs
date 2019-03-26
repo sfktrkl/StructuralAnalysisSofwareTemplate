@@ -91,6 +91,9 @@ namespace StructuralAnalysisSofwareTemplate
                 }
 
                 if (e.ColumnIndex == 0) UiManager.RefreshNavigators();
+                UiManager.RefreshSpreadsheets();
+
+                dataGridView1.CurrentCell = dataGridView1[e.ColumnIndex, e.RowIndex];
                 loaded = true;
             }
         }
