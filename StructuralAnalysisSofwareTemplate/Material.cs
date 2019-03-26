@@ -4,23 +4,15 @@
     {
         public Material()
         {
-            this.elasticModulus = 0;
-            this.unitWeight = 0;
-            this.Name = "Material: " + Database.MaterialList.Count.ToString();
+            this.UniqueName = "Material: " + Database.MaterialList.Count.ToString();
+            this.parameters.Add("Material Name", new Name("Material: " + Database.MaterialList.Count.ToString()));
+            this.parameters.Add("Unit Weight", new Number(0.0));
+            this.parameters.Add("Elastic Modulus", new Number(0.0));
         }
-
-        public double unitWeight { get; private set; }
-        public double elasticModulus { get; private set; }
 
         public override void Delete()
         {
-            Database.MaterialList.Remove(this.Name);
-        }
-
-        public void SetAll(double unitWeight, double elasticModulus)
-        {
-            this.elasticModulus = elasticModulus;
-            this.unitWeight = unitWeight;
+            Database.MaterialList.Remove(this.UniqueName);
         }
     }
 }

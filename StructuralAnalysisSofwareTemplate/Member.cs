@@ -1,41 +1,31 @@
-﻿namespace StructuralAnalysisSofwareTemplate
+﻿using System.Collections.Generic;
+
+namespace StructuralAnalysisSofwareTemplate
 {
     public class Member : Component
     {
         public Member()
         {
-            this.Name = "Member: " + Database.MemberList.Count.ToString();
+            this.UniqueName = "Member: " + Database.MemberList.Count.ToString();
+            this.parameters.Add("Member Name", new Name("Member: " + Database.MemberList.Count.ToString()));
+            this.parameters.Add("First Node", new NodeInstance(null));
+            this.parameters.Add("Second Node", new NodeInstance(null));
+            this.parameters.Add("Material", new MaterialInstance(null));
+            this.parameters.Add("Section", new SectionInstance(null));
+            this.parameters.Add("Length", new Length(new List<Parameter> { this.parameters["First Node"], this.parameters["Second Node"] }));
         }
-
-        public Node Node1 { get; private set; }
-        public Node Node2 { get; private set; }
-        public Material Material { get; private set; }
-        public Section Section { get; private set; }
 
         public override void Delete()
         {
             // when this member is deleted
             // deletes this member from all components usedBy lists
-            this.Section.UsedBy.Remove(this);
-            this.Material.UsedBy.Remove(this);
-            this.Node1.UsedBy.Remove(this);
-            this.Node2.UsedBy.Remove(this);
+            foreach (var components in this.parameters.Values)
+            {
+                var component = (Component)components.Value;
+                component.UsedBy.Remove(this);
+            }
 
-            Database.MemberList.Remove(this.Name);
-        }
-
-        public void SetAll(Node Node1, Node Node2, Material Material, Section Section)
-        {
-            this.Node1 = Node1;
-            this.Node2 = Node2;
-            this.Material = Material;
-            this.Section = Section;
-
-            // adds components used lists to this Member
-            if (this.Section != null) this.Section.UsedBy.Add(this);
-            if (this.Material != null) this.Material.UsedBy.Add(this);
-            if (this.Node1 != null) this.Node1.UsedBy.Add(this);
-            if (this.Node2 != null) this.Node2.UsedBy.Add(this);
+            Database.MemberList.Remove(this.UniqueName);
         }
     }
 }

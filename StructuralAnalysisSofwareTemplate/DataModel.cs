@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -17,10 +16,9 @@ namespace StructuralAnalysisSofwareTemplate
 
         public abstract void CreateComponent();
 
-        //ReleaseAllFor(int index);
-        public abstract List<string> GetRowData(string componentName);
+        public abstract Tuple<List<string>, List<bool>> GetRowData(string componentName);
 
-        public abstract void SetComponentFromData(List<object> componentData);
+        public abstract void SetCellToComponent(string componentName, object data, string parameter);
     }
 
     public class NodeDataModel : DataModel
@@ -31,68 +29,43 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override List<string> GetColumnNames()
         {
-            return new List<string>
+            var columnNames = new List<string>();
+
+            // returns all parameter keys for writing column names.
+            foreach (KeyValuePair<string, Parameter> parameter in new Node().parameters)
             {
-                "Node Name",
-                "X Coordinate",
-                "Y Coordinate",
-                "X Fixity",
-                "Y Fixity",
-                "Z Fixity",
-                "X Stiffness",
-                "Y Stiffness",
-                "Z Stiffness"
-            };
+                columnNames.Add(parameter.Key.ToString());
+            }
+
+            return columnNames;
         }
 
         public override void CreateComponent()
         {
             var component = new Node();
-            this.Components.Add(component.Name, component);
+            this.Components.Add(component.UniqueName, component);
         }
 
-        public override List<string> GetRowData(string componentName)
+        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
         {
             var component = (Node)this.Components[componentName];
-            return new List<string>
+            var rowData = new List<string>();
+            var readOnlyData = new List<bool>();
+
+            // returns all displays for writing cells values.
+            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
             {
-                component.Name,
-                component.xCoordinate.ToString(),
-                component.yCoordinate.ToString(),
-                component.xFixity.ToString(),
-                component.yFixity.ToString(),
-                component.zFixity.ToString(),
-                component.xStiffness.ToString(),
-                component.yStiffness.ToString(),
-                component.zStiffness.ToString()
-            };
+                rowData.Add(parameter.Value.Display);
+                readOnlyData.Add(parameter.Value.readOnly);
+            }
+
+            return Tuple.Create(rowData, readOnlyData);
         }
 
-        public override void SetComponentFromData(List<object> componentData)
+        public override void SetCellToComponent(string componentName, object data, string parameter)
         {
-            var component = (Node)this.Components[componentData[0].ToString()];
-            bool xFixity = AutoComplete.TrueFalse(componentData[3].ToString());
-            bool yFixity = AutoComplete.TrueFalse(componentData[4].ToString());
-            bool zFixity = AutoComplete.TrueFalse(componentData[5].ToString());
-
-            try
-            {
-                // setting node properties
-                component.SetAll(
-                    Convert.ToDouble(componentData[1]),
-                    Convert.ToDouble(componentData[2]),
-                    Convert.ToBoolean(xFixity),
-                    Convert.ToBoolean(yFixity),
-                    Convert.ToBoolean(zFixity),
-                    Convert.ToDouble(componentData[6]),
-                    Convert.ToDouble(componentData[7]),
-                    Convert.ToDouble(componentData[8])
-                );
-            }
-            catch
-            {
-                MessageBox.Show("Wrong Input!!");
-            }
+            var node = (Node)this.Components[componentName];
+            node.parameters[parameter].SetValue(data);
         }
     }
 
@@ -104,66 +77,55 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override List<string> GetColumnNames()
         {
-            return new List<string>
+            var columnNames = new List<string>();
+
+            // returns all parameter keys for writing column names.
+            foreach (KeyValuePair<string, Parameter> parameter in new Member().parameters)
             {
-                "Member Name",
-                "First Node",
-                "Second Node",
-                "Material",
-                "Section"
-            };
+                columnNames.Add(parameter.Key.ToString());
+            }
+
+            return columnNames;
         }
 
         public override void CreateComponent()
         {
             var component = new Member();
-            this.Components.Add(component.Name, component);
+            this.Components.Add(component.UniqueName, component);
         }
 
-        public override List<string> GetRowData(string componentName)
+        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
         {
             var component = (Member)this.Components[componentName];
-            return new List<string>
+            var rowData = new List<string>();
+            var readOnlyData = new List<bool>();
+
+            // returns all displays for writing cells values.
+            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
             {
-                component.Name,
-                component.Node1 != null ? component.Node1.Name : "NULL",
-                component.Node2 != null ? component.Node2.Name : "NULL",
-                component.Material != null ? component.Material.Name : "NULL",
-                component.Section != null ? component.Section.Name : "NULL"
-            };
+                rowData.Add(parameter.Value.Display);
+                readOnlyData.Add(parameter.Value.readOnly);
+            }
+
+            return Tuple.Create(rowData, readOnlyData);
         }
 
-        public override void SetComponentFromData(List<object> componentData)
+        public override void SetCellToComponent(string componentName, object data, string parameter)
         {
-            // deletes this member from all previous related objects' used dictionaries
-            // used property will be added again in the Member.setall function,
-            // if new objects are same with previous ones.
-            var member = (Member)this.Components[componentData[0].ToString()];
+            // finds the member and component which will be changed
+            var member = (Member)this.Components[componentName];
+            var component = (Component)member.parameters[parameter].Value;
 
-            // the following line will be a part of dataModel.ReleaseAllFor(index)
-            if (member.Section != null) member.Section.UsedBy.Remove(member);
-            if (member.Material != null) member.Material.UsedBy.Remove(member);
-            if (member.Node1 != null) member.Node1.UsedBy.Remove(member);
-            if (member.Node2 != null) member.Node2.UsedBy.Remove(member);
+            // if any component is exits before (component != null)
+            // remove the member from usedBy field of this component
+            if (component != null) component.UsedBy.Remove(member);
 
-            try
-            {
-                member.SetAll
-                (
-                AutoComplete.IsNull(componentData[1].ToString()) ? null : (Node)Database.NodeList[AutoComplete.ForObject(componentData[1].ToString(), typeof(Node))],
-                AutoComplete.IsNull(componentData[2].ToString()) ? null : (Node)Database.NodeList[AutoComplete.ForObject(componentData[2].ToString(), typeof(Node))],
-                AutoComplete.IsNull(componentData[3].ToString()) ? null : (Material)Database.MaterialList[AutoComplete.ForObject(componentData[3].ToString(), typeof(Material))],
-                AutoComplete.IsNull(componentData[4].ToString()) ? null : (Section)Database.SectionList[AutoComplete.ForObject(componentData[4].ToString(), typeof(Section))]
-                );
-            }
-            catch
-            {
-                MessageBox.Show("Object does not exist!");
-                if (member.Section != null) member.Section.UsedBy.Add(member);
-                if (member.Material != null) member.Material.UsedBy.Add(member);
-                if (member.Node1 != null) member.Node1.UsedBy.Add(member);
-                if (member.Node2 != null) member.Node2.UsedBy.Add(member);
-            }
+            // sets the new component
+            member.parameters[parameter].SetValue(data);
+
+            // takes the new component and adds this member to its usedBy field
+            component = (Component)member.parameters[parameter].Value;
+            if (component != null) component.UsedBy.Add(member);
         }
     }
 
@@ -175,48 +137,43 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override List<string> GetColumnNames()
         {
-            return new List<string>
+            var columnNames = new List<string>();
+
+            // returns all parameter keys for writing column names.
+            foreach (KeyValuePair<string, Parameter> parameter in new Material().parameters)
             {
-                "Material Name",
-                "Unit Weight",
-                "Elastic Modulus"
-            };
+                columnNames.Add(parameter.Key.ToString());
+            }
+
+            return columnNames;
         }
 
         public override void CreateComponent()
         {
             var component = new Material();
-            this.Components.Add(component.Name, component);
+            this.Components.Add(component.UniqueName, component);
         }
 
-        public override List<string> GetRowData(string componentName)
+        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
         {
             var component = (Material)this.Components[componentName];
+            var rowData = new List<string>();
+            var readOnlyData = new List<bool>();
 
-            return new List<string>
+            // returns all displays for writing cells values.
+            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
             {
-                component.Name,
-                component.unitWeight.ToString(),
-                component.elasticModulus.ToString()
-            };
+                rowData.Add(parameter.Value.Display);
+                readOnlyData.Add(parameter.Value.readOnly);
+            }
+
+            return Tuple.Create(rowData, readOnlyData);
         }
 
-        public override void SetComponentFromData(List<object> componentData)
+        public override void SetCellToComponent(string componentName, object data, string parameter)
         {
-            var material = (Material)this.Components[componentData[0].ToString()];
-
-            try
-            {
-                // setting material properties
-                material.SetAll(
-                    Convert.ToDouble(componentData[1]),
-                    Convert.ToDouble(componentData[2])
-                );
-            }
-            catch
-            {
-                MessageBox.Show("Wrong Input!!");
-            }
+            var material = (Material)this.Components[componentName];
+            material.parameters[parameter].SetValue(data);
         }
     }
 
@@ -228,49 +185,43 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override List<string> GetColumnNames()
         {
-            return new List<string>
+            var columnNames = new List<string>();
+
+            // returns all parameter keys for writing column names.
+            foreach (KeyValuePair<string, Parameter> parameter in new Section().parameters)
             {
-                "Section Name",
-                "Height",
-                "Width",
-                "Area",
-                "Inertia"
-            };
+                columnNames.Add(parameter.Key.ToString());
+            }
+
+            return columnNames;
         }
 
         public override void CreateComponent()
         {
             var component = new Section();
-            this.Components.Add(component.Name, component);
+            this.Components.Add(component.UniqueName, component);
         }
 
-        public override List<string> GetRowData(string componentName)
+        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
         {
             var component = (Section)this.Components[componentName];
+            var rowData = new List<string>();
+            var readOnlyData = new List<bool>();
 
-            return new List<string>
+            // returns all displays for writing cells values.
+            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
             {
-                component.Name,
-                component.Height.ToString(),
-                component.Width.ToString(),
-                component.Area.ToString(),
-                component.Inertia.ToString()
-            };
+                rowData.Add(parameter.Value.Display);
+                readOnlyData.Add(parameter.Value.readOnly);
+            }
+
+            return Tuple.Create(rowData, readOnlyData);
         }
 
-        public override void SetComponentFromData(List<object> componentData)
+        public override void SetCellToComponent(string componentName, object data, string parameter)
         {
-            var section = (Section)this.Components[componentData[0].ToString()];
-
-            try
-            {
-                section.Height = Convert.ToDouble(componentData[1]);
-                section.Width = Convert.ToDouble(componentData[2]);
-            }
-            catch
-            {
-                MessageBox.Show("Wrong Input!!");
-            }
+            var section = (Section)this.Components[componentName];
+            section.parameters[parameter].SetValue(data);
         }
     }
 }

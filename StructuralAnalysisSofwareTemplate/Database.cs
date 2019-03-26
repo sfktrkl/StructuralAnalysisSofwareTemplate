@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -11,5 +8,6 @@ namespace StructuralAnalysisSofwareTemplate
         public static readonly Dictionary<string, Component> MemberList = new Dictionary<string, Component>();
         public static readonly Dictionary<string, Component> MaterialList = new Dictionary<string, Component>();
         public static readonly Dictionary<string, Component> SectionList = new Dictionary<string, Component>();
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
@@ -11,15 +11,11 @@ namespace StructuralAnalysisSofwareTemplate
 
         public DataModel dataModel;
 
-        public SpreadSheet(MainForm mainForm, DataModel dataModel)
+        public SpreadSheet(DataModel dataModel)
         {
             InitializeComponent();
             this.dataModel = dataModel;
-
-            this.mainForm = mainForm;
         }
-
-        private MainForm mainForm;
 
         public void RefreshData()
         {
@@ -35,25 +31,29 @@ namespace StructuralAnalysisSofwareTemplate
                 dataGridView1.Columns.Add(name, name);
             }
 
-            int col = 0, row = 0;
-
             // checks whether objects exist or not and gets values to enter spreadsheet
             foreach (var components in dataModel.Components)
             {
-                dataGridView1.Rows.Add();
+                var newRow = new DataGridViewRow();
+                newRow.Tag = components.Value.UniqueName;
+                dataGridView1.Rows.Add(newRow);
 
-                foreach (var componentData in dataModel.GetRowData(components.Value.Name))
+                var newRowData = dataModel.GetRowData(components.Value.UniqueName);
+
+                for (int i = 0; i < newRowData.Item1.Count; i++)
                 {
-                    dataGridView1.CurrentCell = dataGridView1[col, row];
-                    dataGridView1.CurrentCell.Value = componentData;
-                    col++;
+                    dataGridView1.CurrentCell = dataGridView1[i, dataGridView1.Rows.Count - 2];
+                    dataGridView1.CurrentCell.Value = newRowData.Item1[i];
+                    if (newRowData.Item2[i])
+                    {
+                        dataGridView1.CurrentCell.ReadOnly = true;
+                        dataGridView1.CurrentCell.Style.BackColor = Color.Gray;
+                    }
                 }
-                col = 0;
-                row++;
+
+                dataGridView1.CurrentCell = dataGridView1[1, dataGridView1.Rows.Count - 1];
             }
 
-            dataGridView1.CurrentCell = dataGridView1[1, row-1];
-            dataGridView1.Columns[0].ReadOnly = true;
             loaded = true;
         }
 
@@ -65,32 +65,33 @@ namespace StructuralAnalysisSofwareTemplate
 
                 // adds new components with default constructors
                 this.dataModel.CreateComponent();
-                this.RefreshData();
+                UiManager.RefreshSpreadsheets(this);
 
-                // refresh the treeview
-                this.mainForm.RefreshNavigators();
+                // refresh the navigators
+                UiManager.RefreshNavigators();
             }
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            dataModel.SetValueOf(e.RowIndex, e.ColumnIndex, newString);
-
             if (loaded == true)
             {
-                var index = e.RowIndex;
+                loaded = false;
+                // gets string from cell as "data"
+                var data = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                // sets cell data to component
+                dataModel.SetCellToComponent(dataGridView1.Rows[e.RowIndex].Tag.ToString(), data, dataGridView1.Columns[e.ColumnIndex].Name);
 
+                // gets new row data
+                var newRowData = dataModel.GetRowData(dataGridView1.Rows[e.RowIndex].Tag.ToString());
 
-                var componentData = new List<object>();
-
-                foreach (DataGridViewCell cell in dataGridView1.Rows[index].Cells)
+                for (int i = 1; i < dataGridView1.Rows[e.RowIndex].Cells.Count; i++)
                 {
-                    componentData.Add(cell.Value);
+                    dataGridView1.Rows[e.RowIndex].Cells[i].Value = newRowData.Item1[i];
                 }
 
-                dataModel.SetComponentFromData(componentData);
-                var newRowData = dataModel.GetRowData(dataGridView1.Rows[index].Cells[0].Value.ToString());
-                dataGridView1.Rows[index].Cells[e.ColumnIndex].Value = newRowData[e.ColumnIndex];
+                if (e.ColumnIndex == 0) UiManager.RefreshNavigators();
+                loaded = true;
             }
         }
 
@@ -139,7 +140,7 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.mainForm.RefreshSpreadsheets();
+            UiManager.RefreshSpreadsheets(this);
         }
     }
 }

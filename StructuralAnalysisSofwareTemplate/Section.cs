@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -6,44 +6,17 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public Section()
         {
-            this.height = 0;
-            this.width = 0;
-            this.Area = 0;
-            this.Inertia = 0;
-            this.Name = "Section: " + Database.SectionList.Count.ToString();
+            this.UniqueName = "Section: " + Database.SectionList.Count.ToString();
+            this.parameters.Add("Section Name", new Name("Section: " + Database.SectionList.Count.ToString()));
+            this.parameters.Add("Height", new Number(0.0));
+            this.parameters.Add("Width", new Number(0.0));
+            this.parameters.Add("Area", new Area(new List<Parameter> { this.parameters["Height"], this.parameters["Width"] }));
+            this.parameters.Add("Inertia", new Inertia(new List<Parameter> { this.parameters["Height"], this.parameters["Width"] }));
         }
-
-        public double Height
-        {
-            get { return this.height; }
-            set
-            {
-                this.height = value;
-                this.Area = this.height * this.Width;
-                this.Inertia = this.height * Math.Pow(this.width, 3) / 12;
-            }
-        }
-
-        public double Width
-        {
-            get { return this.width; }
-            set
-            {
-                this.width = value;
-                this.Area = this.height * this.Width;
-                this.Inertia = this.height * Math.Pow(this.width, 3) / 12;
-            }
-        }
-
-        public double Area { get; private set; }
-        public double Inertia { get; private set; }
-
-        public double height { get; private set; }
-        public double width { get; private set; }
 
         public override void Delete()
         {
-            Database.SectionList.Remove(this.Name);
+            Database.SectionList.Remove(this.UniqueName);
         }
     }
 }
