@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
 {
@@ -27,8 +28,16 @@ namespace StructuralAnalysisSofwareTemplate
 
         public virtual void SetValue(object value)
         {
-            this.Value = value;
-            this.Display = value.ToString();
+            try
+            {
+                this.Value = value;
+                this.Display = value.ToString();
+            }
+            catch
+            {
+                MessageBox.Show("Wrong Input!!");
+            }
+
         }
 
         // sets readOnly field false since parameter requires user input
@@ -49,9 +58,17 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void SetValue(object value)
         {
-            this.Value = value.ToString();
-            this.Display = value.ToString();
-            this.RefreshAffects();
+            try
+            {
+
+                this.Value = value.ToString();
+                this.Display = value.ToString();
+                this.RefreshAffects();
+            }
+            catch
+            {
+                MessageBox.Show("Wrong Input!!");
+            }
         }
     }
 
@@ -66,9 +83,16 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void SetValue(object value)
         {
-            this.Value = Convert.ToDouble(value);
-            this.Display = value.ToString();
-            this.RefreshAffects();
+            try
+            {
+                this.Value = Convert.ToDouble(value);
+                this.Display = value.ToString();
+                this.RefreshAffects();
+            }
+            catch
+            {
+                MessageBox.Show("Wrong Input!!");
+            }
         }
     }
 
@@ -83,10 +107,18 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void SetValue(object value)
         {
-            var newValue = AutoComplete.TrueFalse(value.ToString());
-            this.Value = newValue;
-            this.Display = newValue.ToString();
-            this.RefreshAffects();
+            try
+            {
+                var newValue = AutoComplete.TrueFalse(value.ToString());
+                this.Value = newValue;
+                this.Display = newValue.ToString();
+                this.RefreshAffects();
+            }
+            catch
+            {
+                MessageBox.Show("Wrong Input!!");
+            }
+
         }
     }
 }

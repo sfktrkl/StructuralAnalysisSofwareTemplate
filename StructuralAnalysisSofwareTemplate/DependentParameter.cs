@@ -11,6 +11,16 @@ namespace StructuralAnalysisSofwareTemplate
         // method can be differentiate according to the parameter type
         public abstract void RefreshDepends();
 
+        // adds this parameter to affects list of parameters which affects this parameter
+        // since this parameter depends these parameters
+        public virtual void arrangeDependsAffects()
+        {
+            foreach (var parameter in this.depends)
+            {
+                parameter.affects.Add(this);
+            }
+        }
+        
         // sets readonly as true since parameter is dependent to other parameters
         // means that they are not(can not) directly taken by user input
         public DependentParameter()
@@ -24,11 +34,7 @@ namespace StructuralAnalysisSofwareTemplate
         public Area(List<Parameter> depends)
         {
             this.depends = depends;
-            foreach (var parameter in this.depends)
-            {
-                parameter.affects.Add(this);
-            }
-
+            arrangeDependsAffects();
             var height = Convert.ToDouble(this.depends[0].Value);
             var width = Convert.ToDouble(this.depends[1].Value);
 
@@ -51,10 +57,7 @@ namespace StructuralAnalysisSofwareTemplate
         public Inertia(List<Parameter> depends)
         {
             this.depends = depends;
-            foreach (var parameter in this.depends)
-            {
-                parameter.affects.Add(this);
-            }
+            arrangeDependsAffects();
 
             var height = Convert.ToDouble(this.depends[0].Value);
             var width = Convert.ToDouble(this.depends[1].Value);
@@ -78,10 +81,7 @@ namespace StructuralAnalysisSofwareTemplate
         public Length(List<Parameter> depends)
         {
             this.depends = depends;
-            foreach (var parameter in this.depends)
-            {
-                parameter.affects.Add(this);
-            }
+            arrangeDependsAffects();
 
             if (depends[0].Value != null && depends[1].Value != null)
             {

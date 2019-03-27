@@ -10,9 +10,34 @@ namespace StructuralAnalysisSofwareTemplate
             this.readOnly = false;
         }
 
+        // arranges parameters affects list which affects this parameter
+        // also adds these parameters to this parameter's depends list
+        // since this parameter depends these parameters and these parameters are affecting this parameter
+        // :D
+        public override void arrangeDependsAffects()
+        {
+            var component = (Component)this.Value;
+            // clears all parameters in depends list (parameters which are affecting this parameter)
+            this.depends.Clear();
+            foreach (var parameters in component.parameters.Values)
+            {
+                // this parameter depends all of its parameters
+                // hence all parameters of this parameter effects this parameter
+                this.depends.Add(parameters);
+                // for all parameters of this parameter add this parameter as affected parameter
+                if (parameters.affects.Contains(this) == false) parameters.affects.Add(this);
+            }
+            // refresh all affected parameters by this parameter
+            this.RefreshAffects();
+        }
+
+        // refreshes all parameters which are affected by this parameter
+        // it also needs to refresh itself (it's value and display), 
+        // should overriden by every instance seperately
+        // since for different instance types methods may be change
         public override void RefreshDepends()
         {
-            RefreshAffects();
+            this.RefreshAffects();
         }
     }
 
@@ -38,16 +63,8 @@ namespace StructuralAnalysisSofwareTemplate
                     this.Value = Database.NodeList[newValue.ToString()];
                     var component = (Node)this.Value;
                     this.Display = component.parameters["Node Name"].Display;
+                    arrangeDependsAffects();
 
-                    foreach (var parameters in component.parameters.Values)
-                    {
-                        // this parameter depends all of its parameters
-                        // hence all parameters of this parameter effects this parameter
-                        this.depends.Add(parameters);
-                        // for all parameters of this parameter add this parameter as affected parameter
-                        parameters.affects.Add(this);
-                    }
-                    this.RefreshAffects();
                 }
                 catch
                 {
@@ -70,7 +87,7 @@ namespace StructuralAnalysisSofwareTemplate
             base.RefreshDepends();
         }
     }
-
+    
     public class MaterialInstance : DependentInstances
     {
         public MaterialInstance()
@@ -91,12 +108,7 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (Material)this.Value;
                     this.Display = component.parameters["Material Name"].Display;
 
-                    foreach (var parameters in component.parameters.Values)
-                    {
-                        this.depends.Add(parameters);
-                        parameters.affects.Add(this);
-                    }
-                    this.RefreshAffects();
+                    arrangeDependsAffects();
                 }
                 catch
                 {
@@ -139,12 +151,7 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (Section)this.Value;
                     this.Display = component.parameters["Section Name"].Display;
 
-                    foreach (var parameters in component.parameters.Values)
-                    {
-                        this.depends.Add(parameters);
-                        parameters.affects.Add(this);
-                    }
-                    this.RefreshAffects();
+                    arrangeDependsAffects();
                 }
                 catch
                 {
@@ -187,12 +194,7 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (Member)this.Value;
                     this.Display = component.parameters["Member Name"].Display;
 
-                    foreach (var parameters in component.parameters.Values)
-                    {
-                        this.depends.Add(parameters);
-                        parameters.affects.Add(this);
-                    }
-                    this.RefreshAffects();
+                    arrangeDependsAffects();
                 }
                 catch
                 {
