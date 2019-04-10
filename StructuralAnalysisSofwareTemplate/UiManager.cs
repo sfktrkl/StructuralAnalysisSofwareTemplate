@@ -11,28 +11,8 @@ namespace StructuralAnalysisSofwareTemplate
         public static MainForm mainForm { get; set; }
 
         // creates new SpreadSheet instance
-        public static void CreateSpreadSheet(Type givenClass)
+        public static void CreateSpreadSheet(DataModel dataModel)
         {
-            // adds spread sheet in to form1.panel1
-            DataModel dataModel;
-
-            if (givenClass == typeof(Node))
-            {
-                dataModel = new NodeDataModel(Database.NodeList);
-            }
-            else if (givenClass == typeof(Member))
-            {
-                dataModel = new MemberDataModel(Database.MemberList);
-            }
-            else if (givenClass == typeof(Material))
-            {
-                dataModel = new MaterialDataModel(Database.MaterialList);
-            }
-            else
-            {
-                dataModel = new SectionDataModel(Database.SectionList);
-            }
-
             SpreadSheet spreadSheet = new SpreadSheet(dataModel);
             spreadSheet.TopLevel = false;
             mainForm.panel1.Controls.Add(spreadSheet);

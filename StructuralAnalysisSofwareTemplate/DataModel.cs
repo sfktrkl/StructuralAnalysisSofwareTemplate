@@ -10,13 +10,39 @@ namespace StructuralAnalysisSofwareTemplate
             this.Components = components;
         }
 
-        public Dictionary<string, Component> Components { get; private set; }
+        protected Component Prototype;
 
-        public abstract List<string> GetColumnNames();
+        public Dictionary<string, Component> Components { get; private set; }
 
         public abstract void CreateComponent();
 
-        public abstract Tuple<List<string>, List<bool>> GetRowData(string componentName);
+        public virtual List<string> GetColumnNames()
+        {
+            var columnNames = new List<string>();
+
+            // returns all parameter keys for writing column names.
+            foreach (KeyValuePair<string, Parameter> parameter in this.Prototype.parameters)
+            {
+                columnNames.Add(parameter.Key.ToString());
+            }
+
+            return columnNames;
+        }
+
+        public virtual List<Tuple<string, bool>> GetRowData(string componentName)
+        {
+            var component = this.Components[componentName];
+            var values = new List<Tuple<string, bool>>();
+
+            // returns all displays for writing cells values.
+            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
+            {
+                var rowData = new Tuple<string, bool>(parameter.Value.Display, parameter.Value.IsReadOnly());
+                values.Add(rowData);
+            }
+
+            return values;
+        }
 
         public abstract void SetCellToComponent(string componentName, object data, string parameter);
     }
@@ -25,41 +51,13 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public NodeDataModel(Dictionary<string, Component> components) : base(components)
         {
-        }
-
-        public override List<string> GetColumnNames()
-        {
-            var columnNames = new List<string>();
-
-            // returns all parameter keys for writing column names.
-            foreach (KeyValuePair<string, Parameter> parameter in new Node().parameters)
-            {
-                columnNames.Add(parameter.Key.ToString());
-            }
-
-            return columnNames;
+            this.Prototype = new Node();
         }
 
         public override void CreateComponent()
         {
             var component = new Node();
             this.Components.Add(component.UniqueName, component);
-        }
-
-        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
-        {
-            var component = (Node)this.Components[componentName];
-            var rowData = new List<string>();
-            var readOnlyData = new List<bool>();
-
-            // returns all displays for writing cells values.
-            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
-            {
-                rowData.Add(parameter.Value.Display);
-                readOnlyData.Add(parameter.Value.readOnly);
-            }
-
-            return Tuple.Create(rowData, readOnlyData);
         }
 
         public override void SetCellToComponent(string componentName, object data, string parameter)
@@ -73,41 +71,13 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public MemberDataModel(Dictionary<string, Component> components) : base(components)
         {
-        }
-
-        public override List<string> GetColumnNames()
-        {
-            var columnNames = new List<string>();
-
-            // returns all parameter keys for writing column names.
-            foreach (KeyValuePair<string, Parameter> parameter in new Member().parameters)
-            {
-                columnNames.Add(parameter.Key.ToString());
-            }
-
-            return columnNames;
+            this.Prototype = new Member();
         }
 
         public override void CreateComponent()
         {
             var component = new Member();
             this.Components.Add(component.UniqueName, component);
-        }
-
-        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
-        {
-            var component = (Member)this.Components[componentName];
-            var rowData = new List<string>();
-            var readOnlyData = new List<bool>();
-
-            // returns all displays for writing cells values.
-            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
-            {
-                rowData.Add(parameter.Value.Display);
-                readOnlyData.Add(parameter.Value.readOnly);
-            }
-
-            return Tuple.Create(rowData, readOnlyData);
         }
 
         public override void SetCellToComponent(string componentName, object data, string parameter)
@@ -142,41 +112,13 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public MaterialDataModel(Dictionary<string, Component> components) : base(components)
         {
-        }
-
-        public override List<string> GetColumnNames()
-        {
-            var columnNames = new List<string>();
-
-            // returns all parameter keys for writing column names.
-            foreach (KeyValuePair<string, Parameter> parameter in new Material().parameters)
-            {
-                columnNames.Add(parameter.Key.ToString());
-            }
-
-            return columnNames;
+            this.Prototype = new Material();
         }
 
         public override void CreateComponent()
         {
             var component = new Material();
             this.Components.Add(component.UniqueName, component);
-        }
-
-        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
-        {
-            var component = (Material)this.Components[componentName];
-            var rowData = new List<string>();
-            var readOnlyData = new List<bool>();
-
-            // returns all displays for writing cells values.
-            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
-            {
-                rowData.Add(parameter.Value.Display);
-                readOnlyData.Add(parameter.Value.readOnly);
-            }
-
-            return Tuple.Create(rowData, readOnlyData);
         }
 
         public override void SetCellToComponent(string componentName, object data, string parameter)
@@ -190,41 +132,13 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public SectionDataModel(Dictionary<string, Component> components) : base(components)
         {
-        }
-
-        public override List<string> GetColumnNames()
-        {
-            var columnNames = new List<string>();
-
-            // returns all parameter keys for writing column names.
-            foreach (KeyValuePair<string, Parameter> parameter in new Section().parameters)
-            {
-                columnNames.Add(parameter.Key.ToString());
-            }
-
-            return columnNames;
+            this.Prototype = new Section();
         }
 
         public override void CreateComponent()
         {
             var component = new Section();
             this.Components.Add(component.UniqueName, component);
-        }
-
-        public override Tuple<List<string>, List<bool>> GetRowData(string componentName)
-        {
-            var component = (Section)this.Components[componentName];
-            var rowData = new List<string>();
-            var readOnlyData = new List<bool>();
-
-            // returns all displays for writing cells values.
-            foreach (KeyValuePair<string, Parameter> parameter in component.parameters)
-            {
-                rowData.Add(parameter.Value.Display);
-                readOnlyData.Add(parameter.Value.readOnly);
-            }
-
-            return Tuple.Create(rowData, readOnlyData);
         }
 
         public override void SetCellToComponent(string componentName, object data, string parameter)

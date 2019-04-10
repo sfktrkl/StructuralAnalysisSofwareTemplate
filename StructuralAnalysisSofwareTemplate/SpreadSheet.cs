@@ -40,16 +40,17 @@ namespace StructuralAnalysisSofwareTemplate
 
                 var newRowData = dataModel.GetRowData(components.Value.UniqueName);
 
-                for (int i = 0; i < newRowData.Item1.Count; i++)
+                for (int i = 0; i < newRowData.Count; i++)
                 {
+                    var rowData = newRowData[i];
                     dataGridView1.CurrentCell = dataGridView1[i, dataGridView1.Rows.Count - 2];
-                    dataGridView1.CurrentCell.Value = newRowData.Item1[i];
-                    if (newRowData.Item2[i])
+                    dataGridView1.CurrentCell.Value = rowData.Item1;
+                    if (rowData.Item2)
                     {
                         dataGridView1.CurrentCell.ReadOnly = true;
                         dataGridView1.CurrentCell.Style.BackColor = Color.Gray;
                     }
-                }
+                } 
 
                 dataGridView1.CurrentCell = dataGridView1[1, dataGridView1.Rows.Count - 1];
             }
@@ -85,9 +86,9 @@ namespace StructuralAnalysisSofwareTemplate
                 // gets new row data
                 var newRowData = dataModel.GetRowData(dataGridView1.Rows[e.RowIndex].Tag.ToString());
 
-                for (int i = 1; i < dataGridView1.Rows[e.RowIndex].Cells.Count; i++)
+                for (int i = 0; i < dataGridView1.Rows[e.RowIndex].Cells.Count; i++)
                 {
-                    dataGridView1.Rows[e.RowIndex].Cells[i].Value = newRowData.Item1[i];
+                    dataGridView1.Rows[e.RowIndex].Cells[i].Value = newRowData[i].Item1;
                 }
 
                 if (e.ColumnIndex == 0) UiManager.RefreshNavigators();

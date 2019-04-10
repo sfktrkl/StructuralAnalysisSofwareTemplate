@@ -7,25 +7,26 @@ namespace StructuralAnalysisSofwareTemplate
         // sets readOnly field false since these instances can be changed by user input
         public DependentInstances()
         {
-            this.readOnly = false;
+            this.Value = null;
+            this.Display = "NULL";
         }
 
         // arranges parameters affects list which affects this parameter
         // also adds these parameters to this parameter's depends list
         // since this parameter depends these parameters and these parameters are affecting this parameter
         // :D
-        public override void arrangeDependsAffects()
+        public override void notifyAffectors()
         {
             var component = (Component)this.Value;
             // clears all parameters in depends list (parameters which are affecting this parameter)
             this.depends.Clear();
-            foreach (var parameters in component.parameters.Values)
+            foreach (var parameter in component.parameters.Values)
             {
                 // this parameter depends all of its parameters
                 // hence all parameters of this parameter effects this parameter
-                this.depends.Add(parameters);
+                this.depends.Add(parameter);
                 // for all parameters of this parameter add this parameter as affected parameter
-                if (parameters.affects.Contains(this) == false) parameters.affects.Add(this);
+                if (parameter.affects.Contains(this) == false) parameter.affects.Add(this);
             }
             // refresh all affected parameters by this parameter
             this.RefreshAffects();
@@ -35,9 +36,14 @@ namespace StructuralAnalysisSofwareTemplate
         // it also needs to refresh itself (it's value and display), 
         // should overriden by every instance seperately
         // since for different instance types methods may be change
-        public override void RefreshDepends()
+        public override void RecalculateValue()
         {
             this.RefreshAffects();
+        }
+
+        public override bool IsReadOnly()
+        {
+            return false;
         }
     }
 
@@ -45,8 +51,6 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public NodeInstance()
         {
-            this.Value = null;
-            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
@@ -63,7 +67,7 @@ namespace StructuralAnalysisSofwareTemplate
                     this.Value = Database.NodeList[newValue.ToString()];
                     var component = (Node)this.Value;
                     this.Display = component.parameters["Node Name"].Display;
-                    arrangeDependsAffects();
+                    notifyAffectors();
 
                 }
                 catch
@@ -79,12 +83,12 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public override void RefreshDepends()
+        public override void RecalculateValue()
         {
             var component = (Node)this.Value;
             this.Value = component;
             this.Display = component.parameters["Node Name"].Display;
-            base.RefreshDepends();
+            base.RecalculateValue();
         }
     }
     
@@ -92,8 +96,6 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public MaterialInstance()
         {
-            this.Value = null;
-            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
@@ -108,7 +110,7 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (Material)this.Value;
                     this.Display = component.parameters["Material Name"].Display;
 
-                    arrangeDependsAffects();
+                    notifyAffectors();
                 }
                 catch
                 {
@@ -122,12 +124,12 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public override void RefreshDepends()
+        public override void RecalculateValue()
         {
             var component = (Material)this.Value;
             this.Value = component;
             this.Display = component.parameters["Material Name"].Display;
-            base.RefreshDepends();
+            base.RecalculateValue();
         }
     }
 
@@ -135,8 +137,6 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public SectionInstance()
         {
-            this.Value = null;
-            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
@@ -151,7 +151,7 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (Section)this.Value;
                     this.Display = component.parameters["Section Name"].Display;
 
-                    arrangeDependsAffects();
+                    notifyAffectors();
                 }
                 catch
                 {
@@ -165,12 +165,12 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public override void RefreshDepends()
+        public override void RecalculateValue()
         {
             var component = (Section)this.Value;
             this.Value = component;
             this.Display = component.parameters["Section Name"].Display;
-            base.RefreshDepends();
+            base.RecalculateValue();
         }
     }
 
@@ -178,8 +178,6 @@ namespace StructuralAnalysisSofwareTemplate
     {
         public MemberInstance()
         {
-            this.Value = null;
-            this.Display = "NULL";
         }
 
         public override void SetValue(object value)
@@ -194,7 +192,7 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (Member)this.Value;
                     this.Display = component.parameters["Member Name"].Display;
 
-                    arrangeDependsAffects();
+                    notifyAffectors();
                 }
                 catch
                 {
@@ -208,12 +206,12 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
-        public override void RefreshDepends()
+        public override void RecalculateValue()
         {
             var component = (Member)this.Value;
             this.Value = component;
             this.Display = component.parameters["Member Name"].Display;
-            base.RefreshDepends();
+            base.RecalculateValue();
         }
     }
 }

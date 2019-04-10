@@ -52,42 +52,42 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Node));
+            UiManager.CreateSpreadSheet(new NodeDataModel(Database.NodeList));
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Member));
+            UiManager.CreateSpreadSheet(new MemberDataModel(Database.MemberList));
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Material));
+            UiManager.CreateSpreadSheet(new MaterialDataModel(Database.MaterialList));
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Section));
+            UiManager.CreateSpreadSheet(new SectionDataModel(Database.SectionList));
         }
 
         private void nodesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Node));
+            UiManager.CreateSpreadSheet(new NodeDataModel(Database.NodeList));
         }
 
         private void membersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Member));
+            UiManager.CreateSpreadSheet(new MemberDataModel(Database.MemberList));
         }
 
         private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Material));
+            UiManager.CreateSpreadSheet(new MaterialDataModel(Database.MaterialList));
         }
 
         private void sectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UiManager.CreateSpreadSheet(typeof(Section));
+            UiManager.CreateSpreadSheet(new SectionDataModel(Database.SectionList));
         }
     }
 }

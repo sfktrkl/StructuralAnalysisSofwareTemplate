@@ -63,7 +63,7 @@ namespace StructuralAnalysisSofwareTemplate
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             // sets the spread sheet name and calls the function
-            UiManager.CreateSpreadSheet(e.Node.Tag.GetType());
+            //UiManager.CreateSpreadSheet(e.Node.Tag.GetType());
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)

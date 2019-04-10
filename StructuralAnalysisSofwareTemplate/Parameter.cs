@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace StructuralAnalysisSofwareTemplate
 {
     public abstract class Parameter
     {
+        public Parameter()
+        {
+        }
+
         public object Value { get; protected set; }
         public string Display { get; protected set; }
 
@@ -17,33 +20,17 @@ namespace StructuralAnalysisSofwareTemplate
         public void RefreshAffects()
         {
             // for each parameter affected by this parameter calls refresh function
-            foreach (var parameter in affects)
+            foreach (var affected in affects)
             {
-                parameter.RefreshDepends();
+                affected.RecalculateValue();
             }
         }
 
-        // readOnly status for datagridview display
-        public bool readOnly { get; protected set; }
+        public abstract void SetValue(object value);
 
-        public virtual void SetValue(object value)
+        public virtual bool IsReadOnly()
         {
-            try
-            {
-                this.Value = value;
-                this.Display = value.ToString();
-            }
-            catch
-            {
-                MessageBox.Show("Wrong Input!!");
-            }
-
-        }
-
-        // sets readOnly field false since parameter requires user input
-        public Parameter()
-        {
-            this.readOnly = false;
+            return false;
         }
     }
 
@@ -58,17 +45,9 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void SetValue(object value)
         {
-            try
-            {
-
-                this.Value = value.ToString();
-                this.Display = value.ToString();
-                this.RefreshAffects();
-            }
-            catch
-            {
-                MessageBox.Show("Wrong Input!!");
-            }
+            this.Value = value.ToString();
+            this.Display = value.ToString();
+            this.RefreshAffects();
         }
     }
 
@@ -83,16 +62,9 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void SetValue(object value)
         {
-            try
-            {
-                this.Value = Convert.ToDouble(value);
-                this.Display = value.ToString();
-                this.RefreshAffects();
-            }
-            catch
-            {
-                MessageBox.Show("Wrong Input!!");
-            }
+            this.Value = Convert.ToDouble(value);
+            this.Display = value.ToString();
+            this.RefreshAffects();
         }
     }
 
@@ -107,18 +79,10 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void SetValue(object value)
         {
-            try
-            {
-                var newValue = AutoComplete.TrueFalse(value.ToString());
-                this.Value = newValue;
-                this.Display = newValue.ToString();
-                this.RefreshAffects();
-            }
-            catch
-            {
-                MessageBox.Show("Wrong Input!!");
-            }
-
+            var newValue = AutoComplete.TrueFalse(value.ToString());
+            this.Value = newValue;
+            this.Display = newValue.ToString();
+            this.RefreshAffects();
         }
     }
 }
