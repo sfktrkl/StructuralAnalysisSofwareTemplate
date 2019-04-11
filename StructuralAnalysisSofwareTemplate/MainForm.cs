@@ -36,6 +36,9 @@ namespace StructuralAnalysisSofwareTemplate
             member1.parameters["Material"].SetValue(material1.UniqueName);
             member1.parameters["Section"].SetValue(section1.UniqueName);
 
+            MultiLine multiline = new MultiLine();
+            Database.MultiLineList.Add(multiline.UniqueName, multiline);
+
             // creates the first navigator
             UiManager.CreateNavigator();
         }

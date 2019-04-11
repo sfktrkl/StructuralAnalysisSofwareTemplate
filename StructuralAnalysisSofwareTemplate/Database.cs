@@ -8,5 +8,6 @@ namespace StructuralAnalysisSofwareTemplate
         public static readonly Dictionary<string, Component> MemberList = new Dictionary<string, Component>();
         public static readonly Dictionary<string, Component> MaterialList = new Dictionary<string, Component>();
         public static readonly Dictionary<string, Component> SectionList = new Dictionary<string, Component>();
+        public static readonly Dictionary<string, Component> MultiLineList = new Dictionary<string, Component>();
     }
 }

@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Material.cs" />
     <Compile Include="Member.cs" />
+    <Compile Include="MultiLine.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="Program.cs" />

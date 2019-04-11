@@ -147,4 +147,24 @@ namespace StructuralAnalysisSofwareTemplate
             section.parameters[parameter].SetValue(data);
         }
     }
+
+    public class MultiLineDataModel : DataModel
+    {
+        public MultiLineDataModel(Dictionary<string, Component> components) : base(components)
+        {
+            this.Prototype = new MultiLine();
+        }
+
+        public override void CreateComponent()
+        {
+            var component = new MultiLine();
+            this.Components.Add(component.UniqueName, component);
+        }
+
+        public override void SetCellToComponent(string componentName, object data, string parameter)
+        {
+            var multiline = (MultiLine)this.Components[componentName];
+            multiline.parameters[parameter].SetValue(data);
+        }
+    }
 }

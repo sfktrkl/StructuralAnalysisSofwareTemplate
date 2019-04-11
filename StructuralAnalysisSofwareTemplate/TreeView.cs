@@ -16,34 +16,42 @@ namespace StructuralAnalysisSofwareTemplate
             treeView1.Nodes.Clear();
 
             var parentNode = treeView1.Nodes.Add("Nodes");
-            parentNode.Tag = new Node();
+            parentNode.Tag = new NodeDataModel(Database.NodeList);
             foreach (var obj in Database.NodeList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Node Name"].Display + " = " + obj.Value.UniqueName.ToString());
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Node Name"].Display);
                 childNode.Tag = obj.Value;
             }
 
             parentNode = treeView1.Nodes.Add("Members");
-            parentNode.Tag = new Member();
+            parentNode.Tag = new MemberDataModel(Database.MemberList);
             foreach (var obj in Database.MemberList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Member Name"].Display + " = " + obj.Value.UniqueName.ToString());
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Member Name"].Display);
                 childNode.Tag = obj.Value;
             }
 
             parentNode = treeView1.Nodes.Add("Materials");
-            parentNode.Tag = new Material();
+            parentNode.Tag = new MaterialDataModel(Database.MaterialList);
             foreach (var obj in Database.MaterialList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Material Name"].Display + " = " + obj.Value.UniqueName.ToString());
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Material Name"].Display);
                 childNode.Tag = obj.Value;
             }
 
             parentNode = treeView1.Nodes.Add("Sections");
-            parentNode.Tag = new Section();
+            parentNode.Tag = new SectionDataModel(Database.SectionList);
             foreach (var obj in Database.SectionList)
             {
-                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Section Name"].Display + " = " + obj.Value.UniqueName.ToString());
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["Section Name"].Display);
+                childNode.Tag = obj.Value;
+            }
+
+            parentNode = treeView1.Nodes.Add("MultiLine");
+            parentNode.Tag = new MultiLineDataModel(Database.MultiLineList);
+            foreach (var obj in Database.MultiLineList)
+            {
+                var childNode = parentNode.Nodes.Add(obj.Value.parameters["MultiLine Name"].Display);
                 childNode.Tag = obj.Value;
             }
 
@@ -63,7 +71,8 @@ namespace StructuralAnalysisSofwareTemplate
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             // sets the spread sheet name and calls the function
-            //UiManager.CreateSpreadSheet(e.Node.Tag.GetType());
+            if (e.Node.Parent != null) UiManager.CreateSpreadSheet((DataModel)e.Node.Parent.Tag);
+            else UiManager.CreateSpreadSheet((DataModel)e.Node.Tag);
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)

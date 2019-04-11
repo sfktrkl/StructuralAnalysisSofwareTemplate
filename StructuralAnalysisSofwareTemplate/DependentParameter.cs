@@ -87,7 +87,7 @@ namespace StructuralAnalysisSofwareTemplate
 
         public override void RecalculateValue()
         {
-            if (depends[0].Value != null && depends[1].Value != null)
+            if (this.depends[0].Value != null && this.depends[1].Value != null)
             {
                 var node1 = (Node)this.depends[0].Value;
                 var node2 = (Node)this.depends[1].Value;
@@ -97,6 +97,34 @@ namespace StructuralAnalysisSofwareTemplate
                 var y2 = Convert.ToDouble(node2.parameters["Y Coordinate"].Value);
 
                 this.Value = Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
+                this.Display = this.Value.ToString();
+            }
+        }
+    }
+
+    public class Interval : DependentParameter
+    {
+        public Interval(List<Parameter> depends)
+        {
+            this.depends = depends;
+            this.notifyAffectors();
+            this.RecalculateValue();
+        }
+
+        public override void RecalculateValue()
+        {
+            if (this.depends[0].Value != null && this.depends[1].Value != null && Convert.ToDouble(this.depends[2].Value) > 0)
+            {
+                var node1 = (Node)this.depends[0].Value;
+                var node2 = (Node)this.depends[1].Value;
+                var x1 = Convert.ToDouble(node1.parameters["X Coordinate"].Value);
+                var x2 = Convert.ToDouble(node2.parameters["X Coordinate"].Value);
+                var y1 = Convert.ToDouble(node1.parameters["Y Coordinate"].Value);
+                var y2 = Convert.ToDouble(node2.parameters["Y Coordinate"].Value);
+                var xInterval = Math.Abs(x2 - x1) / Convert.ToDouble(depends[2].Value);
+                var yInterval = Math.Abs(y2 - y1) / Convert.ToDouble(depends[2].Value);
+
+                this.Value = Math.Sqrt(Math.Pow(xInterval, 2) + Math.Pow(yInterval, 2));
                 this.Display = this.Value.ToString();
             }
         }

@@ -33,7 +33,7 @@ namespace StructuralAnalysisSofwareTemplate
         }
 
         // refreshes all parameters which are affected by this parameter
-        // it also needs to refresh itself (it's value and display), 
+        // it also needs to refresh itself (it's value and display),
         // should overriden by every instance seperately
         // since for different instance types methods may be change
         public override void RecalculateValue()
@@ -68,7 +68,6 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (Node)this.Value;
                     this.Display = component.parameters["Node Name"].Display;
                     notifyAffectors();
-
                 }
                 catch
                 {
@@ -91,7 +90,7 @@ namespace StructuralAnalysisSofwareTemplate
             base.RecalculateValue();
         }
     }
-    
+
     public class MaterialInstance : DependentInstances
     {
         public MaterialInstance()
@@ -211,6 +210,47 @@ namespace StructuralAnalysisSofwareTemplate
             var component = (Member)this.Value;
             this.Value = component;
             this.Display = component.parameters["Member Name"].Display;
+            base.RecalculateValue();
+        }
+    }
+
+    public class MultiLineInstance : DependentInstances
+    {
+        public MultiLineInstance()
+        {
+        }
+
+        public override void SetValue(object value)
+        {
+            var newValue = AutoComplete.ForObject(value.ToString(), typeof(MultiLine));
+
+            if (newValue != "NULL")
+            {
+                try
+                {
+                    this.Value = Database.MultiLineList[newValue.ToString()];
+                    var component = (MultiLine)this.Value;
+                    this.Display = component.parameters["MultiLine Name"].Display;
+
+                    notifyAffectors();
+                }
+                catch
+                {
+                    MessageBox.Show("Object does not exist!!!");
+                }
+            }
+            else
+            {
+                this.Value = null;
+                this.Display = "NULL";
+            }
+        }
+
+        public override void RecalculateValue()
+        {
+            var component = (MultiLine)this.Value;
+            this.Value = component;
+            this.Display = component.parameters["MultiLine Name"].Display;
             base.RecalculateValue();
         }
     }
