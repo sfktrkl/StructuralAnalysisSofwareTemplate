@@ -15,18 +15,26 @@ namespace StructuralAnalysisSofwareTemplate
             this.parameters.Add("Length", new Length(new List<Parameter> { this.parameters["First Node"], this.parameters["Second Node"] }));
         }
 
+        // overloaded constructor for multiLine
         public Member(MultiLine multiLine, Node firstNode, Node secondNode)
         {
             this.UniqueName = "Member: " + multiLine.Members.Count.ToString();
             this.parameters.Add("Member Name", new Name("Member: " + multiLine.Members.Count.ToString()));
+
             this.parameters.Add("First Node", new NodeInstance());
-            this.parameters["First Node"].SetValue(firstNode);
+            this.parameters["First Node"].SetValue(firstNode.UniqueName, multiLine);
+
             this.parameters.Add("Second Node", new NodeInstance());
-            this.parameters["First Node"].SetValue(secondNode);
+            this.parameters["Second Node"].SetValue(secondNode.UniqueName, multiLine);
+
             this.parameters.Add("Material", new MaterialInstance());
-            this.parameters["Material"].SetValue(multiLine.parameters["Material"].Value);
+            var material = (Material)multiLine.parameters["Material"].Value;
+            this.parameters["Material"].SetValue(material.UniqueName);
+
             this.parameters.Add("Section", new SectionInstance());
-            this.parameters["Section"].SetValue(multiLine.parameters["Section"].Value);
+            var section = (Section)multiLine.parameters["Section"].Value;
+            this.parameters["Section"].SetValue(section.UniqueName);
+
             this.parameters.Add("Length", new Length(new List<Parameter> { this.parameters["First Node"], this.parameters["Second Node"] }));
         }
 

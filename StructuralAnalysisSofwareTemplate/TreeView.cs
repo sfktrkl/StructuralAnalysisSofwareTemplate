@@ -65,6 +65,17 @@ namespace StructuralAnalysisSofwareTemplate
             {
                 treeView1.SelectedNode = e.Node;
                 contextMenuStrip1.Show(Cursor.Position);
+                // Show Nodes and Show Members buttons for Multilines.
+                if (e.Node.Tag.GetType() == typeof(MultiLine))
+                {
+                    contextMenuStrip1.Items[3].Visible = true;
+                    contextMenuStrip1.Items[4].Visible = true;
+                }
+                else
+                {
+                    contextMenuStrip1.Items[3].Visible = false;
+                    contextMenuStrip1.Items[4].Visible = false;
+                }
             }
         }
 
@@ -106,6 +117,20 @@ namespace StructuralAnalysisSofwareTemplate
             }
 
             UiManager.RefreshNavigators();
+        }
+
+        private void showToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var component = (MultiLine)treeView1.SelectedNode.Tag;
+            var datamodel = new NodeDataModel(component.Nodes);
+            UiManager.CreateSpreadSheet(datamodel);
+        }
+
+        private void showMembersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var component = (MultiLine)treeView1.SelectedNode.Tag;
+            var datamodel = new MemberDataModel(component.Members);
+            UiManager.CreateSpreadSheet(datamodel);
         }
     }
 }

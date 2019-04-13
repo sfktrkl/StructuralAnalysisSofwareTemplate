@@ -28,6 +28,8 @@ namespace StructuralAnalysisSofwareTemplate
 
         public abstract void SetValue(object value);
 
+        public virtual void SetValue(object value, MultiLine multiline) { }
+
         public virtual bool IsReadOnly()
         {
             return false;
@@ -85,4 +87,5 @@ namespace StructuralAnalysisSofwareTemplate
             this.RefreshAffects();
         }
     }
+
 }

@@ -82,6 +82,35 @@ namespace StructuralAnalysisSofwareTemplate
             }
         }
 
+        public override void SetValue(object value, MultiLine multiline)
+        {
+            var newValue = AutoComplete.ForObject(value.ToString(), typeof(Node));
+
+            // if result from autocomplete is not null
+            // tries changing the value and display of the parameter
+            if (newValue != "NULL")
+            {
+                try
+                {
+                    //sets the value and the display of the parameter
+                    this.Value = multiline.Nodes[newValue.ToString()];
+                    var component = (Node)this.Value;
+                    this.Display = component.parameters["Node Name"].Display;
+                    notifyAffectors();
+                }
+                catch
+                {
+                    // if given input (component) does not exist
+                    MessageBox.Show("Object does not exist!!!");
+                }
+            }
+            else
+            {
+                this.Value = null;
+                this.Display = "NULL";
+            }
+        }
+
         public override void RecalculateValue()
         {
             var component = (Node)this.Value;
@@ -232,7 +261,7 @@ namespace StructuralAnalysisSofwareTemplate
                     var component = (MultiLine)this.Value;
                     this.Display = component.parameters["MultiLine Name"].Display;
 
-                    notifyAffectors();
+                    this.notifyAffectors();
                 }
                 catch
                 {
@@ -254,4 +283,5 @@ namespace StructuralAnalysisSofwareTemplate
             base.RecalculateValue();
         }
     }
+
 }

@@ -38,6 +38,8 @@ namespace StructuralAnalysisSofwareTemplate
 
             MultiLine multiline = new MultiLine();
             Database.MultiLineList.Add(multiline.UniqueName, multiline);
+            DependentInstances multilineIntance = new MultiLineInstance();
+            multilineIntance.SetValue(multiline.UniqueName);
 
             // creates the first navigator
             UiManager.CreateNavigator();

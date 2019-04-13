@@ -131,6 +131,14 @@ namespace StructuralAnalysisSofwareTemplate
                         c.Selected = true;
                     }
                 }
+                /*
+                if (dataModel.GetType() == typeof(MultiLineDataModel))
+                {
+                    var item = contextMenuStrip1.Items.ContainsKey("Show");
+                    item.vis
+
+                }
+                */
                 // shows the contextmenustrip in cursor position
                 contextMenuStrip1.Show(Cursor.Position);
             }
@@ -145,6 +153,11 @@ namespace StructuralAnalysisSofwareTemplate
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UiManager.RefreshSpreadsheets(this);
+        }
+
+        private void showToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

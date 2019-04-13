@@ -38,6 +38,8 @@
             this.refreshToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showMembersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -104,9 +106,11 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshToolStripMenuItem1,
             this.copyToolStripMenuItem,
-            this.deleteToolStripMenuItem1});
+            this.deleteToolStripMenuItem1,
+            this.showToolStripMenuItem,
+            this.showMembersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 136);
             // 
             // refreshToolStripMenuItem1
             // 
@@ -128,6 +132,22 @@
             this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // showToolStripMenuItem
+            // 
+            this.showToolStripMenuItem.Name = "showToolStripMenuItem";
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showToolStripMenuItem.Text = "Show Nodes";
+            this.showToolStripMenuItem.Visible = false;
+            this.showToolStripMenuItem.Click += new System.EventHandler(this.showToolStripMenuItem_Click);
+            // 
+            // showMembersToolStripMenuItem
+            // 
+            this.showMembersToolStripMenuItem.Name = "showMembersToolStripMenuItem";
+            this.showMembersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showMembersToolStripMenuItem.Text = "Show Members";
+            this.showMembersToolStripMenuItem.Visible = false;
+            this.showMembersToolStripMenuItem.Click += new System.EventHandler(this.showMembersToolStripMenuItem_Click);
             // 
             // TreeView
             // 
@@ -160,5 +180,7 @@
         private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showMembersToolStripMenuItem;
     }
 }
