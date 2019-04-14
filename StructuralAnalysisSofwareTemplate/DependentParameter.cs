@@ -121,11 +121,12 @@ namespace StructuralAnalysisSofwareTemplate
                 var x2 = Convert.ToDouble(node2.parameters["X Coordinate"].Value);
                 var y1 = Convert.ToDouble(node1.parameters["Y Coordinate"].Value);
                 var y2 = Convert.ToDouble(node2.parameters["Y Coordinate"].Value);
-                var xInterval = Math.Abs(x2 - x1) / Convert.ToDouble(depends[2].Value);
-                var yInterval = Math.Abs(y2 - y1) / Convert.ToDouble(depends[2].Value);
-
-                this.Value = Math.Sqrt(Math.Pow(xInterval, 2) + Math.Pow(yInterval, 2));
-                this.Display = this.Value.ToString();
+                var xInterval = (x2 - x1) / Convert.ToDouble(depends[2].Value);
+                var yInterval = (y2 - y1) / Convert.ToDouble(depends[2].Value);
+                var xyInverval = Math.Sqrt(Math.Pow(xInterval, 2) + Math.Pow(yInterval, 2));
+                var interval = new List<double> { xInterval, yInterval, xyInverval };
+                this.Value = interval;
+                this.Display = interval[2].ToString();
             }
         }
     }

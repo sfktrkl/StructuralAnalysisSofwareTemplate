@@ -159,6 +159,8 @@ namespace StructuralAnalysisSofwareTemplate
         {
             var component = new MultiLine();
             this.Components.Add(component.UniqueName, component);
+            DependentInstances multilineIntance = new MultiLineInstance();
+            multilineIntance.SetValue(component.UniqueName);
         }
 
         public override void SetCellToComponent(string componentName, object data, string parameter)
