@@ -64,7 +64,7 @@
             // splitContainer2
             // 
             this.splitContainer2.Size = new System.Drawing.Size(1021, 42);
-            this.splitContainer2.SplitterDistance = 992;
+            this.splitContainer2.SplitterDistance = 970;
             // 
             // dataGridView1
             // 

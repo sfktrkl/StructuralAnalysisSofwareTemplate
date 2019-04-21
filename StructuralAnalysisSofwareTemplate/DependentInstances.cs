@@ -283,5 +283,4 @@ namespace StructuralAnalysisSofwareTemplate
             base.RecalculateValue();
         }
     }
-
 }

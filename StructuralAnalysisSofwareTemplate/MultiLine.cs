@@ -32,7 +32,6 @@ namespace StructuralAnalysisSofwareTemplate
                 this.Display = value.ToString();
                 this.notifyAffectors();
                 this.RecalculateValue();
-
             }
 
             public override bool IsReadOnly()
@@ -46,7 +45,6 @@ namespace StructuralAnalysisSofwareTemplate
                 this.Display = value.ToString();
                 this.notifyAffectors();
                 this.RecalculateValue();
-
             }
 
             public override void RecalculateValue()
@@ -77,30 +75,28 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void CreateNodes()
         {
+            // take first node and save it to dictionary
+            var firstNode = (Node)this.parameters["First Node"].Value;
+            var xCoordinate1 = Convert.ToDouble(firstNode.parameters["X Coordinate"].Value);
+            var yCoordinate1 = Convert.ToDouble(firstNode.parameters["Y Coordinate"].Value);
+            var cloneFirst = new Node(this, xCoordinate1, yCoordinate1);
+            this.Nodes.Add(cloneFirst.UniqueName, cloneFirst);
 
-                // take first node and save it to dictionary
-                var firstNode = (Node)this.parameters["First Node"].Value;
-                var xCoordinate1 = Convert.ToDouble(firstNode.parameters["X Coordinate"].Value);
-                var yCoordinate1 = Convert.ToDouble(firstNode.parameters["Y Coordinate"].Value);
-                var cloneFirst = new Node(this, xCoordinate1, yCoordinate1);
-                this.Nodes.Add(cloneFirst.UniqueName, cloneFirst);
+            // create nodes between first and last nodes
+            var interval = (List<double>)this.parameters["Interval"].Value;
 
-                // create nodes between first and last nodes
-                var interval = (List<double>)this.parameters["Interval"].Value;
+            int i = 0;
+            for (i = 0; i < Convert.ToDouble(this.parameters["Member Count"].Value) - 1; i++)
+            {
+                var node = new Node(this, xCoordinate1 + interval[0] * (i + 1), yCoordinate1 + interval[1] * (i + 1));
+                this.Nodes.Add(node.UniqueName, node);
+            }
 
-                int i = 0;
-                for (i = 0; i < Convert.ToDouble(this.parameters["Member Count"].Value) - 1; i++)
-                {
-                    var node = new Node(this, xCoordinate1 + interval[0] * (i + 1), yCoordinate1 + interval[1] * (i + 1));
-                    this.Nodes.Add(node.UniqueName, node);
-                }
-
-                // take first node and save it to dictionary
-                var lastNode = (Node)this.parameters["Last Node"].Value;
-                var cloneLast = new Node(this, xCoordinate1 + interval[0] * (i + 1), yCoordinate1 + interval[1] * (i + 1));
-                this.Nodes.Add(cloneLast.UniqueName, cloneLast);
-            
-         }
+            // take first node and save it to dictionary
+            var lastNode = (Node)this.parameters["Last Node"].Value;
+            var cloneLast = new Node(this, xCoordinate1 + interval[0] * (i + 1), yCoordinate1 + interval[1] * (i + 1));
+            this.Nodes.Add(cloneLast.UniqueName, cloneLast);
+        }
 
         private void CreateMembers()
         {

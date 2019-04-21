@@ -94,5 +94,10 @@ namespace StructuralAnalysisSofwareTemplate
         {
             UiManager.CreateSpreadSheet(new SectionDataModel(Database.SectionList));
         }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            UiManager.Create3DView();
+        }
     }
 }

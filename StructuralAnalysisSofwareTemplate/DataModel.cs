@@ -104,7 +104,6 @@ namespace StructuralAnalysisSofwareTemplate
                 var member = (Member)this.Components[componentName];
                 member.parameters[parameter].SetValue(data);
             }
-
         }
     }
 

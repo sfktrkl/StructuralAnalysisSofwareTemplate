@@ -50,7 +50,7 @@ namespace StructuralAnalysisSofwareTemplate
                         dataGridView1.CurrentCell.ReadOnly = true;
                         dataGridView1.CurrentCell.Style.BackColor = Color.Gray;
                     }
-                } 
+                }
 
                 dataGridView1.CurrentCell = dataGridView1[1, dataGridView1.Rows.Count - 1];
             }
@@ -136,7 +136,6 @@ namespace StructuralAnalysisSofwareTemplate
                 {
                     var item = contextMenuStrip1.Items.ContainsKey("Show");
                     item.vis
-
                 }
                 */
                 // shows the contextmenustrip in cursor position
@@ -157,7 +156,6 @@ namespace StructuralAnalysisSofwareTemplate
 
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

@@ -343,6 +343,7 @@
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
             this.toolStripButton5.Text = "3D View";
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
             // contextMenuStrip2
             // 
