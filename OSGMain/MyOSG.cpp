@@ -1,6 +1,122 @@
 #pragma once
 #include "MyOSG.h"
 
+osg::ref_ptr<osgViewer::Viewer> g_viewer;
+osg::Group* root = new osg::Group();
+bool g_finished;
+
+void render(void*)
+{
+	// Keep the rendering as long as the viewer's work isn't done
+	while (!g_viewer->done())
+	{
+		g_viewer->frame();
+	}
+
+	// The rendering is done, set the status to Finished
+	g_finished = true;
+}
+
+bool createViewer(HWND hwnd)
+{
+	// Get the dimensions of the window handle
+	RECT rect;
+	GetWindowRect(hwnd, &rect);
+
+	// WindowData is used to pass in the Win32 window handle attached the GraphicsContext::Traits structure
+	osg::ref_ptr<osg::Referenced> windata = new osgViewer::GraphicsWindowWin32::WindowData(hwnd);
+
+	// Create osg's graphics context traits
+	osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits;
+
+	// Set location and size of the window
+	traits->x = 0;
+	traits->y = 0;
+	traits->width = rect.right - rect.left;
+	traits->height = rect.bottom - rect.top;
+	traits->windowDecoration = false;
+	traits->doubleBuffer = true;
+	traits->sharedContext = 0;
+	traits->inheritedWindowData = windata;
+	traits->pbuffer = false;
+
+	// We must set the pixelformat before we can create the OSG Rendering Surface
+	PIXELFORMATDESCRIPTOR pixelFormat =
+	{
+		sizeof(PIXELFORMATDESCRIPTOR), // Specifies the size of this data structure. This value should be set to sizeof(PIXELFORMATDESCRIPTOR).
+		1,	// Specifies the version of this data structure. This value should be set to 1.
+		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER, // A set of bit flags that specify properties of the pixel buffer
+		PFD_TYPE_RGBA, // Specifies the type of pixel data.  PFD_TYPE_RGBA or PFD_TYPE_COLORINDEX
+		24,	// Specifies the number of color bitplanes in each color buffer. For RGBA pixel types, it is the size of the color buffer, excluding the alpha bitplanes
+		0,  // cRedBits	  Specifies the number of red bitplanes in each RGBA color buffer.
+		0,  // cRedShift  Specifies the shift count for red bitplanes in each RGBA color buffer.
+		0,0,// cGreenBits, cGreenShift
+		0,0,// cBlueBits , cBlueShift
+		0,0,// cAlphaBits, cAlphaShift
+		0,  // cAccumBits  Specifies the total number of bitplanes in the accumulation buffer.
+		0,  // cAccumRedBits Specifies the number of red bitplanes in the accumulation buffer.
+		0,0,0,// cAccumGreenBits, cAccumBlueBits, cAccumAlphaBits
+		24,// cDepthBits     Specifies the depth of the depth (z-axis) buffer.
+		0, // cStencilBits   Specifies the depth of the stencil buffer.
+		0, // cAuxBuffers    Specifies the number of auxiliary buffers. Auxiliary buffers are not supported.
+		PFD_MAIN_PLANE, // iLayerType Ignored. Earlier implementations of OpenGL used this member, but it is no longer used.
+		0, // bReserved      Specifies the number of overlay and underlay planes. Bits 0 through 3 specify up to 15 overlay planes and bits 4 through 7 specify up to 15 underlay planes
+		0, // dwLayerMask    Ignored. Earlier implementations of OpenGL used this member, but it is no longer used.
+		0, // dwVisibleMask  Specifies the transparent color or index of an underlay plane. When the pixel type is RGBA, dwVisibleMask is a transparent RGB color value
+		0  // dwDamageMask   Ignored. Earlier implementations of OpenGL used this member, but it is no longer used.
+	};
+
+	// Retrieves a device context for the client area. (ATL)
+	HDC hdc = ::GetDC(hwnd);
+	if (hdc == 0)
+	{
+		// Destroys the window associated with the CWindow object and sets m_hWnd to NULL.
+		::DestroyWindow(hwnd);
+		return false;
+	}
+
+	// The ChoosePixelFormat OpenGL function attempts to match an appropriate pixel format supported by a device context to a given pixel format specification.
+	int pixelFormatIndex = ::ChoosePixelFormat(hdc, &pixelFormat);
+	if (pixelFormatIndex == 0)
+	{
+		// (MFC)Releases the display device context of a container of a windowless control, freeing the device context for use by other applications
+		::ReleaseDC(hwnd, hdc);
+		::DestroyWindow(hwnd);
+		return false;
+	}
+
+	// The SetPixelFormat OpenGL function sets the pixel format of the specified device context to the format specified by the iPixelFormat index.
+	if (!::SetPixelFormat(hdc, pixelFormatIndex, &pixelFormat))
+	{
+		::ReleaseDC(hwnd, hdc);
+		::DestroyWindow(hwnd);
+		return false;
+	}
+
+	// Create graphics context
+	osg::ref_ptr<osg::GraphicsContext> gc = osg::GraphicsContext::createGraphicsContext(traits.get());
+	osg::ref_ptr<osg::Camera> camera = new osg::Camera;
+	camera->setGraphicsContext(gc.get());
+	camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
+
+	camera->setDrawBuffer(GL_BACK);
+	camera->setReadBuffer(GL_BACK);
+
+	// Create the viewer and attach the camera to it
+	g_viewer = new osgViewer::Viewer;
+	g_viewer->addSlave(camera.get());
+
+	g_viewer->setCamera(camera.get());
+	g_viewer->setSceneData(root);
+	g_viewer->setKeyEventSetsDone(0);
+	g_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+
+	// The viewer isn't rendering yet, set the status to False
+	g_finished = false;
+
+	return true;
+}
+
 void MyOSG::CreateCube(osg::Group* root)
 {
 	// cube centered at origin
@@ -13,13 +129,13 @@ void MyOSG::CreateCube(osg::Group* root)
 
 	// add cube geode to root
 	root->addChild(cubeGeode);
-	// turn on light (normals ???)
-	root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::ON);
+	// turn off light
+	root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 }
 
 void MyOSG::CreateSphere(osg::Group* root)
 {
-	osg::Sphere* sphere = new osg::Sphere(osg::Vec3(0, 0, 0), 10.0f);
+	osg::Sphere* sphere = new osg::Sphere(osg::Vec3(0, 0, 0), 1.0f);
 
 	osg::ShapeDrawable* sphereDrawable = new osg::ShapeDrawable(sphere);
 
@@ -29,16 +145,11 @@ void MyOSG::CreateSphere(osg::Group* root)
 
 	root->addChild(sphereGeode);
 
-	root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::ON);
+	root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 }
 
-int MyOSG::TakeInput(int i)
+void MyOSG::TakeInput(int i)
 {
-	// root node in scene graph
-	osg::Group* root = new osg::Group();
-	// create viewer
-	osgViewer::Viewer viewer;
-
 	if (i == 1)
 	{
 		MyOSG::CreateCube(root);
@@ -48,57 +159,27 @@ int MyOSG::TakeInput(int i)
 		MyOSG::CreateSphere(root);
 	}
 
-	//
-	viewer.setSceneData(root);
-	// show viewer in second screen
-	viewer.setUpViewOnSingleScreen(1);
+	g_viewer->setSceneData(root);
+}
 
-	return viewer.run();
+void MyOSG::Render(HWND hwnd)
+{
+	if (createViewer(hwnd))
+	{
+		// Create a rendering thread
+		_beginthread(render, 0, NULL);
+	}
+}
 
-	/*
-	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
-	// Front
-	vertices->push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
-	vertices->push_back(osg::Vec3(1.0f, 0.0f, 0.0f));
-	vertices->push_back(osg::Vec3(1.0f, 0.0f, 1.0f));
-	vertices->push_back(osg::Vec3(0.0f, 0.0f, 1.0f));
-	// Back
-	vertices->push_back(osg::Vec3(0.0f, 1.0f, 0.0f));
-	vertices->push_back(osg::Vec3(1.0f, 1.0f, 0.0f));
-	vertices->push_back(osg::Vec3(1.0f, 1.0f, 1.0f));
-	vertices->push_back(osg::Vec3(0.0f, 1.0f, 1.0f));
-	// Left
+void MyOSG::Destroy()
+{
+	// Set viewer's work to Done
+	g_viewer->setDone(true);
 
-	// Right
+	// Get the rendering status
+	while (!g_finished) Sleep(10);
 
-	// Bottom
-
-	// Top
-
-	//osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
-	//normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
-
-	//osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
-	//colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	//colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
-	//colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	//colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
-	quad->setVertexArray(vertices.get());
-
-	//quad->setNormalArray(normals.get());
-	//quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
-	//quad->setColorArray(colors.get());
-	//quad->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
-
-	quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
-
-	osg::ref_ptr<osg::Geode> root = new osg::Geode;
-	root->addDrawable(quad.get());
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	viewer.setUpViewOnSingleScreen(1);
-	return viewer.run();
-	*/
+	// Release the memory
+	g_viewer = NULL;
+	g_finished = NULL;
 }

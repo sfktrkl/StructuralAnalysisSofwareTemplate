@@ -1,16 +1,23 @@
 #pragma once
 
-// When libraries are included, CLR is not building properly.
+#include <Windows.h>
+#include <process.h>
+
 #include <osgViewer/Viewer>
 #include <osg/Geode>
 #include <osg/Group>
 #include <osg/ShapeDrawable>
+#include <osgGA\TrackballManipulator>
+#include <osgViewer\api\Win32\GraphicsWindowWin32>
+#include <osg\Camera>
 
-class MyOSG
+class __declspec(dllexport) MyOSG
 {
 public:
+	void Render(HWND hwnd);
+	void Destroy();
 
 	void CreateCube(osg::Group* root);
 	void CreateSphere(osg::Group* root);
-	int TakeInput(int i);
+	void TakeInput(int i);
 };

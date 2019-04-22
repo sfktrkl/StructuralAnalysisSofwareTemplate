@@ -22,7 +22,8 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OSGClassLibrary">
+    <Reference Include="OSGClassLibrary, Version=1.0.7051.37315, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Release\OSGClassLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />

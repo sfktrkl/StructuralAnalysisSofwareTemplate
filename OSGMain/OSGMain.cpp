@@ -5,7 +5,6 @@
 int main()
 {
 	// Trial to see results.
-
 	MyOSG window = MyOSG();
 	window.TakeInput(1);
 }

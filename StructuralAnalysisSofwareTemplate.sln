@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StructuralAnalysisSofwareTemplate", "StructuralAnalysisSofwareTemplate\StructuralAnalysisSofwareTemplate.csproj", "{A6839E98-EABB-4A07-B813-78C94B6D537A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSGClassLibrary", "OSGClassLibrary\OSGClassLibrary.vcxproj", "{20DE98BD-4E79-443D-AA83-39A89E31F412}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ABBF2753-FAE9-4725-A519-5D12427180E2} = {ABBF2753-FAE9-4725-A519-5D12427180E2}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSGMain", "OSGMain\OSGMain.vcxproj", "{ABBF2753-FAE9-4725-A519-5D12427180E2}"
 EndProject

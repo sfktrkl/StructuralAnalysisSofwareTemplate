@@ -76,10 +76,8 @@ namespace StructuralAnalysisSofwareTemplate
         public static void Create3DView()
         {
             var view = new _3DView();
-            view.TopLevel = false;
-            mainForm.panel1.Controls.Add(view);
+            view.TopLevel = true;
             view.Show();
-            view.Dock = DockStyle.Right; // docks the form in to panel (temporary)
         }
     }
 }
