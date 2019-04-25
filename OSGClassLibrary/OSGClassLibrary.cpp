@@ -9,7 +9,7 @@ OSGClassWrapper::OSGClassWrapper()
 	myOSG = new MyOSG();
 }
 
-void OSGClassWrapper::TakeInputWrapper(int i) {
+void OSGClassWrapper::TakeInput(int i) {
 	myOSG->TakeInput(i);
 }
 

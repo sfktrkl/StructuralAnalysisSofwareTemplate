@@ -75,7 +75,7 @@ namespace StructuralAnalysisSofwareTemplate
 
         public static void Create3DView()
         {
-            var view = new _3DView();
+            var view = new View3D();
             view.TopLevel = true;
             view.Show();
         }

@@ -1,6 +1,6 @@
 ﻿namespace StructuralAnalysisSofwareTemplate
 {
-    partial class _3DView
+    partial class View3D
     {
         /// <summary>
         /// Required designer variable.

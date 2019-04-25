@@ -9,15 +9,21 @@
 #include <osg/ShapeDrawable>
 #include <osgGA\TrackballManipulator>
 #include <osgViewer\api\Win32\GraphicsWindowWin32>
-#include <osg\Camera>
+#include <osg/Camera>
+#include <osg/LightSource>
 
-class __declspec(dllexport) MyOSG
+class MyOSG
 {
 public:
+	bool CreateViewer(HWND hwnd);
 	void Render(HWND hwnd);
 	void Destroy();
 
-	void CreateCube(osg::Group* root);
-	void CreateSphere(osg::Group* root);
+	void CreateCube();
+	void CreateSphere();
 	void TakeInput(int i);
+private:
+	//osg::ref_ptr<osgViewer::Viewer> viewer;
+	osg::ref_ptr<osg::Group> root;
+	//bool finished;
 };

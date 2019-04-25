@@ -9,7 +9,7 @@ namespace OSGClassLibrary {
 	{
 	public:
 		OSGClassWrapper();
-		void TakeInputWrapper(int i);
+		void TakeInput(int i);
 		void Render(IntPtr hwnd);
 		void Destroy();
 

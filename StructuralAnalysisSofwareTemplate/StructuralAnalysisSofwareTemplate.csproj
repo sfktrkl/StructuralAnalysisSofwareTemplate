@@ -39,11 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="3DView.cs">
+    <Compile Include="View3D.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="3DView.Designer.cs">
-      <DependentUpon>3DView.cs</DependentUpon>
+    <Compile Include="View3D.Designer.cs">
+      <DependentUpon>View3D.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoComplete.cs" />
     <Compile Include="Component.cs" />
@@ -84,8 +84,8 @@
       <DependentUpon>TreeView.cs</DependentUpon>
     </Compile>
     <Compile Include="UiManager.cs" />
-    <EmbeddedResource Include="3DView.resx">
-      <DependentUpon>3DView.cs</DependentUpon>
+    <EmbeddedResource Include="View3D.resx">
+      <DependentUpon>View3D.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DockableForm.resx">
       <DependentUpon>DockableForm.cs</DependentUpon>
@@ -109,7 +109,6 @@
     <EmbeddedResource Include="TreeView.resx">
       <DependentUpon>TreeView.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
