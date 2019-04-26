@@ -23,13 +23,13 @@ namespace StructuralAnalysisSofwareTemplate
         private void button2_Click(object sender, EventArgs e)
         {
             // draws cube to screen
-            myWrapper.TakeInput(1);
+            myWrapper.CreateCube();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             // draws sphere to screen
-            myWrapper.TakeInput(2);
+            myWrapper.CreateSphere();
         }
 
         private void button1_Click(object sender, EventArgs e)

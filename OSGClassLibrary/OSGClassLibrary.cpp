@@ -9,8 +9,12 @@ OSGClassWrapper::OSGClassWrapper()
 	myOSG = new MyOSG();
 }
 
-void OSGClassWrapper::TakeInput(int i) {
-	myOSG->TakeInput(i);
+void OSGClassWrapper::CreateCube() {
+	myOSG->CreateCube();
+}
+
+void OSGClassWrapper::CreateSphere() {
+    myOSG->CreateSphere();
 }
 
 void OSGClassWrapper::Render(IntPtr hwnd)

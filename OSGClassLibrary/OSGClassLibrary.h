@@ -9,7 +9,9 @@ namespace OSGClassLibrary {
 	{
 	public:
 		OSGClassWrapper();
-		void TakeInput(int i);
+
+		void CreateCube();
+		void CreateSphere();
 		void Render(IntPtr hwnd);
 		void Destroy();
 

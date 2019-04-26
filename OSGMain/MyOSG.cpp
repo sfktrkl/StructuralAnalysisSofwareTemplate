@@ -15,6 +15,7 @@ static void RenderingThread(void*)
 	// The rendering is done, set the status to Finished
 	finished = true;
 }
+
 bool MyOSG::CreateViewer(HWND hwnd)
 {
 	// Get the dimensions of the window handle
@@ -22,7 +23,7 @@ bool MyOSG::CreateViewer(HWND hwnd)
 	GetWindowRect(hwnd, &rect);
 
 	// WindowData is used to pass in the Win32 window handle attached the GraphicsContext::Traits structure
-	osg::ref_ptr<osg::Referenced> windata = new osgViewer::GraphicsWindowWin32::WindowData(hwnd);
+	osg::ref_ptr<osg::Referenced> windata(new osgViewer::GraphicsWindowWin32::WindowData(hwnd));
 
 	// Create osg's graphics context traits
 	osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits;
@@ -47,6 +48,8 @@ bool MyOSG::CreateViewer(HWND hwnd)
 	camera->setDrawBuffer(GL_BACK);
 	camera->setReadBuffer(GL_BACK);
 
+	root = new osg::Group();
+
 	// Create the viewer and attach the camera to it
 	viewer = new osgViewer::Viewer;
 	viewer->addSlave(camera.get());
@@ -56,10 +59,8 @@ bool MyOSG::CreateViewer(HWND hwnd)
 	viewer->setKeyEventSetsDone(0);
 	viewer->setCameraManipulator(new osgGA::TrackballManipulator);
 
-	root = new osg::Group();
-
 	// turn off light
-	root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+	root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::ON);
 
 	// The viewer isn't rendering yet, set the status to False
 	finished = false;
@@ -70,43 +71,36 @@ bool MyOSG::CreateViewer(HWND hwnd)
 void MyOSG::CreateCube()
 {
 	// cube centered at origin
-	osg::Box* cube = new osg::Box(osg::Vec3(0, 0, 0), 1.0f);
-	// associate shape with drawable
-	osg::ShapeDrawable* cubeDrawable = new osg::ShapeDrawable(cube);
-	// creage geode and add cubedrawable
-	osg::Geode* cubeGeode = new osg::Geode();
+	osg::ref_ptr<osg::Box> cube(new osg::Box(osg::Vec3(0, 0, 0), 1.0f));
+	
+    // associate shape with drawable
+	osg::ref_ptr<osg::ShapeDrawable> cubeDrawable(new osg::ShapeDrawable(cube));
+	
+    // creage geode and add cubedrawable
+	osg::ref_ptr<osg::Geode> cubeGeode(new osg::Geode());
+
 	cubeGeode->addDrawable(cubeDrawable);
 
 	// add cube geode to root
 	root->addChild(cubeGeode);
+
+    viewer->setSceneData(root);
 }
 
 void MyOSG::CreateSphere()
 {
 	//smart pointer ??
-	osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere(osg::Vec3(0, 0, 0), 1.0f);
+	osg::ref_ptr<osg::Sphere> sphere(new osg::Sphere(osg::Vec3(0, 0, 0), 1.0f));
 
-	osg::ref_ptr<osg::ShapeDrawable> sphereDrawable = new osg::ShapeDrawable(sphere);
+	osg::ref_ptr<osg::ShapeDrawable> sphereDrawable(new osg::ShapeDrawable(sphere));
 
-	osg::ref_ptr<osg::Geode> sphereGeode = new osg::Geode();
+	osg::ref_ptr<osg::Geode> sphereGeode(new osg::Geode());
 
 	sphereGeode->addDrawable(sphereDrawable);
 
 	root->addChild(sphereGeode);
-}
 
-void MyOSG::TakeInput(int i)
-{
-	if (i == 1)
-	{
-		MyOSG::CreateCube();
-	}
-	if (i == 2)
-	{
-		MyOSG::CreateSphere();
-	}
-
-	viewer->setSceneData(root);
+    viewer->setSceneData(root);
 }
 
 void MyOSG::Render(HWND hwnd)

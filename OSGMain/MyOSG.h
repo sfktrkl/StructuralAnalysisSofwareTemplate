@@ -21,9 +21,7 @@ public:
 
 	void CreateCube();
 	void CreateSphere();
-	void TakeInput(int i);
+
 private:
-	//osg::ref_ptr<osgViewer::Viewer> viewer;
 	osg::ref_ptr<osg::Group> root;
-	//bool finished;
 };

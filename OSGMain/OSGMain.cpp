@@ -5,9 +5,7 @@
 int main()
 {
 	// Trial to see results.
-	MyOSG osg = MyOSG();
-
-	osg.TakeInput(1);
+    MyOSG osg;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
